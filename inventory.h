@@ -27,7 +27,8 @@ class Inventory{
         HashTable<Transaction> ClosedTransactions;
         // Customer table will hold all important information about a customer 
         HashTable<Transaction> Customers;
-        HashTable<CustId, TransId> Rel;
+        // Maps customers to their transactions
+        HashTable<CustId, List<Trans> Rel;
         // Stores all possible products. E.g (Media, Hardware, etc)
         List<Product> Products;
 
