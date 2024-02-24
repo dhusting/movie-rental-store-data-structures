@@ -32,6 +32,7 @@ class Inventory{
         List<Product> Products;
 
     public:
+
         // --------------------------------------------------------------------
         // Default Constructor
         // Precondition: NONE
@@ -39,6 +40,8 @@ class Inventory{
         Inventory();
         // --------------------------------------------------------------------
         // Name and Address Constructor (Name, Address)
+        // Initialize inventory from backup files.  If files don't exist,
+        // initialize empty inventory with name & address fields
         // Precondition: NONE
         // Postcondition: Initialized Inventory w/ name and address.
         Inventory(const string, const string);
@@ -64,37 +67,64 @@ class Inventory{
         // Postcondition: Dynamic memory freed
         ~Inventory();
         // --------------------------------------------------------------------
-        // checkForFiles()
+        // setName
+        // Set inventory name field
+        // Precondition: NONE
+        // Postcondition: Name field is updated w/ value
+        void setName(string);
+        // --------------------------------------------------------------------
+        // getName
+        // Get inventory name field
+        // Precondition: NONE
+        // Postcondition: return name field value
+        string getName();
+        // --------------------------------------------------------------------
+        // setAddress
+        // Set inventory address field
+        // Precondition: NONE
+        // Postcondition: Address field is updated w/ value
+        void setAddress(string);
+        // --------------------------------------------------------------------
+        // getAddress
+        // Get inventory address field
+        // Precondition: NONE
+        // Postcondition: return address field value
+        string getAddress();
+        // --------------------------------------------------------------------
+        // checkForBackupFiles()
         // Returns whether there are automated backup files of previous 
-        // iterations
-        // Precondition: TBD
-        // Postcondition: 
-        bool checkForFiles();
+        // sessions
+        // Precondition: NONE
+        // Postcondition: return true if files exist, false otherwise
+        bool checkForBackupFiles();
         // --------------------------------------------------------------------
-        // ingestFromFiles()
+        // ingestFromBackupFiles()
         // Ingests from automated backup files that have been outputted and stored.
-        // Returns success
-        // Precondition: TBD
-        // Postcondition: TBD
-        bool ingestFromFiles();
+        // Precondition: NONE
+        // Postcondition: returns true if successfull, false otherwise
+        bool ingestFromBackupFiles();
         // --------------------------------------------------------------------
-        // dumpToFile()
-        // Dumps genre nodes in-order into a <nventoryName_movie_dump.txt> 
-        // Allows us to save the state of the data 
+        // dumpToBackupFiles()
+        // Dumps genre nodes in-order into a <inventoryName_movie_dump.bak> 
+        // Dumps transactions into <inventoryName_transactions_dump.bak>
+        // Dumps customers into <inventoryName_customers_dump.bak>
+        // Allows us to save the state of the inventory
         // between application sessions. (ex: customer or movies are manually 
         // added) Automated Backs up all data structures to files
         // Returns success
-        // Precondition: TBD
-        // Postcondition: File named with Inventory Name + _dump
-        bool dumpToFiles();
+        // Precondition: NONE
+        // Postcondition: Overwrites file if file named with 
+        // inventoryName_*dumpType*_dump.bak exists
+        bool dumpToBackupFiles();
         // --------------------------------------------------------------------
         // command()
-        // Inputs commands from the console and calls the correct method. 
+        // Executes commands from the console and calls the correct method. 
         // Returns true if command is executed, false if user wants to exit. 
         // Handles bad inputs. 
-        // Precondition: TBD
-        // Postcondition: TBD 
-        void command();
+        // Precondition: Inventoryis intialized correctly
+        // Postcondition: Command is executed if it is a valid command and exectues
+        // the correct associated action and errors if the command is not valid
+        void command(const string);
 
         // --------------------------------------------------------------------
         // executeBorrow()
@@ -103,8 +133,10 @@ class Inventory{
         // Comment: May need to handle erronous data such as invalid user or 
         // invalid movies
         // Executes a Borrow (‘B’) command. Inserts a new transaction into log 
-        // Precondition: TBD
-        // Postcondition: TBD
+        // Precondition: command is valid and inventory is initialized correctly
+        // and the movie is in stock
+        // Postcondition: stock is decreased by one and a transaction is created
+        // in the transaction log and errors out if command is not valid
         void executeBorrow();
 
         // --------------------------------------------------------------------
@@ -115,148 +147,163 @@ class Inventory{
         // invalid movies
         // Executes a Return (‘R’) command. Gets the transaction from the log 
         // and changes the return date. Calculates fees due on return. 
-        // Precondition: TBD
-        // Postcondition: TBD
+        // Precondition: command is valid and inventory is initialized correctly
+        // Postcondition: stock is decreased by one and a transaction is created
+        // in the transaction log and errors out if command is not valid
         void executeReturn();
 
         // --------------------------------------------------------------------
         // displayInventory()
         // Executes an Inventory (‘I’) command. Outputs the inventory to the 
         // console 
-        // Comment: How do we want to format this? Table? What columns?
-        // Precondition: TBD
-        // Postcondition: TBD
+        // Precondition: Inventory is initialized
+        // Postcondition: outputs all inventory to the console in order and blank
+        // if there are no values
         void displayInventory();
 
         // --------------------------------------------------------------------
         // displayHistory()
         // Executes a History (‘H’) command. Outputs the transaction log of a 
         // customer to the console given a customer ID 
-        // Precondition: TBD
-        // Postcondition: TBD
+        // Precondition: NONE
+        // Postcondition: displays all transactions for all customers and blank
+        // if no transactions.
         void displayHistory();
 
         // --------------------------------------------------------------------
         // createProduct()
         // Creates a new Product using the Product class and specify type of 
         // product. (Movie, Music, hardware, etc)
-        // Precondition: TBD
-        // Postcondition: TBD
-        void createProduct();
+        // Precondition: Inventory is initialized correctly
+        // Postcondition: creates a new Product object for that product and
+        // returns error if the product already exists
+        void createProduct(string);
 
         // --------------------------------------------------------------------
         // removeProduct()
         // Removes a product using the product class
-        // Precondition: TBD
-        // Postcondition: TBD
-        void removeProduct();
+        // Precondition: Inventory must be initialized correctly
+        // Postcondition: removes the product from the product list if it exists
+        // skips if it doesn't exist
+        void removeProduct(string);
 
         // --------------------------------------------------------------------
         // getProduct()
         // Iterates through the list to get the product needed.
-        // Precondition: TBD
-        // Postcondition: TBD
-        void getProduct();
+        // Precondition: Inventory is initialized correctly
+        // Postcondition: returns the address of the product if it exists, null if it doesn't
+        Product getProduct(string);
 
         // --------------------------------------------------------------------
         // createGenre()
         // Creates a new Genre Binary Search Tree. (Comedy, Classic, Drama, Etc)
-        // Precondition: TBD
-        // Postcondition: TBD
-        void createGenre();
+        // Precondition: Inventory and Product are initialized correctly
+        // Postcondition: creates a new genre BST if no genre exists with the same name
+        void createGenre(string);
 
         // --------------------------------------------------------------------
         // removeGenre()
         // Removes a genre from the list
-        // Precondition: TBD
-        // Postcondition: TBD
-        void removeGenre();
+        // Precondition: Inventory and Product are initialized correctly
+        // Postcondition: Genre is removed if it exists
+        void removeGenre(string);
 
         // --------------------------------------------------------------------
         // getGenre()
         // Iterates through the list of Genre heads to return the given Genre 
         // Binary Search Tree
-        // Precondition: TBD
-        // Postcondition: TBD
-        void getGenre();
+        // Precondition: Inventory and Product are initialized correctly
+        // Postcondition: returns the address of the Genre if the Genre exists and errors out
+        Genre getGenre(string);
 
         // --------------------------------------------------------------------
         // createMovie()
         // Creates a new movie. Assumes Product is a movie, based on genre the 
         // string is parsed differently so input is left generic
-        // Precondition: TBD
-        // Postcondition: TBD
-        void createMovie();
+        // Precondition: Inventory, Product, and Genre are initialized correctly
+        // Postcondition: creates a new node that designates the stock in inventory
+        // if it does not already exist
+        void createMovie(string);
 
         // --------------------------------------------------------------------
         // removeMovie()
         // Removes a movie from the binary tree
-        // Precondition: TBD
-        // Postcondition: TBD
-        void removeMovie();
+        // Precondition: Inventory, Product, and Genre are initialized correctly
+        // Postcondition: removes a movie node if it exists
+        void removeMovie(string);
 
         // --------------------------------------------------------------------
         // getMovie()
         // Gets the movie based on the input
-        // Precondition: TBD
-        // Postcondition: TBD
-        void getMovie();
+        // Precondition: Inventory, Product, and Genre are initialized correctly
+        // Postcondition: the address of the movie is returned
+        MovieNode getMovie(string);
 
         // --------------------------------------------------------------------
         // createCustomer()
         // Creates a new customer in the hash table
-        // Precondition: TBD
-        // Postcondition: TBD
-        void createCustomer();
+        // Precondition: The Inventory and customer table are initialized correctly
+        // Postcondition: creates a new customer in the table if it does not exist
+        void createCustomer(int);
 
         // --------------------------------------------------------------------
         // removeCustomer()
         // Deletes customer from Hash table
-        // Precondition: TBD
-        // Postcondition: TBD
-        void removeCustomer();
+        // Precondition: The Inventory and customer table are initialized correctly
+        // Postcondition: removes a customer from the customer table if it exists
+        void removeCustomer(int);
 
         // --------------------------------------------------------------------
         // getCustomer(int)
         // Gets the customer based on ID
         // Return NULL if customer not found?
-        // Precondition: TBD
-        // Postcondition: TBD
+        // Precondition: The Inventory and customer table are initialized correctly
+        // Postcondition: returns the customer address in the hash table
         void getCustomer(int);
-
-        // --------------------------------------------------------------------
-        // getCustomer(string)
-        // Gets the customer based on name
-        // Return NULL if customer not found?
-        // Precondition: TBD
-        // Postcondition: TBD
-        void getCustomer(string);
 
         // --------------------------------------------------------------------
         // createTransaction()
         // Creates a new transaction in the HashTable. ID is created off of date
         // customer ID and all other details.
-        // Precondition: TBD
-        // Postcondition: TBD
-        void createTransaction();
+        // Precondition: inventory and customer table are initialized correctly
+        // Postcondition: a new transaction borrow transaction is created in the table
+        // if the customer exists
+        void borrowTransaction();
 
         // --------------------------------------------------------------------
         // returnTransaction()
         // Sets the transaction return date of an existing transaction
-        // Precondition: TBD
-        // Postcondition: TBD
+        // Precondition: inventory and customer table are initialized correctly
+        // Postcondition: a return transaction is created if the customer exists
+        // and fees are calculated
         void returnTransaction();
 
         // --------------------------------------------------------------------
         // removeTransaction()
         // Removes the transaction from the HashTable
-        // Comment: Suggest transaction has an ID and you remove the transaction
-        // based on ID, not (String customerID, String productName, String 
-        // genreName, String input)
-        // Precondition: TBD
-        // Postcondition: TBD
+        // Precondition: inventory and customer table are initialized correctly
+        // Postcondition: transaction is removed if the transaction exists
         void removeTransaction();
 
-        
+        // --------------------------------------------------------------------
+        // movieInputFromFile(string)
+        // reads file and constructs genre BSTs
+        // Precondition: NONE
+        // Postcondition: genre BSTs are initialized for data lookup
+        void movieInputFromFile(string);
 
+        // --------------------------------------------------------------------
+        // customerInputFromFile(string)
+        // reads file and initializes customer hashtable
+        // Precondition: NONE
+        // Postcondition: hashtable is ready for transaction lookup by 
+        // customer id
+        void customerInputFromFile(string);
+        
+        // --------------------------------------------------------------------
+        // commandInputFromFile(string)
+        // reads and executes commands from command file
+        // Precondition: NONE
+        // Postcondition: all valid commands are executed
+        void commandInputFromFile(string);
 }
