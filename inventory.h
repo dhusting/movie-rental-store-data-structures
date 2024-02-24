@@ -34,32 +34,41 @@ class Inventory{
     public:
         // --------------------------------------------------------------------
         // Default Constructor
-        // Precondition: TBD
-        // Postcondition: TBD
+        // Precondition: NONE
+        // Postcondition: Initialized Inventory with no name or address.
         Inventory();
         // --------------------------------------------------------------------
         // Name and Address Constructor (Name, Address)
-        // Precondition: TBD
-        // Postcondition: TBD
-        Inventory(string, string);
+        // Precondition: NONE
+        // Postcondition: Initialized Inventory w/ name and address.
+        Inventory(const string, const string);
         // --------------------------------------------------------------------
         // Command File Constructor
-        // (Name, Address, CustomerFile, MovieFile, CommandFile)
-        // Precondition: TBD
-        // Postcondition: TBD
-        Inventory(string, string, string, string, string);
+        // Initialize Inventory with specified name and address, build customer 
+        // and movies list. Then execute commands from file.
+        // If any files are non-existing, return error.
+        // Precondition: NONE
+        // Postcondition: Initialized inventory.
+        Inventory(
+            const string, const string, const string, const string, const string);
         // --------------------------------------------------------------------
         // Copy Constructor
+        // Deep copies inventory
+        // Precondition: Inventory to be copied should exist.
+        // Postcondition: Deep copied inventory.
         Inventory(const Inventory &);
         // --------------------------------------------------------------------
         // Destructor
+        // Frees dynamically allocated memory from HashTables and Genre BSTs
+        // Precondition: NONE
+        // Postcondition: Dynamic memory freed
         ~Inventory();
         // --------------------------------------------------------------------
         // checkForFiles()
         // Returns whether there are automated backup files of previous 
         // iterations
         // Precondition: TBD
-        // Postcondition: TBD
+        // Postcondition: 
         bool checkForFiles();
         // --------------------------------------------------------------------
         // ingestFromFiles()
@@ -70,14 +79,14 @@ class Inventory{
         bool ingestFromFiles();
         // --------------------------------------------------------------------
         // dumpToFile()
-        // Outputs/Updates formatted files: data4movies.txt, data4customers.txt.
-        // Note: This essentially allows us to save the state of the data 
+        // Dumps genre nodes in-order into a <nventoryName_movie_dump.txt> 
+        // Allows us to save the state of the data 
         // between application sessions. (ex: customer or movies are manually 
         // added) Automated Backs up all data structures to files
         // Returns success
         // Precondition: TBD
-        // Postcondition: TBD
-        bool dumpToFile();
+        // Postcondition: File named with Inventory Name + _dump
+        bool dumpToFiles();
         // --------------------------------------------------------------------
         // command()
         // Inputs commands from the console and calls the correct method. 
