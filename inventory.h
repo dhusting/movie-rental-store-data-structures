@@ -21,8 +21,7 @@ class Inventory{
     private:
         // Transaction
         // Used to contain the information within a borrow or return 
-        // transaction. This is the ValueType of the Transactions HashTable
-        // TransactionID is the KeyType of the Transactions HashTable.
+        // transaction.
         struct Transaction {
             int transactionID;
             string borrowDate;
@@ -35,16 +34,15 @@ class Inventory{
         // Used to contain customer information.
         // This is the ValueType of the Customers HashTable
         // ID is the KeyType of the Customers HashTable.
-        // The customer entry will also contain their associated open and 
-        // closed transactions as a list of transactionIDs.
+        // The customer entry will also contain their associated transactions 
+        // as a transaction list.
         struct Customer {
             int ID;
             string Name;
             string DateCreated;
             int infractionCount;
             bool banned;
-            list<Transaction> openTransactions;
-            list<Transaction> closedTransactions;
+            list<Transaction> transactions;
         };
         // Denotes the name of the store inventory 
         string Name;
@@ -52,10 +50,6 @@ class Inventory{
         string Address;
         // Maps customers to their ID
         HashTable<int, Customer> *Customers;
-        // Maps Open transactions to their ID
-        HashTable<int, Transaction> *OpenTransactions;
-        // Maps Closed transactions to their ID
-        HashTable<int, Transaction> *ClosedTransactions;
         // Stores all possible products. E.g (Media, Hardware, etc)
         list<Product> Products;
 
