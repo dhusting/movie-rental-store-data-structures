@@ -1,7 +1,7 @@
 // ----------------------------------movie.h -----------------------------------
 // Team Blockbuster - CS502A
 // Created 20240224
-// Modified 20240224
+// Modified 20240225
 // -----------------------------------------------------------------------------
 // Summary - This file contains the specification for the Movie class
 // Assumptions - Extends the NodeData class
@@ -30,6 +30,8 @@ class Movie : NodeData {
         // Precondition: NodeData & Movie parameters
         // Postcondition: Movie object allocated and ready for lookup in BST
         Movie(string, string, int, string, int, double, string, string);
+        // Pseudocode:
+        // Assign object properties to parameter values
 
         // -----------------------------------------------------------------------------
         // getDirector

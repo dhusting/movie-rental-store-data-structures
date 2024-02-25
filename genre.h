@@ -1,7 +1,7 @@
 // ---------------------------------genre.h ------------------------------------
 // Team Blockbuster - CS502A
 // Created 20240224
-// Modified 20240224
+// Modified 20240225
 // -----------------------------------------------------------------------------
 // Summary - This file contains the specification for the Genre class
 // Assumptions - Filters for each genre will be provided from either config
@@ -43,6 +43,8 @@ class Genre {
         // Precondition: Abbreviation & filter parameters match valid file format
         // Postcondition: Genre object allocated and ready for use as BST
         Genre(string, string, vector<int>, vector<int>);
+        // Pseudocode:
+        // Assign genre properties to parameter values
 
         // -----------------------------------------------------------------------------
         // Destructor
@@ -50,6 +52,8 @@ class Genre {
         // Precondition: Valid genre object
         // Postcondition: Memory used by genre object is freed
         ~Genre();
+        // Pseudocode:
+        // Post order traversal of BST, delete each node during visit
 
         // -----------------------------------------------------------------------------
         // getName
@@ -57,6 +61,8 @@ class Genre {
         // Precondition: Valid genre object
         // Postcondition: Return string name value
         string getName() {return name;}
+        // Pseudocode:
+        // Return name value
 
         // -----------------------------------------------------------------------------
         // getAbbreviation
@@ -64,6 +70,8 @@ class Genre {
         // Precondition: Valid genre object
         // Postcondition: Return string abbreviation value
         string getAbbreviation() {return abbreviation;}
+        // Pseudocode:
+        // Return abbreviation value
 
         // -----------------------------------------------------------------------------
         // insert
@@ -71,6 +79,9 @@ class Genre {
         // Precondition: Pointer to NodeData object to insert into tree
         // Postcondition: Data inserted into ordered leaf of the tree
         bool insert(NodeData*);
+        // Pseudocode:
+        // Iterate down the tree using parameter as the comparison value.  Add new
+        // leaf node with param NodeData value once nullptr node is reached
 
         // -----------------------------------------------------------------------------
         // find
@@ -78,6 +89,9 @@ class Genre {
         // Precondition: Search key parameter
         // Postcondition: Return reference to nodeData object if found, else nullptr
         NodeData& find(string);
+        // Pseudocode:
+        // Iterate down the tree using parameter as the comparison value.  Return
+        // NodeData value if equal comparison, nullptr value if media doesn't exist
 
         // -----------------------------------------------------------------------------
         // setKey
@@ -86,4 +100,8 @@ class Genre {
         // Postcondition: Set string concatenation of matching NodeData fields in
         // ID field
         void setKey(NodeData&);
+        // Pseudocode:
+        // Iterate through sortFilters, each filter represents an index of a getter
+        // method in the NodeData object.  Execute methods and concatentate results
+        // into a string key, then assign to NodeData id field
 };
