@@ -19,6 +19,10 @@ using namespace std;
 
 class Inventory{
     private:
+        // Transaction
+        // Used to contain the information within a borrow or return 
+        // transaction. This is the ValueType of the Transactions HashTable
+        // TransactionID is the KeyType of the Transactions HashTable.
         struct Transaction {
             int transactionID;
             string borrowDate;
@@ -27,7 +31,12 @@ class Inventory{
             string returnDate;
             string transactionDetail;
         };
-
+        // Customer
+        // Used to contain customer information.
+        // This is the ValueType of the Customers HashTable
+        // ID is the KeyType of the Customers HashTable.
+        // The customer entry will also contain their associated open and 
+        // closed transactions as a list of transactionIDs.
         struct Customer {
             int ID;
             string Name;
@@ -42,9 +51,9 @@ class Inventory{
         // Address of the store
         string Address;
         // Maps customers to their ID
-        HashTable<int, Customer> Customers;
+        HashTable<int, Customer> *Customers;
         // Maps transactions to their ID
-        HashTable<int, Transaction> Transactions;
+        HashTable<int, Transaction> *Transactions;
         // Stores all possible products. E.g (Media, Hardware, etc)
         list<Product> Products;
 

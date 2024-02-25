@@ -39,7 +39,7 @@ class HashTable {
         // Initializes an empty HashTable with size of hashSize
         // Precondition: NONE
         // Postcondition: Initialize an empty HashTable
-        HashTable(int hashSize) {this->hashSize = hashSize};
+        HashTable(int hashSize) {this->hashSize = hashSize; hashTable = new KeyValuePair[hashSize]};
         // Pseudocode:
         // Initialize array with hashSize and set to hashTable
 
@@ -70,10 +70,11 @@ class HashTable {
         // Postcondition: Hash Table is updated with key value pair removed
         bool remove(const KeyType&);
         // Pseudocode:
-        //  getHashIndex from KeyType
-        //  Attempt to insert at hashIndex into hashTable
-        //  If not sucessful, increment index and try again.
-        //  Abort if end of array
+        //  Calculate hash value
+        //  Check location of array for the key
+        //  Keep moving forward until you find key or reach empty spot
+        //  Replace value with empty customer information.
+        //   - Set ID to -1 to indicate removal. 
 
         // --------------------------------------------------------------------
         // get()
