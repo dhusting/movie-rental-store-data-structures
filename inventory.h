@@ -285,9 +285,7 @@ class Inventory{
         // Postcondition: returns the address of the Genre if the Genre exists and errors out
         Genre& getGenre(string);
         // call getProduct() and if returns address
-        // iterates through all the Genres in the list
-        // compares their names and if found Genre
-        // return the address
+        // call Media.getGenre()
 
         // --------------------------------------------------------------------
         // createMovie()
