@@ -52,6 +52,20 @@ class Genre {
         ~Genre();
 
         // -----------------------------------------------------------------------------
+        // getName
+        // Getter for name property
+        // Precondition: Valid genre object
+        // Postcondition: Return string name value
+        string getName() {return name;}
+
+        // -----------------------------------------------------------------------------
+        // getAbbreviation
+        // Getter for abbreviation property
+        // Precondition: Valid genre object
+        // Postcondition: Return string abbreviation value
+        string getAbbreviation() {return abbreviation;}
+
+        // -----------------------------------------------------------------------------
         // insert
         // Method to insert data into the BST while maintaing sorted order
         // Precondition: Pointer to NodeData object to insert into tree
