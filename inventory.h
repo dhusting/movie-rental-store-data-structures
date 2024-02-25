@@ -52,8 +52,10 @@ class Inventory{
         string Address;
         // Maps customers to their ID
         HashTable<int, Customer> *Customers;
-        // Maps transactions to their ID
-        HashTable<int, Transaction> *Transactions;
+        // Maps Open transactions to their ID
+        HashTable<int, Transaction> *OpenTransactions;
+        // Maps Closed transactions to their ID
+        HashTable<int, Transaction> *ClosedTransactions;
         // Stores all possible products. E.g (Media, Hardware, etc)
         list<Product> Products;
 
