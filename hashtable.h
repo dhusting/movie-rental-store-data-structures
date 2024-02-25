@@ -14,7 +14,7 @@ using namespace std;
 template<typename KeyType, typename ValueType>
 class HashTable {
     private:
-        int hashSize;
+        int arraySize;
          // HashTable Elements
         struct KeyValuePair {
             int key;
@@ -22,11 +22,13 @@ class HashTable {
             KeyValuePair(int k, ValueType v) : key(k), value(v) {}
         };
 
-        // getBucketIndex()
+        KeyValuePair hashTable[];
+
+        // getHashIndex()
         // Returns index in hash table based on value of key
         // Precondition: NONE
         // Postcondtion: Index returned.
-        int getBucketIndex(const KeyType& key) const {
+        int getHashIndex(const KeyType& key) const {
             std::hash<KeyType> hasher;
             return hasher(key) % hashSize;
         }
@@ -34,10 +36,12 @@ class HashTable {
     public:
         // --------------------------------------------------------------------
         // Default Constructor
-        // Initializes an empty HashTable with 
+        // Initializes an empty HashTable with size of hashSize
         // Precondition: NONE
         // Postcondition: Initialize an empty HashTable
         HashTable(int hashSize) {this->hashSize = hashSize};
+        // Pseudocode:
+        // Initialize array with hashSize and set to hashTable
 
         // --------------------------------------------------------------------
         // Destructor
@@ -52,6 +56,11 @@ class HashTable {
         // Postcondition: Hash Table is updated with key value pair if the 
         // entry does not exist.
         void insert(const KeyType&, const ValueType&);
+        // Pseudocode:
+        //  getHashIndex from KeyType
+        //  Attempt to insert at hashIndex into hashTable
+        //  If not sucessful, increment index and try again.
+        //  Abort if end of array
 
         // --------------------------------------------------------------------
         // remove()
@@ -60,6 +69,11 @@ class HashTable {
         // Precondition: None
         // Postcondition: Hash Table is updated with key value pair removed
         bool remove(const KeyType&);
+        // Pseudocode:
+        //  getHashIndex from KeyType
+        //  Attempt to insert at hashIndex into hashTable
+        //  If not sucessful, increment index and try again.
+        //  Abort if end of array
 
         // --------------------------------------------------------------------
         // get()
@@ -67,6 +81,11 @@ class HashTable {
         // Precondition: Key and value should exist
         // Postcondition: Returns value specified by key
         ValueType get(const KeyType&) const;
+        // Pseudocode:
+        //  Calculate hash value
+        //  Check location of array for the key
+        //  Keep moving forward until you find key or reach empty spot
+        //  Reutrn copy of value
 
         // --------------------------------------------------------------------
         // display()
@@ -74,4 +93,7 @@ class HashTable {
         // Precondition: None
         // Postcondition: Output of hash table to console
         void display(const KeyType&) const;
+        // Pseudocode:
+        //  for (length of hash array)
+        //   output value, if not empty to cout
 };
