@@ -9,6 +9,9 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include "product.h"
+#include "movie.h"
+#include "genre.h"
 
 using namespace std;
 
@@ -238,7 +241,7 @@ class Inventory{
         // Gets the movie based on the input
         // Precondition: Inventory, Product, and Genre are initialized correctly
         // Postcondition: the address of the movie is returned
-        MovieNode getMovie(string);
+        Movie getMovie(string);
 
         // --------------------------------------------------------------------
         // createCustomer()
@@ -307,4 +310,4 @@ class Inventory{
         // Precondition: NONE
         // Postcondition: all valid commands are executed
         void commandInputFromFile(string);
-}
+};
