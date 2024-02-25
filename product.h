@@ -1,3 +1,12 @@
+// ---------------------------------product.h ------------------------------------
+// Team Blockbuster - CS502A
+// Created 20240224
+// Modified 20240224
+// -----------------------------------------------------------------------------
+// Summary - This file contains the specification for the Product class that
+// stores all product types in a store. 
+// Assumptions - None
+// -----------------------------------------------------------------------------
 #include <string>
 
 using namespace std;
