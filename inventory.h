@@ -6,9 +6,11 @@
 // Summary - This file contains the specification for the Inventory class
 // Assumptions - N/A
 // ----------------------------------------------------------------------------
-#include <string>
-#include <iostream>
 #include <fstream>
+#include <iostream>
+#include <list>
+#include <string>
+#include "hashtable.h"
 #include "product.h"
 #include "movie.h"
 #include "genre.h"
@@ -17,23 +19,34 @@ using namespace std;
 
 class Inventory{
     private:
+        struct Transaction {
+            int transactionID;
+            string borrowDate;
+            string nodeID;
+            string dueDate;
+            string returnDate;
+            string transactionDetail;
+        };
+
+        struct Customer {
+            int ID;
+            string Name;
+            string DateCreated;
+            int infractionCount;
+            bool banned;
+            list<Transaction> openTransactions;
+            list<Transaction> closedTransactions;
+        };
         // Denotes the name of the store inventory 
         string Name;
         // Address of the store
         string Address;
-        // Contains all OPEN transactions within the store. Needs to create a 
-        // transaction when a borrow occurs, set a due date,  
-        HashTable<Transactions> OpenTransactions;
-        // Contains all CLOSED transactions within the store. Closed 
-        // transactions are given a return date from an open transaction from 
-        // the hash table and moved to the closed  
-        HashTable<Transaction> ClosedTransactions;
-        // Customer table will hold all important information about a customer 
-        HashTable<Transaction> Customers;
-        // Maps customers to their transactions
-        HashTable<CustId, List<Trans> Rel;
+        // Maps customers to their ID
+        HashTable<int, Customer> Customers;
+        // Maps transactions to their ID
+        HashTable<int, Transaction> Transactions;
         // Stores all possible products. E.g (Media, Hardware, etc)
-        List<Product> Products;
+        list<Product> Products;
 
     public:
 
