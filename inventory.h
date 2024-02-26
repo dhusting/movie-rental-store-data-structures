@@ -182,7 +182,7 @@ class Inventory{
         // and the movie is in stock
         // Postcondition: stock is decreased by one and a transaction is created
         // in the transaction log and errors out if command is not valid
-        void executeBorrow();
+        void executeBorrow(const string);
         // searches the given string for information on the product
         // call getProduct() and if not nullptr
         // gets from the given string the Genre abbreviation
@@ -205,7 +205,7 @@ class Inventory{
         // Precondition: command is valid and inventory is initialized correctly
         // Postcondition: stock is decreased by one and a transaction is created
         // in the transaction log and errors out if command is not valid
-        void executeReturn();
+        void executeReturn(const string);
         // searches the given string for information on the product
         // call getProduct() and if not nullptr
         // gets from the given string the Genre abbreviation
@@ -234,10 +234,11 @@ class Inventory{
         // displayHistory()
         // Executes a History (‘H’) command. Outputs the transaction log of a 
         // customer to the console given a customer ID 
-        // Precondition: NONE
-        // Postcondition: displays all transactions for all customers and blank
-        // if no transactions.
-        void displayHistory();
+        // Precondition: Empty string or valid customer id parameter
+        // Postcondition: If param string is empty, display transactions 
+        // for all customers.  Otherwise, display transactions for given id,
+        // blank if no transactions.
+        void displayHistory(const string);
         // iterates through all customers
         // iterates through all the customer transactions 
         // output the transaction to the console.
