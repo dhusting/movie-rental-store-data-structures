@@ -182,7 +182,7 @@ class Inventory{
         // and the movie is in stock
         // Postcondition: stock is decreased by one and a transaction is created
         // in the transaction log and errors out if command is not valid
-        void executeBorrow();
+        void executeBorrow(const string);
         // searches the given string for information on the product
         // call getProduct() and if not nullptr
         // gets from the given string the Genre abbreviation
@@ -205,7 +205,7 @@ class Inventory{
         // Precondition: command is valid and inventory is initialized correctly
         // Postcondition: stock is decreased by one and a transaction is created
         // in the transaction log and errors out if command is not valid
-        void executeReturn();
+        void executeReturn(const string);
         // searches the given string for information on the product
         // call getProduct() and if not nullptr
         // gets from the given string the Genre abbreviation
@@ -234,10 +234,11 @@ class Inventory{
         // displayHistory()
         // Executes a History (‘H’) command. Outputs the transaction log of a 
         // customer to the console given a customer ID 
-        // Precondition: NONE
-        // Postcondition: displays all transactions for all customers and blank
-        // if no transactions.
-        void displayHistory();
+        // Precondition: Empty string or valid customer id parameter
+        // Postcondition: If param string is empty, display transactions 
+        // for all customers.  Otherwise, display transactions for given id,
+        // blank if no transactions.
+        void displayHistory(const string);
         // iterates through all customers
         // iterates through all the customer transactions 
         // output the transaction to the console.
@@ -371,33 +372,21 @@ class Inventory{
         // createTransaction()
         // Creates a new transaction in the HashTable. ID is created off of date
         // customer ID and all other details.
-        // Precondition: inventory and customer table are initialized correctly
-        // Postcondition: a new transaction borrow transaction is created in the table
+        // Precondition: Customer id, mediaKey, and isReturn parameters
+        // Postcondition: a new transaction transaction is created in the table
         // if the customer exists
-        void borrowTransaction();
+        void createTransaction(string, string, bool);
         // call getMovie() if address returned
-        // call borrowStock()
         // call getCustomer() if customer returned
-        // create a transaction in the list
-
-        // --------------------------------------------------------------------
-        // returnTransaction()
-        // Sets the transaction return date of an existing transaction
-        // Precondition: inventory and customer table are initialized correctly
-        // Postcondition: a return transaction is created if the customer exists
-        // and fees are calculated
-        void returnTransaction();
-        // call getMovie() if address returned
-        // call returnStock()
-        // call getCustomer() if customer returned
+        // call borrowStock() if isReturn is false, otherwise returnStock()
         // create a transaction in the list
 
         // --------------------------------------------------------------------
         // removeTransaction()
         // Removes the transaction from the HashTable
-        // Precondition: inventory and customer table are initialized correctly
-        // Postcondition: transaction is removed if the transaction exists
-        void removeTransaction();
+        // Precondition: Transaction id parameter
+        // Postcondition: Transaction is removed if the transaction exists
+        void removeTransaction(string);
         // call getCustomer() if customer returned
         // search for Transaction and remove from list if exists
 
