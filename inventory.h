@@ -372,33 +372,21 @@ class Inventory{
         // createTransaction()
         // Creates a new transaction in the HashTable. ID is created off of date
         // customer ID and all other details.
-        // Precondition: inventory and customer table are initialized correctly
-        // Postcondition: a new transaction borrow transaction is created in the table
+        // Precondition: Customer id, mediaKey, and isReturn parameters
+        // Postcondition: a new transaction transaction is created in the table
         // if the customer exists
-        void borrowTransaction();
+        void createTransaction(string, string, bool);
         // call getMovie() if address returned
-        // call borrowStock()
         // call getCustomer() if customer returned
-        // create a transaction in the list
-
-        // --------------------------------------------------------------------
-        // returnTransaction()
-        // Sets the transaction return date of an existing transaction
-        // Precondition: inventory and customer table are initialized correctly
-        // Postcondition: a return transaction is created if the customer exists
-        // and fees are calculated
-        void returnTransaction();
-        // call getMovie() if address returned
-        // call returnStock()
-        // call getCustomer() if customer returned
+        // call borrowStock() if isReturn is false, otherwise returnStock()
         // create a transaction in the list
 
         // --------------------------------------------------------------------
         // removeTransaction()
         // Removes the transaction from the HashTable
-        // Precondition: inventory and customer table are initialized correctly
-        // Postcondition: transaction is removed if the transaction exists
-        void removeTransaction();
+        // Precondition: Transaction id parameter
+        // Postcondition: Transaction is removed if the transaction exists
+        void removeTransaction(string);
         // call getCustomer() if customer returned
         // search for Transaction and remove from list if exists
 
