@@ -1,7 +1,7 @@
 // --------------------------------nodeData.h ----------------------------------
 // Team Blockbuster - CS502A
 // Created 20240224
-// Modified 20240224
+// Modified 20240225
 // -----------------------------------------------------------------------------
 // Summary - This file contains the specification for the NodeData class
 // Assumptions - The class is abstract and is meant be extended to allow for
@@ -39,6 +39,8 @@ class NodeData {
         // Precondition: Valid NodeData object
         // Postcondition: Memory used by NodeData object is freed
         virtual ~NodeData() = 0;
+        // Pseudocode:
+        // Child object overloads destructor
 
         // -----------------------------------------------------------------------------
         // getId
