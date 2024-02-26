@@ -375,7 +375,7 @@ class Inventory{
         // Precondition: Customer id, mediaKey, and isReturn parameters
         // Postcondition: a new transaction transaction is created in the table
         // if the customer exists
-        void createTransaction(string, string, bool);
+        void createTransaction(int, string, bool);
         // call getMovie() if address returned
         // call getCustomer() if customer returned
         // call borrowStock() if isReturn is false, otherwise returnStock()
@@ -386,7 +386,7 @@ class Inventory{
         // Removes the transaction from the HashTable
         // Precondition: Transaction id parameter
         // Postcondition: Transaction is removed if the transaction exists
-        void removeTransaction(string);
+        void removeTransaction(int);
         // call getCustomer() if customer returned
         // search for Transaction and remove from list if exists
 
