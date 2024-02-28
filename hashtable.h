@@ -1,11 +1,11 @@
-// ---------------------------------product.h ------------------------------------
+// ---------------------------------product.h ---------------------------------
 // Team Blockbuster - CS502A
 // Created 20240224
 // Modified 20240224
-// -----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // Summary - This file contains the specification for the HashTable class
 // Assumptions - None
-// -----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 #include <string>
 #include <list>
 
@@ -14,7 +14,7 @@ using namespace std;
 template<typename KeyType, typename ValueType>
 class HashTable {
     private:
-        int arraySize;
+        int hashSize;
          // HashTable Elements
         struct KeyValuePair {
             int key;
@@ -39,7 +39,7 @@ class HashTable {
         // Initializes an empty HashTable with size of hashSize
         // Precondition: NONE
         // Postcondition: Initialize an empty HashTable
-        HashTable(int hashSize) {this->hashSize = hashSize; hashTable = new KeyValuePair[hashSize]};
+        HashTable(int _hashSize);
         // Pseudocode:
         // Initialize array with hashSize and set to hashTable
 
