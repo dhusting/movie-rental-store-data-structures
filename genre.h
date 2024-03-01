@@ -28,8 +28,8 @@ class Genre {
             Node* left;
             Node* right;
         };
-        // Pointer to head node for tree traversal
-        Node* head;
+        // Pointer to root node for tree traversal
+        Node* root;
         // int vector matches serialized data to indexes of object fields 
         vector<int> parseFilters;
         // int vector matches sort fields to indexes of object fields
@@ -74,6 +74,15 @@ class Genre {
         // Return abbreviation value
 
         // -----------------------------------------------------------------------------
+        // clear
+        // Deallocate tree with rescursive, post-order traversal
+        // Precondition: Pointer to current Node
+        // Postcondition: All tree nodes deleted and memory freed
+        void Genre::clear(Node* &node) const;
+        // Pseudocode:
+        // Use recursive, post-order traversal to visit and delete each node
+
+        // -----------------------------------------------------------------------------
         // insert
         // Method to insert data into the BST while maintaing sorted order
         // Precondition: Pointer to NodeData object to insert into tree
@@ -87,8 +96,8 @@ class Genre {
         // find
         // Method to retrieve inventory data from BST to update or print
         // Precondition: Search key parameter
-        // Postcondition: Return reference to nodeData object if found, else nullptr
-        NodeData& find(string);
+        // Postcondition: Return nodeData object if found, otherwise null
+        bool find(string, NodeData&);
         // Pseudocode:
         // Iterate down the tree using parameter as the comparison value.  Return
         // NodeData value if equal comparison, nullptr value if media doesn't exist
