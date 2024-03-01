@@ -34,6 +34,15 @@ class Movie : NodeData {
         // Assign object properties to parameter values
 
         // -----------------------------------------------------------------------------
+        // getType
+        // Override function that returns media type
+        // Precondition: N/A
+        // Postcondition: Return string value of media type
+        string getType() {
+            return "Movie";
+        };
+
+        // -----------------------------------------------------------------------------
         // getDirector
         // Getter for director property
         // Precondition: Valid movie object

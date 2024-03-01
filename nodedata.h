@@ -38,9 +38,32 @@ class NodeData {
         // Deallocates NodeData object, pure virtual implementation
         // Precondition: Valid NodeData object
         // Postcondition: Memory used by NodeData object is freed
-        virtual ~NodeData() = 0;
+        ~NodeData();
         // Pseudocode:
         // Child object overloads destructor
+
+        // -----------------------------------------------------------------------------
+        // getType
+        // Pure virtual function that returns media type
+        // Precondition: N/A
+        // Postcondition: Return string value of media type
+        virtual string getType() = 0;
+        // Pseudocode:
+        // Pure virtual implementation makes NodeData an abstract class
+
+        // -----------------------------------------------------------------------------
+        // operator == overload
+        // Check two nodeData instances for equality
+        // Precondition: Two nodeData parameters
+        // Postcondition: Return true if parameters are equal, false otherwise
+        bool NodeData::operator==(const NodeData& rhs) const;
+
+        // -----------------------------------------------------------------------------
+        // operator > overload
+        // Check if left operand is greater than the right
+        // Precondition: Two nodeData parameters
+        // Postcondition: Return true if left operand is greater, false otherwise
+        bool NodeData::operator>(const NodeData& rhs) const;
 
         // -----------------------------------------------------------------------------
         // getId
