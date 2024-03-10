@@ -51,7 +51,7 @@ class Inventory{
         // Maps customers to their ID
         HashTable<int, Customer> *Customers;
         // Stores all possible products. E.g (Media, Hardware, etc)
-        list<Product> Products;
+        vector<Product> Products;
 
     public:
 
@@ -182,7 +182,7 @@ class Inventory{
         // and the movie is in stock
         // Postcondition: stock is decreased by one and a transaction is created
         // in the transaction log and errors out if command is not valid
-        void executeBorrow(const string);
+        void executeBorrow(const vector<string>);
         // searches the given string for information on the product
         // call getProduct() and if not nullptr
         // gets from the given string the Genre abbreviation
@@ -205,7 +205,7 @@ class Inventory{
         // Precondition: command is valid and inventory is initialized correctly
         // Postcondition: stock is decreased by one and a transaction is created
         // in the transaction log and errors out if command is not valid
-        void executeReturn(const string);
+        void executeReturn(const vector<string>);
         // searches the given string for information on the product
         // call getProduct() and if not nullptr
         // gets from the given string the Genre abbreviation
@@ -238,7 +238,7 @@ class Inventory{
         // Postcondition: If param string is empty, display transactions 
         // for all customers.  Otherwise, display transactions for given id,
         // blank if no transactions.
-        void displayHistory(const string);
+        void displayHistory(const vector<string>);
         // iterates through all customers
         // iterates through all the customer transactions 
         // output the transaction to the console.
@@ -257,26 +257,6 @@ class Inventory{
         // add the product to the list
 
         // --------------------------------------------------------------------
-        // removeProduct()
-        // Removes a product using the product class
-        // Precondition: Inventory must be initialized correctly
-        // Postcondition: removes the product from the product list if it exists
-        // skips if it doesn't exist
-        void removeProduct(string);
-        // call getProduct() and if returns address
-        // delete that product
-
-        // --------------------------------------------------------------------
-        // getProduct()
-        // Iterates through the list to get the product needed.
-        // Precondition: Inventory is initialized correctly
-        // Postcondition: returns the address of the product if it exists, null if it doesn't
-        Product& getProduct(string);
-        // iterates through all the Products in the list
-        // compares their names and if found Product
-        // return the address
-
-        // --------------------------------------------------------------------
         // createGenre()
         // Creates a new Genre Binary Search Tree. (Comedy, Classic, Drama, Etc)
         // Precondition: Inventory and Product are initialized correctly
@@ -286,25 +266,6 @@ class Inventory{
         // create new Genre object
         // set the name of the product
         // add the Genre to the list
-
-        // --------------------------------------------------------------------
-        // removeGenre()
-        // Removes a genre from the list
-        // Precondition: Inventory and Product are initialized correctly
-        // Postcondition: Genre is removed if it exists
-        void removeGenre(string);
-        // call getGenre() and if returns address
-        // delete that Genre
-
-        // --------------------------------------------------------------------
-        // getGenre()
-        // Iterates through the list of Genre heads to return the given Genre 
-        // Binary Search Tree
-        // Precondition: Inventory and Product are initialized correctly
-        // Postcondition: returns the address of the Genre if the Genre exists and errors out
-        Genre& getGenre(string);
-        // call getProduct() and if returns address
-        // call Media.getGenre()
 
         // --------------------------------------------------------------------
         // createMovie()
@@ -319,54 +280,14 @@ class Inventory{
         // if found movie of same name return error
 
         // --------------------------------------------------------------------
-        // removeMovie()
-        // Removes a movie from the binary tree
-        // Precondition: Inventory, Product, and Genre are initialized correctly
-        // Postcondition: removes a movie node if it exists
-        void removeMovie(string);
-        // call getMovie() and if returns address
-        // delete movie
-
-        // --------------------------------------------------------------------
-        // getMovie()
-        // Gets the movie based on the input
-        // Precondition: Inventory, Product, and Genre are initialized correctly
-        // Postcondition: the address of the movie is returned
-        Movie getMovie(string);
-        // call getProduct() and if returns address
-        // call getGenre() and if returns address
-        // iterate through Genre BST,
-        // if movie found return address
-        // else return nullptr
-
-        // --------------------------------------------------------------------
         // createCustomer()
         // Creates a new customer in the hash table
         // Precondition: The Inventory and customer table are initialized correctly
         // Postcondition: creates a new customer in the table if it does not exist
-        void createCustomer(int);
+        void createCustomer(string);
         // call get getCustomer() if returns nullptr
         // create new customer
         // else error to console
-
-        // --------------------------------------------------------------------
-        // removeCustomer()
-        // Deletes customer from Hash table
-        // Precondition: The Inventory and customer table are initialized correctly
-        // Postcondition: removes a customer from the customer table if it exists
-        void removeCustomer(int);
-        // call get getCustomer() if returns address
-        // delete customer
-        // else error to console
-
-        // --------------------------------------------------------------------
-        // getCustomer(int)
-        // Gets the customer based on ID
-        // Return NULL if customer not found?
-        // Precondition: The Inventory and customer table are initialized correctly
-        // Postcondition: returns the customer address in the hash table
-        void getCustomer(int);
-        // gets the id of the customer from the hash table
 
         // --------------------------------------------------------------------
         // createTransaction()
@@ -382,38 +303,11 @@ class Inventory{
         // create a transaction in the list
 
         // --------------------------------------------------------------------
-        // removeTransaction()
-        // Removes the transaction from the HashTable
-        // Precondition: Transaction id parameter
-        // Postcondition: Transaction is removed if the transaction exists
-        void removeTransaction(int);
-        // call getCustomer() if customer returned
-        // search for Transaction and remove from list if exists
-
-        // --------------------------------------------------------------------
-        // productInputFromFile(string)
-        // reads and executes genres from command file
-        // Precondition: NONE
-        // Postcondition: all valid genres are created
-        void productInputFromFile(string);
-        // iterates through a file until EOF
-        // utilizes createProduct()
-
-        // --------------------------------------------------------------------
-        // genreInputFromFile(string)
-        // reads and executes genres from command file
-        // Precondition: NONE
-        // Postcondition: all valid genres are created
-        void genreInputFromFile(string);
-        // iterates through a file until EOF
-        // utilizes createGenre()
-
-        // --------------------------------------------------------------------
         // movieInputFromFile(string)
         // reads file and constructs genre BSTs
         // Precondition: NONE
         // Postcondition: genre BSTs are initialized for data lookup
-        void movieInputFromFile(string);
+        void movieInputFromFile();
         // iterates through a file until EOF
         // utilizes createMovie()
 
@@ -423,7 +317,7 @@ class Inventory{
         // Precondition: NONE
         // Postcondition: hashtable is ready for transaction lookup by 
         // customer id
-        void customerInputFromFile(string);
+        void customerInputFromFile();
         // iterates through a file until EOF
         // utilizes createCustomer()
 
@@ -432,7 +326,7 @@ class Inventory{
         // reads and executes commands from command file
         // Precondition: NONE
         // Postcondition: all valid commands are executed
-        void commandInputFromFile(string);
+        void commandInputFromFile();
         // iterates through a file until EOF
         // utilizes createCommand()
 };

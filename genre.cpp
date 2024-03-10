@@ -10,8 +10,39 @@
 #include "nodedata.h"
 #include "genre.h"
 #include <vector>
+#include <iostream>
 
 using namespace std;
+
+// -----------------------------------------------------------------------------
+// operator << overload
+// Print contents of Genre BST
+// Precondition: Valid Genre object
+// Postcondition: BST contents are printed to terminal output in order
+ostream &operator<<(ostream &out, const Genre &rhs) {
+    rhs.print(out);
+}
+
+// -----------------------------------------------------------------------------
+// print
+// Print contents of Genre BST
+// Precondition: Valid Genre object
+// Postcondition: BST contents are printed to terminal output recursively
+void Genre::print(ostream &out, Node* node) const {
+    //in order traversal & print node
+    if (node != nullptr) {
+        print(out, node->left);
+        out << *node->data << endl;
+        print(out, node->right);
+    }
+}
+
+// -----------------------------------------------------------------------------
+// Empty constructor
+// Initializes genre object with empty properties
+// Precondition: N/A
+// Postcondition: Genre object allocated and ready for use as BST
+Genre::Genre() {}
 
 // -----------------------------------------------------------------------------
 // Name, Abbreviation and Filter Constructor (name, abbreviation
@@ -19,8 +50,8 @@ using namespace std;
 // Initializes genre object with unique parameters
 // Precondition: Abbreviation & filter parameters match valid file format
 // Postcondition: Genre object allocated and ready for use as BST
-Genre::Genre(string name, string abv, vector<int> pFlt
-, vector<int> sFlt) {
+Genre::Genre(string name, string abv, string pFlt
+, string sFlt) {
     // Assign genre properties to parameter values
     name = name;
     abbreviation = abv;
@@ -60,7 +91,7 @@ string Genre::getAbbreviation() {
 // Deallocate tree with rescursive, post-order traversal
 // Precondition: Pointer to current Node
 // Postcondition: All tree nodes deleted and memory freed
-void Genre::clear(Node* &node) const {
+void Genre::clear(Node* node) const {
     //post-order traversal & delete node
     if (node != nullptr) {
         clear(node->left);  // traverse left
@@ -141,3 +172,12 @@ void Genre::setKey(NodeData&) {}
 // Iterate through sortFilters, each filter represents an index of a getter
 // method in the NodeData object.  Execute methods and concatentate results
 // into a string key, then assign to NodeData id field
+
+// -----------------------------------------------------------------------------
+// print
+// Print contents of Genre BST
+// Precondition: Open output stream parameter
+// Postcondition: BST contents are printed to terminal output recursively
+void Genre::print(ostream &out) const {
+    print(out, root);
+}

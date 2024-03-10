@@ -18,6 +18,15 @@ using namespace std;
 // for simplest abstract behavior
 class NodeData {
 
+    // -----------------------------------------------------------------------------
+    // operator << overload
+    // Print contents of NodeData
+    // Precondition: Valid NodeData object
+    // Postcondition: NodeData contents printed to terminal output
+    friend ostream &operator<<(ostream &out, const NodeData &rhs);
+    // Pseudocode:
+    // NodeData contents printed to terminal output
+
     private:
         // Id key used for comparrisons within BST implementation
         string id;
