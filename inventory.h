@@ -51,7 +51,9 @@ class Inventory{
         // Maps customers to their ID
         HashTable<int, Customer> *Customers;
         // Stores all possible products. E.g (Media, Hardware, etc)
-        vector<Product> Products;
+        list<Product> productList;
+
+        Product* getProduct(const string);
 
     public:
 
@@ -261,7 +263,7 @@ class Inventory{
         // Creates a new Genre Binary Search Tree. (Comedy, Classic, Drama, Etc)
         // Precondition: Inventory and Product are initialized correctly
         // Postcondition: creates a new genre BST if no genre exists with the same name
-        void createGenre(string);
+        void createGenre(const string);
         // call getGenre() and if returns nullptr
         // create new Genre object
         // set the name of the product
@@ -274,7 +276,7 @@ class Inventory{
         // Precondition: Inventory, Product, and Genre are initialized correctly
         // Postcondition: creates a new node that designates the stock in inventory
         // if it does not already exist
-        void createMovie(string);
+        void createMovie(const string);
         // // call getMovie() and if returns address
         // if nullptr towards comparison, create new movie
         // if found movie of same name return error
@@ -284,7 +286,7 @@ class Inventory{
         // Creates a new customer in the hash table
         // Precondition: The Inventory and customer table are initialized correctly
         // Postcondition: creates a new customer in the table if it does not exist
-        void createCustomer(string);
+        void createCustomer(const string);
         // call get getCustomer() if returns nullptr
         // create new customer
         // else error to console
@@ -303,30 +305,12 @@ class Inventory{
         // create a transaction in the list
 
         // --------------------------------------------------------------------
-        // movieInputFromFile(string)
-        // reads file and constructs genre BSTs
-        // Precondition: NONE
-        // Postcondition: genre BSTs are initialized for data lookup
-        void movieInputFromFile();
-        // iterates through a file until EOF
-        // utilizes createMovie()
-
-        // --------------------------------------------------------------------
-        // customerInputFromFile(string)
-        // reads file and initializes customer hashtable
-        // Precondition: NONE
-        // Postcondition: hashtable is ready for transaction lookup by 
-        // customer id
-        void customerInputFromFile();
-        // iterates through a file until EOF
-        // utilizes createCustomer()
-
-        // --------------------------------------------------------------------
         // commandInputFromFile(string)
         // reads and executes commands from command file
         // Precondition: NONE
         // Postcondition: all valid commands are executed
-        void commandInputFromFile();
+        void commandInputFromFile(const string);
         // iterates through a file until EOF
         // utilizes createCommand()
+
 };

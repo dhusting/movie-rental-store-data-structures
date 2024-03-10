@@ -282,6 +282,8 @@ void Inventory::createProduct(const string command)
         if (commandFields.at(1) == "M")
         {
             Media m(commandFields.at(2), commandFields.at(3));
+
+            productList.push_back(m);
         }
     }
 }
@@ -298,9 +300,20 @@ void Inventory::createProduct(const string command)
 // Postcondition: creates a new genre BST if no genre exists with the same name
 void Inventory::createGenre(const string command) {
     
-
+    Product * product = getProduct(to_string(command.at(0)));
     
-    media->createGenre(command);
+    if(product != nullptr)
+    {
+
+        if(Media * mediaPtr = dynamic_cast<Media *>(product))
+        {
+            string genreCommand = command.substr(3);        
+            mediaPtr->createGenre(genreCommand);
+        }    
+
+    }
+    
+    
 }
 
 // -----------------------------------------------------------------------------
@@ -356,44 +369,14 @@ void Inventory::createTransaction(int, string, bool) {}
 // call borrowStock() if isReturn is false, otherwise returnStock()
 // create a transaction in the list
 
-// -----------------------------------------------------------------------------
-// movieInputFromFile(string)
-// reads file and constructs genre BSTs
-// Precondition: NONE
-// Postcondition: genre BSTs are initialized for data lookup
-void Inventory::movieInputFromFile() {
-    string line;
-    ifstream movieFile;
-    movieFile.open("data4movies.txt");
-    while (getline(movieFile, line))
-        createMovie(line);
-    movieFile.close();
-}
-
-// -----------------------------------------------------------------------------
-// customerInputFromFile(string)
-// reads file and initializes customer hashtable
-// Precondition: NONE
-// Postcondition: hashtable is ready for transaction lookup by 
-// customer id
-void Inventory::customerInputFromFile() {
-    string line;
-    ifstream customerFile;
-    customerFile.open("data4customers.txt");
-    while (getline(customerFile, line))
-        createCustomer(line);
-    customerFile.close();
-}
-
-// -----------------------------------------------------------------------------
 // commandInputFromFile(string)
 // reads and executes commands from command file
 // Precondition: NONE
 // Postcondition: all valid commands are executed
-void Inventory::commandInputFromFile() {
+void Inventory::commandInputFromFile(const string filePath) {
     string line;
     ifstream commandFile;
-    commandFile.open("data4commands.txt");
+    commandFile.open(filePath);
     while (getline(commandFile, line))
         command(line);
     commandFile.close();
