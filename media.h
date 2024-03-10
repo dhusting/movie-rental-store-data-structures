@@ -9,7 +9,7 @@
 // -----------------------------------------------------------------------------
 #include "product.h"
 #include "genre.h"
-#include <map>
+#include <list>
 
 using namespace std;
 
@@ -17,9 +17,12 @@ class Media : public Product {
 
     private:
         // Genre instances
-        map<string, Genre> genres;
+        list<Genre> genreList;
 
     public:
+    
+        Media(const string abbreviation, const string name): Product(name, abbreviation);
+
         // --------------------------------------------------------------------
         // getGenre()
         // parses list of genre BSTs to find the correct genre by its abbreviation

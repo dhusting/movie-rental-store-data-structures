@@ -100,6 +100,19 @@ string Inventory::getAddress() {
     return Address;
 }
 
+Product* Inventory::getProduct(const string abbrev)
+{
+
+    for(Product product : productList)
+    {
+        if(product.getAbbreviation() == abbrev)
+            return &product;
+    }
+
+    return nullptr;
+
+}
+
 // -----------------------------------------------------------------------------
 // checkForBackupFiles()
 // Returns whether there are automated backup files of previous 
@@ -251,7 +264,28 @@ void Inventory::displayHistory(const vector<string> terms) {}
 // Precondition: Inventory is initialized correctly
 // Postcondition: creates a new Product object for that product and
 // returns error if the product already exists
-void Inventory::createProduct(string) {}
+void Inventory::createProduct(const string command) 
+{
+
+    vector<string> commandFields;
+
+    stringstream ss(command);
+
+    string parsedField;
+
+    while (getline(ss, parsedField, ',')) {
+        commandFields.push_back(parsedField);
+    }
+
+    if(getProduct(commandFields.at(0)) == nullptr)
+    {
+        if (commandFields.at(1) == "M")
+        {
+            Media m(commandFields.at(2), commandFields.at(3));
+        }
+    }
+}
+
 // call getProduct() and if returns nullptr
 // create new Product object
 // set the name of the product
@@ -262,32 +296,11 @@ void Inventory::createProduct(string) {}
 // Creates a new Genre Binary Search Tree. (Comedy, Classic, Drama, Etc)
 // Precondition: Inventory and Product are initialized correctly
 // Postcondition: creates a new genre BST if no genre exists with the same name
-void Inventory::createGenre(string abrv) {
-    string name;
-    string parseFilters;
-    string sortFilters;
-    if (abrv == "C") {
-        name = "Classic";
-        parseFilters = "Stock, Director, Title, Major actor_Release date";
-        sortFilters = "C, Classic, (Stock, Director, Title, Year it released)"
-            ", [Year it released, Major actor])";
-    } else if (abrv == "D") {
-        name = "Drama";
-        parseFilters = "Stock, Director, Title, Major actor_Release date";
-        sortFilters = "D, Drama, (Stock, Director, Title, Year it released)"
-            ", [Major actor, Title])";
-    } else if (abrv == "F") {
-        name = "Comedy";
-        parseFilters = "Stock, Director, Title, Major actor_Release date";
-        sortFilters = "F, Comedy, (Stock, Director, Title, Year it released)"
-            ", [Year it released, Title])";
-    } else
-        return;
+void Inventory::createGenre(const string command) {
+    
 
-    Product *product = &Products[0];
-    Media *media = (Media *)product;
-    Genre genre = Genre(name, abrv, parseFilters, sortFilters);
-    media->setGenre(genre);
+    
+    media->createGenre(command);
 }
 
 // -----------------------------------------------------------------------------
