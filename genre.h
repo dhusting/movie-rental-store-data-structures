@@ -17,6 +17,15 @@ using namespace std;
 // Summary - Provides quick search of media inventory for each genre
 class Genre {
 
+    // -----------------------------------------------------------------------------
+    // operator << overload
+    // Print contents of Genre BST
+    // Precondition: Valid Genre object
+    // Postcondition: BST contents are printed to terminal output in order
+    friend ostream &operator<<(ostream &out, const Genre &rhs);
+    // Pseudocode:
+    // Execute in order traversal of tree and print contents of each node
+
     private:
         // Genre name
         string name;
@@ -36,13 +45,13 @@ class Genre {
         string sortFilters;
 
         // -----------------------------------------------------------------------------
-        // operator << overload
+        // print
         // Print contents of Genre BST
         // Precondition: Valid Genre object
-        // Postcondition: BST contents are printed to terminal output in order
-        friend ostream &operator<<(ostream &out, const Genre &rhs);
+        // Postcondition: BST contents are printed to terminal output recursively
+        void print(ostream &out, Node* node) const;
         // Pseudocode:
-        // Execute in order traversal of tree and print contents of each node
+        // Execute recursive in-order traversal of tree and print contents of each node
 
     public:
         // -----------------------------------------------------------------------------
@@ -135,9 +144,9 @@ class Genre {
         // -----------------------------------------------------------------------------
         // print
         // Print contents of Genre BST
-        // Precondition: Valid Genre object
+        // Precondition: Open output stream parameter
         // Postcondition: BST contents are printed to terminal output recursively
-        void print(ostream &out, Node* node);
+        void print(ostream &out) const;
         // Pseudocode:
         // Execute recursive in-order traversal of tree and print contents of each node
 };
