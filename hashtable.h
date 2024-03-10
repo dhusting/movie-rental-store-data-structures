@@ -1,36 +1,50 @@
-// ---------------------------------product.h ------------------------------------
+// -------------------------------hashtable.h ---------------------------------
 // Team Blockbuster - CS502A
 // Created 20240224
 // Modified 20240224
-// -----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // Summary - This file contains the specification for the HashTable class
 // Assumptions - None
-// -----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 #include <string>
 #include <list>
 
 using namespace std;
 
-template<typename KeyType, typename ValueType>
+struct Transaction {
+    int transactionID;
+    string borrowDate;
+    string nodeID;
+    string dueDate;
+    string returnDate;
+    string transactionDetail;
+};
+
+struct Customer {
+    int ID;
+    string name;
+    string dateCreated;
+    int infractionCount;
+    bool banned;
+    list<Transaction> transactions;
+};
+
 class HashTable {
     private:
-        int arraySize;
-         // HashTable Elements
         struct KeyValuePair {
-            int key;
-            ValueType value;
-            KeyValuePair(int k, ValueType v) : key(k), value(v) {}
+            int customerID;
+            Customer customer;
         };
 
-        KeyValuePair hashTable[];
+        int hashSize;
+        KeyValuePair* hashTable;
 
         // getHashIndex()
         // Returns index in hash table based on value of key
         // Precondition: NONE
         // Postcondtion: Index returned.
-        int getHashIndex(const KeyType& key) const {
-            std::hash<KeyType> hasher;
-            return hasher(key) % hashSize;
+        int getHashIndex(const int key) const {
+            return key % hashSize;
         }
 
     public:
@@ -39,7 +53,9 @@ class HashTable {
         // Initializes an empty HashTable with size of hashSize
         // Precondition: NONE
         // Postcondition: Initialize an empty HashTable
-        HashTable(int hashSize) {this->hashSize = hashSize; hashTable = new KeyValuePair[hashSize]};
+        HashTable(int size) : hashSize(size){
+            hashTable = new KeyValuePair[hashSize];
+        };
         // Pseudocode:
         // Initialize array with hashSize and set to hashTable
 
@@ -55,7 +71,7 @@ class HashTable {
         // Precondition: None
         // Postcondition: Hash Table is updated with key value pair if the 
         // entry does not exist.
-        void insert(const KeyType&, const ValueType&);
+        void insert(const int, const Customer);
         // Pseudocode:
         //  getHashIndex from KeyType
         //  Attempt to insert at hashIndex into hashTable
@@ -68,12 +84,12 @@ class HashTable {
         //  False if not found
         // Precondition: None
         // Postcondition: Hash Table is updated with key value pair removed
-        bool remove(const KeyType&);
+        bool remove(const int);
         // Pseudocode:
         //  Calculate hash value
         //  Check location of array for the key
         //  Keep moving forward until you find key or reach empty spot
-        //  Replace value with empty customer information.
+        //  Replace value with empty customer information.reset
         //   - Set ID to -1 to indicate removal. 
 
         // --------------------------------------------------------------------
@@ -81,7 +97,7 @@ class HashTable {
         // Gets value specified by key
         // Precondition: Key and value should exist
         // Postcondition: Returns value specified by key
-        ValueType get(const KeyType&) const;
+        Customer get(const int) const;
         // Pseudocode:
         //  Calculate hash value
         //  Check location of array for the key
@@ -93,7 +109,7 @@ class HashTable {
         // Outputs hash table to console for debugging
         // Precondition: None
         // Postcondition: Output of hash table to console
-        void display(const KeyType&) const;
+        void display(const int) const;
         // Pseudocode:
         //  for (length of hash array)
         //   output value, if not empty to cout
