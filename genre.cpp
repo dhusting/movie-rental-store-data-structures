@@ -50,13 +50,12 @@ Genre::Genre() {}
 // Initializes genre object with unique parameters
 // Precondition: Abbreviation & filter parameters match valid file format
 // Postcondition: Genre object allocated and ready for use as BST
-Genre::Genre(string name, string abv, string pFlt
-, string sFlt) {
+Genre::Genre(string name, string abv, string pFlt, string sFlt) {
     // Assign genre properties to parameter values
     name = name;
     abbreviation = abv;
-    parseFilters = pFlt;
-    sortFilters = sFlt;
+    parseString = pFlt;
+    sortString = sFlt;
 }
 
 // -----------------------------------------------------------------------------
@@ -69,7 +68,7 @@ Genre::~Genre() {
 }
 
 // -----------------------------------------------------------------------------
-// getName
+// getName 
 // Getter for name property
 // Precondition: Valid genre object
 // Postcondition: Return string name value

@@ -40,10 +40,10 @@ class Genre {
         // Pointer to root node for tree traversal
         Node* root;
         // int vector matches serialized data to indexes of object fields 
-        string parseFilters;
+        string parseString;
         // int vector matches sort fields to indexes of object fields
-        string sortFilters;
-
+        string sortString;
+  
         // -----------------------------------------------------------------------------
         // print
         // Print contents of Genre BST
