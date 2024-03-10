@@ -31,7 +31,7 @@ Inventory::Inventory() {}
 // initialize empty inventory with name & address fields
 // Precondition: NONE
 // Postcondition: Initialized Inventory w/ name and address.
-Inventory::Inventory(const string name, const string address) : Inventory() {
+Inventory::Inventory(const string name, const string address) {
     Name = name;
     Address = address;
 }
@@ -44,7 +44,7 @@ Inventory::Inventory(const string name, const string address) : Inventory() {
 // Precondition: NONE
 // Postcondition: Initialized inventory.
 Inventory::Inventory(const string name, const string address, const string iPath
-    , const string aPath, const string cPath) : Inventory() {
+    , const string aPath, const string cPath) {
         Name = name;
         Address = address;
 }
@@ -364,11 +364,26 @@ void Inventory::createCustomer(string line) {
 // Precondition: Customer id, mediaKey, and isReturn parameters
 // Postcondition: a new transaction transaction is created in the table
 // if the customer exists
-void Inventory::createTransaction(int customerID, string details, bool isReturn) {}
-// call getMovie() if address returned
-// call getCustomer() if customer returned
-// call borrowStock() if isReturn is false, otherwise returnStock()
-// create a transaction in the list
+void Inventory::addTransaction(int customerID, string details, bool isReturn) {
+    // call getMovie() if address returned
+    // call getCustomer() if customer returned
+    // call borrowStock() if isReturn is false, otherwise returnStock()
+    // create a transaction in the list
+    Customer* temp = customers.get(customerID);
+    if (temp != nullptr)  {
+        if (!isReturn) {
+            temp->transactions.push_front(
+                Transaction{
+                    "transactionID",
+                    "borrowDate",
+                    "dueDate",
+                    "returnDate",
+                    details,
+                    }
+                );
+        }
+    }
+}
 
 // -----------------------------------------------------------------------------
 // movieInputFromFile(string)

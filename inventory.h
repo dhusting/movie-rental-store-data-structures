@@ -271,7 +271,7 @@ class Inventory{
         // Precondition: Customer id, mediaKey, and isReturn parameters
         // Postcondition: a new transaction transaction is created in the table
         // if the customer exists
-        void createTransaction(int, string, bool);
+        void addTransaction(int, string, bool);
         // call getMovie() if address returned
         // call getCustomer() if customer returned
         // call borrowStock() if isReturn is false, otherwise returnStock()
