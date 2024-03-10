@@ -25,13 +25,13 @@ class Media : public Product {
         // parses list of genre BSTs to find the correct genre by its abbreviation
         // Precondition: Media created correctly 
         // Postcondition: returns address of genre if exists, null otherwise
-        Genre& getGenre(string);
+        Genre* getGenre(const string);
 
         // --------------------------------------------------------------------
         // createGenre()
         // create a new Genre and add it to the list
         // Precondition: Media created correctly 
         // Postcondition: returns address of genre if exists, null otherwise
-        void createGenre(string);
+        void createGenre(const string);
 
 };

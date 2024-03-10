@@ -31,9 +31,9 @@ class Genre {
         // Pointer to root node for tree traversal
         Node* root;
         // int vector matches serialized data to indexes of object fields 
-        vector<int> parseFilters;
+        string parseString;
         // int vector matches sort fields to indexes of object fields
-        vector<int> sortFilters;
+        string sortString;
 
     public:
         // -----------------------------------------------------------------------------
@@ -42,7 +42,7 @@ class Genre {
         // Initializes genre object with unique parameters
         // Precondition: Abbreviation & filter parameters match valid file format
         // Postcondition: Genre object allocated and ready for use as BST
-        Genre(string, string, vector<int>, vector<int>);
+        Genre(string, string, string, string);
         // Pseudocode:
         // Assign genre properties to parameter values
 
