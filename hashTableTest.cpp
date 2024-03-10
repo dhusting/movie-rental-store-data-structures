@@ -17,8 +17,8 @@ int main() {
     Customer customer2{2, "Jane Smith", "2024-03-02", 0, false, {}};
     Customer customer3{3, "Alice Johnson", "2024-03-03", 0, false, {}};
 
-    // Instantiate the HashTable with a size of 10
-    HashTable hashTable(10);
+    // Instantiate the HashTable
+    HashTable hashTable;
 
     // Insert customers into the hash table
     hashTable.insert(customer1.ID, customer1);

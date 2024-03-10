@@ -11,10 +11,11 @@
 
 using namespace std;
 
+int DEFAULT_HASH_SIZE = 1000;
+
 struct Transaction {
-    int transactionID;
+    string transactionID;
     string borrowDate;
-    string nodeID;
     string dueDate;
     string returnDate;
     string transactionDetail;
@@ -53,7 +54,7 @@ class HashTable {
         // Initializes an empty HashTable with size of hashSize
         // Precondition: NONE
         // Postcondition: Initialize an empty HashTable
-        HashTable(int size) : hashSize(size){
+        HashTable() : hashSize(DEFAULT_HASH_SIZE) {
             hashTable = new KeyValuePair[hashSize];
         };
         // Pseudocode:
