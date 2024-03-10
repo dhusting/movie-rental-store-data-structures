@@ -9,15 +9,15 @@
 // -----------------------------------------------------------------------------
 #include "product.h"
 #include "genre.h"
-#include <list>
+#include <map>
 
 using namespace std;
 
 class Media : public Product {
 
     private:
-        //list of heads for genre BSTs
-        list<Genre> genreList;
+        // Genre instances
+        map<string, Genre> genres;
 
     public:
         // --------------------------------------------------------------------
@@ -28,10 +28,11 @@ class Media : public Product {
         Genre* getGenre(const string);
 
         // --------------------------------------------------------------------
-        // createGenre()
-        // create a new Genre and add it to the list
+        // setGenre()
+        // set new Genre in map
         // Precondition: Media created correctly 
         // Postcondition: returns address of genre if exists, null otherwise
         void createGenre(const string);
+
 
 };
