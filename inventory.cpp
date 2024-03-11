@@ -443,23 +443,11 @@ bool Inventory::displayInventory() {
 // for all customers.  Otherwise, display transactions for given id,
 // blank if no transactions.
 void Inventory::displayHistory(const string term) const {
-    // scans customer ID from terms
-    // scans through all customers for customer ID
-    // given customer ID iterates through all the customer transactions 
+    // given customer ID
     // output the transaction to the console.
- 
-    int customer_ID = stoi(term);
-    Customer * temp = customers.get(customer_ID);
-    list<Transaction> tempTransactions = (*temp).transactions;
-    list<Transaction>::iterator it;
-    // TODO: Table header and logic for checking if transactions exist
-    for (it = tempTransactions.begin(); it != tempTransactions.end(); ++it){
-        cout << it->transactionID << " "
-             << it->borrowDate << " "
-             << it->dueDate << " "
-             << it->returnDate << " "
-             << it->transactionDetail << endl;
-    }
+    int customerID = stoi(term);
+    // Output up to 1000 transactions of given customer ID
+    customers.displayHistory(customerID, 1000);
 }
 
 // -----------------------------------------------------------------------------
@@ -590,9 +578,7 @@ bool Inventory::addTransaction(int customerID, string details, bool isBorrow) {
     // call getCustomer() if customer returned
     // call borrowStock() if isReturn is false, otherwise returnStock()
     // create a transaction in the list
-    // TODO: Handle isReturn
     return customers.addTransaction(customerID, details, isBorrow);
-    // TODO: return success
 }
 
 // commandInputFromFile(string)

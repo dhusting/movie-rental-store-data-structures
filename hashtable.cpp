@@ -139,7 +139,7 @@ bool HashTable::addTransaction(
                     to_string(customerID),
                     to_string(getCurrentTimestamp()),
                     to_string(getCurrentTimestamp() + TWO_WEEKS),
-                    "returnDate_holder",
+                    "N/A",
                     details,
                     }
                 );
