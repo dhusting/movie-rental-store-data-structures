@@ -54,6 +54,7 @@ Inventory::Inventory(const string name, const string address, const string iPath
 // Precondition: Inventory to be copied should exist.
 // Postcondition: Deep copied inventory.
 Inventory::Inventory(const Inventory &) {}
+// TODO: Deep copy customers table?
 
 // -----------------------------------------------------------------------------
 // Destructor
@@ -386,10 +387,25 @@ bool Inventory::displayInventory() {
 // Postcondition: If param string is empty, display transactions 
 // for all customers.  Otherwise, display transactions for given id,
 // blank if no transactions.
-bool Inventory::displayHistory(const string terms) {}
-// iterates through all customers
-// iterates through all the customer transactions 
-// output the transaction to the console.
+void Inventory::displayHistory(const string term) const {
+    // scans customer ID from terms
+    // scans through all customers for customer ID
+    // given customer IDiterates through all the customer transactions 
+    // output the transaction to the console.
+ 
+    int customer_ID = stoi(term);
+    Customer temp = customers.get(customer_ID);
+    list<Transaction> tempTransactions = temp.transactions;
+    list<Transaction>::iterator it;
+    // TODO: Table header and logic for checking if transactions exist
+    for (it = tempTransactions.begin(); it != tempTransactions.end(); ++it){
+        cout << it->transactionID << " "
+             << it->borrowDate << " "
+             << it->dueDate << " "
+             << it->returnDate << " "
+             << it->transactionDetail << endl;
+    }
+}
 
 // -----------------------------------------------------------------------------
 // createProduct()
@@ -485,10 +501,23 @@ bool Inventory::createMovie(const string line) {
 // Creates a new customer in the hash table
 // Precondition: The Inventory and customer table are initialized correctly
 // Postcondition: creates a new customer in the table if it does not exist
-bool Inventory::createCustomer(string line) {}
-// call get getCustomer() if returns nullptr
-// create new customer
-// else error to console
+bool Inventory::createCustomer(string line) {
+    // parse line for customer information
+    // call get getCustomer() if returns nullptr
+    // create new customer
+    // else error to console
+    stringstream ss(line);
+    string term;
+    string name;
+
+    ss >> term;
+    int customerID = stoi(term);
+    name = ss.str();
+    // TODO: programmatically set creation date
+    Customer newCustomer{customerID, name, "2024-03-10", 0, false, {}};
+    customers.insert(customerID, newCustomer);
+    return true; // TODO: return success
+}
 
 // -----------------------------------------------------------------------------
 // createTransaction()
@@ -497,11 +526,28 @@ bool Inventory::createCustomer(string line) {}
 // Precondition: Customer id, mediaKey, and isReturn parameters
 // Postcondition: a new transaction transaction is created in the table
 // if the customer exists
-bool Inventory::createTransaction(int, string, bool) {}
-// call getMovie() if address returned
-// call getCustomer() if customer returned
-// call borrowStock() if isReturn is false, otherwise returnStock()
-// create a transaction in the list
+bool Inventory::addTransaction(int customerID, string details, bool isReturn) {
+    // call getMovie() if address returned
+    // call getCustomer() if customer returned
+    // call borrowStock() if isReturn is false, otherwise returnStock()
+    // create a transaction in the list
+    // TODO: Handle isReturn
+    Customer* temp = customers.get(customerID);
+    if (temp != nullptr)  {
+        if (!isReturn) {
+            temp->transactions.push_front(
+                Transaction{
+                    "transactionID",
+                    "borrowDate",
+                    "dueDate",
+                    "returnDate",
+                    details,
+                    }
+                );
+        }
+    }
+    return true; // TODO: return success
+}
 
 // commandInputFromFile(string)
 // reads and executes commands from command file

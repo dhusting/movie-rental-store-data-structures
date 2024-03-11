@@ -20,37 +20,13 @@ using namespace std;
 
 class Inventory{
     private:
-        // Transaction
-        // Used to contain the information within a borrow or return 
-        // transaction.
-        struct Transaction {
-            int transactionID;
-            string borrowDate;
-            string nodeID;
-            string dueDate;
-            string returnDate;
-            string transactionDetail;
-        };
-        // Customer
-        // Used to contain customer information.
-        // This is the ValueType of the Customers HashTable
-        // ID is the KeyType of the Customers HashTable.
-        // The customer entry will also contain their associated transactions 
-        // as a transaction list.
-        struct Customer {
-            int ID;
-            string Name;
-            string DateCreated;
-            int infractionCount;
-            bool banned;
-            list<Transaction> transactions;
-        };
         // Denotes the name of the store inventory 
         string Name;
         // Address of the store
         string Address;
         // Maps customers to their ID
-        HashTable<int, Customer> * customers;
+        HashTable customers;
+
         // Stores all possible products. E.g (Media, Hardware, etc)
         list<Product> productList;
 
@@ -59,7 +35,6 @@ class Inventory{
         Product* getProduct(const string);
 
     public:
-
         // --------------------------------------------------------------------
         // Default Constructor
         // Precondition: NONE
@@ -224,9 +199,10 @@ class Inventory{
         // Postcondition: If param string is empty, display transactions 
         // for all customers.  Otherwise, display transactions for given id,
         // blank if no transactions.
-        bool displayHistory(const string);
-        // iterates through all customers
-        // iterates through all the customer transactions 
+        void displayHistory(const string) const;
+        // scans customer ID from terms
+        // scans through all customers for customer ID
+        // given customer IDiterates through all the customer transactions 
         // output the transaction to the console.
 
         // --------------------------------------------------------------------
@@ -282,7 +258,7 @@ class Inventory{
         // Precondition: Customer id, mediaKey, and isReturn parameters
         // Postcondition: a new transaction transaction is created in the table
         // if the customer exists
-        bool createTransaction(int, string, bool);
+        bool addTransaction(int, string, bool);
         // call getMovie() if address returned
         // call getCustomer() if customer returned
         // call borrowStock() if isReturn is false, otherwise returnStock()
