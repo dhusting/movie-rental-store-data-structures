@@ -6,8 +6,9 @@
 // Summary - This file contains the specification for the HashTable class
 // Assumptions - None
 // ----------------------------------------------------------------------------
-#include <string>
+#include <chrono>
 #include <list>
+#include <string>
 
 using namespace std;
 
@@ -22,7 +23,7 @@ struct Transaction {
 };
 
 struct Customer {
-    int ID;
+    int ID = 0;
     string name;
     string dateCreated;
     int infractionCount;
@@ -47,6 +48,8 @@ class HashTable {
         int getHashIndex(const int key) const {
             return key % hashSize;
         }
+
+        uint64_t getCurrentTimestamp();
 
     public:
         // --------------------------------------------------------------------
@@ -105,6 +108,19 @@ class HashTable {
         //  Keep moving forward until you find key or reach empty spot
         //  Reutrn copy of value
 
+        // -----------------------------------------------------------------------------
+        // addTransaction()
+        // Transactions are either a borrow or return.
+        // If transaction is a borrow, creates a new transaction in the HashTable. 
+        // ID is created off of date customer ID and all other details.
+        // If transaction is a return, searches for the transaction given the customer
+        // ID and updates the return date.
+        // Transaction is moved to front of list to maintain chronological order. 
+        // Precondition: Customer id, transaction details, and isReturn parameters
+        // Postcondition: a new transaction transaction is created in the table
+        // if the customer exists
+        bool addTransaction(const int, const string, const bool);
+
         // --------------------------------------------------------------------
         // display()
         // Outputs hash table to console for debugging
@@ -114,4 +130,7 @@ class HashTable {
         // Pseudocode:
         //  for (length of hash array)
         //   output value, if not empty to cout
+
+        
+        void displayHistory(const int, const int) const;
 };

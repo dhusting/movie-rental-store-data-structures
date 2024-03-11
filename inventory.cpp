@@ -443,23 +443,11 @@ bool Inventory::displayInventory() {
 // for all customers.  Otherwise, display transactions for given id,
 // blank if no transactions.
 void Inventory::displayHistory(const string term) const {
-    // scans customer ID from terms
-    // scans through all customers for customer ID
-    // given customer IDiterates through all the customer transactions 
+    // given customer ID
     // output the transaction to the console.
- 
-    int customer_ID = stoi(term);
-    Customer * temp = customers.get(customer_ID);
-    list<Transaction> tempTransactions = (*temp).transactions;
-    list<Transaction>::iterator it;
-    // TODO: Table header and logic for checking if transactions exist
-    for (it = tempTransactions.begin(); it != tempTransactions.end(); ++it){
-        cout << it->transactionID << " "
-             << it->borrowDate << " "
-             << it->dueDate << " "
-             << it->returnDate << " "
-             << it->transactionDetail << endl;
-    }
+    int customerID = stoi(term);
+    // Output up to 1000 transactions of given customer ID
+    customers.displayHistory(customerID, 1000);
 }
 
 // -----------------------------------------------------------------------------
@@ -575,33 +563,22 @@ bool Inventory::createCustomer(string line) {
 }
 
 // -----------------------------------------------------------------------------
-// createTransaction()
-// Creates a new transaction in the HashTable. ID is created off of date
-// customer ID and all other details.
-// Precondition: Customer id, mediaKey, and isReturn parameters
+// addTransaction()
+// Transactions are either a borrow or return.
+// If transaction is a borrow, creates a new transaction in the HashTable. 
+// ID is created off of date customer ID and all other details.
+// If transaction is a return, searches for the transaction given the customer
+// ID and updates the return date.
+// Transaction is moved to front of list to maintain chronological order. 
+// Precondition: Customer id, transaction details, and isReturn parameters
 // Postcondition: a new transaction transaction is created in the table
 // if the customer exists
-bool Inventory::addTransaction(int customerID, string details, bool isReturn) {
+bool Inventory::addTransaction(int customerID, string details, bool isBorrow) {
     // call getMovie() if address returned
     // call getCustomer() if customer returned
     // call borrowStock() if isReturn is false, otherwise returnStock()
     // create a transaction in the list
-    // TODO: Handle isReturn
-    Customer* temp = customers.get(customerID);
-    if (temp != nullptr)  {
-        if (!isReturn) {
-            temp->transactions.push_front(
-                Transaction{
-                    "transactionID",
-                    "borrowDate",
-                    "dueDate",
-                    "returnDate",
-                    details,
-                    }
-                );
-        }
-    }
-    return true; // TODO: return success
+    return customers.addTransaction(customerID, details, isBorrow);
 }
 
 // commandInputFromFile(string)
