@@ -41,3 +41,11 @@ void Media::createGenre(const string command)
     }
 
 }
+
+void Media::printGenre()
+{
+    for (Genre g : genreList)
+    {
+        cout << g;
+    }
+}
