@@ -33,8 +33,8 @@ int main() {
     // Get and display a specific customer
     try {
         // Attempt to retrieve customer with ID 2
-        Customer retrievedCustomer = hashTable.get(2);
-        cout << "Retrieved Customer: " << retrievedCustomer.name << endl;
+        Customer* retrievedCustomer = hashTable.get(2);
+        cout << "Retrieved Customer: " << retrievedCustomer->name << endl;
     } catch (const runtime_error& e) {
         cout << e.what() << endl;
     }

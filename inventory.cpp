@@ -369,6 +369,7 @@ void Inventory::addTransaction(int customerID, string details, bool isReturn) {
     // call getCustomer() if customer returned
     // call borrowStock() if isReturn is false, otherwise returnStock()
     // create a transaction in the list
+    // TODO: Handle isReturn
     Customer* temp = customers.get(customerID);
     if (temp != nullptr)  {
         if (!isReturn) {
