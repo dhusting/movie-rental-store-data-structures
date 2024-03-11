@@ -97,7 +97,7 @@ class HashTable {
         // Gets value specified by key
         // Precondition: Key and value should exist
         // Postcondition: Returns value specified by key
-        Customer get(const int) const;
+        Customer * get(const int) const;
         // Pseudocode:
         //  Calculate hash value
         //  Check location of array for the key

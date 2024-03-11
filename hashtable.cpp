@@ -79,13 +79,13 @@ bool HashTable::remove(const int key) {
 // Gets value specified by key
 // Precondition: Key and value should exist
 // Postcondition: Returns value specified by key
-Customer HashTable::get(const int key) const {
+Customer * HashTable::get(const int key) const {
     int index = getHashIndex(key);
     int originalIndex = index;
 
     do {
         if (hashTable[index].customerID == key) {
-            return hashTable[index].customer;
+            return &hashTable[index].customer;
         } else if (hashTable[index].customerID == 0) {
             // If we hit an empty slot, the item was never in the table
             break;
