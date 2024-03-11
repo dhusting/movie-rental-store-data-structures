@@ -175,7 +175,7 @@ void Inventory::command(const string line) {
     int firstComma = line.find(',');
 
     //truncate the command abbreviation from the line
-    string command = line.substr(firstComma);
+    string command = line.substr(firstComma+2);
 
     //set a command success flag that is false
     bool commandSuccessFlag = false;
@@ -247,7 +247,7 @@ bool Inventory::executeBorrow(const string command)
     int spaceCount = 0;
 
     // Parse the string and grab each word up to the 4th space
-    while (ss >> word && spaceCount < 3) {
+    while (ss >> word && spaceCount < 2) {
         //increase count if word is a space
         if (word == " ") {
             spaceCount++;
@@ -340,7 +340,7 @@ bool Inventory::executeReturn(const string command)
     int spaceCount = 0;
 
     // Parse the string and grab each word up to the 4th space
-    while (ss >> word && spaceCount < 3) {
+    while (ss >> word && spaceCount < 2) {
         //increase count if word is a space
         if (word == " ") {
             spaceCount++;
@@ -428,7 +428,7 @@ bool Inventory::displayInventory() {
         if (Media * mediaPtr = dynamic_cast<Media *>(productPtr))
         {
             //call the print method
-            mediaPtr->printGenre();
+            mediaPtr->printGenres();
         }
         
     }
@@ -484,12 +484,12 @@ bool Inventory::createProduct(const string command)
     }
 
     //check to see if the product exists already
-    if(getProduct(commandFields.at(0)) == nullptr)
+    if(getProduct(commandFields.at(2)) == nullptr)
     {
         //if the genre is of media type
         if (commandFields.at(1) == "M")
         {
-            //create a new media object giving it the name and abbreviation
+            //create a new media object giving it the abbreviation and name
             Media m(commandFields.at(2), commandFields.at(3));
 
             //add to the back of the list
@@ -609,10 +609,18 @@ bool Inventory::addTransaction(int customerID, string details, bool isReturn) {
 // Precondition: NONE
 // Postcondition: all valid commands are executed
 void Inventory::commandInputFromFile(const string filePath) {
+    //create empty variables for storage
     string line;
     ifstream commandFile;
+
+    //open the file
     commandFile.open(filePath);
+
+    //get every line from the file
     while (getline(commandFile, line))
+        //call the command function for every line
         command(line);
+
+    //close the file
     commandFile.close();
 }
