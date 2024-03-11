@@ -16,32 +16,26 @@
 #include "hashtable.h"
 
 using namespace std;
+using namespace std::chrono;
 
-const uint64_t TWO_WEEKS = 1209600000;
-
-// ----------------------------------------------------------------------------
-// Destructor
-// Precondition: NONE
-// Postcondition: Clears all dynamically allocated memory.
-HashTable::~HashTable() {
-    delete[] hashTable;
-}
+ // Used for calculating due date from borrow date
+const uint64_t TWO_WEEKS = 1209600000; //ms
 
 // Return number of seconds since January 1st, 1970
 uint64_t HashTable::getCurrentTimestamp() {
-    chrono::milliseconds ms = chrono::duration_cast< chrono::milliseconds >(
-    chrono::system_clock::now().time_since_epoch());
+    milliseconds ms = duration_cast< milliseconds >(
+    system_clock::now().time_since_epoch());
 
     return ms.count();
 }
 
 string HashTable::msTimestampToString(uint64_t milliseconds) {
     // Convert milliseconds to system_clock time_point
-    chrono::time_point<chrono::system_clock> tp =
-        chrono::time_point<chrono::system_clock>() + chrono::milliseconds(milliseconds);
+    time_point<system_clock> tp = 
+        time_point<system_clock>() + chrono::milliseconds(milliseconds);
 
     // Convert time_point to time_t for conversion to tm struct
-    auto timeT = chrono::system_clock::to_time_t(tp);
+    auto timeT = system_clock::to_time_t(tp);
 
     // Convert to tm struct for formatting
     tm bt = *localtime(&timeT);
@@ -51,7 +45,7 @@ string HashTable::msTimestampToString(uint64_t milliseconds) {
 
     oss << put_time(&bt, "%Y%m%d_%H%M%S");
     int milliseconds_part = milliseconds % 1000;
-    oss << "." << setw(2) << setfill('0') << milliseconds_part;
+    oss << "." << setw(3) << setfill('0') << milliseconds_part;
 
     return oss.str();
 }
@@ -62,18 +56,14 @@ string HashTable::msTimestampToString(uint64_t milliseconds) {
 // Precondition: None
 // Postcondition: Hash Table is updated with key value pair if the entry does 
 // not exist.
-void HashTable::insert(const Customer customer) {
+bool HashTable::insert(const Customer customer) {
     int index = getHashIndex(customer.ID);
     int originalIndex = index;
     bool inserted = false;
 
     do {
-        // If the spot is empty or previously removed (ID = -1), insert the new
-        /* Debug Messages
-        //cout << "Processing key: " << key << " customer: " << customer.ID << endl;
-        //cout << "Traversing | current index: " << index << endl;
-        //cout << "Traversing | current ID: " << hashTable[index].customerID << endl;
-        */
+        // If the spot is empty or previously removed (ID = 0 or -1)
+        // Insert new customer
         if (hashTable[index].customerID == 0 || hashTable[index].customerID == -1) {
             hashTable[index].customerID = customer.ID;
             hashTable[index].customer = customer;
@@ -83,12 +73,12 @@ void HashTable::insert(const Customer customer) {
 
         // Linear probing: go to the next index
         index = (index + 1) % hashSize;
-        // cout << "Traversing | current ID+: " << hashTable[index].customerID << endl;
     } while (index != originalIndex);
 
-    if (!inserted) {
-        cout << "HashTable is full or cannot find suitable position to insert." << endl;
-    }
+    if (!inserted)
+        cout << "HashTable is full or no suitable position to insert.\n";
+
+    return inserted;
 }
 
 // ----------------------------------------------------------------------------
@@ -100,17 +90,18 @@ void HashTable::insert(const Customer customer) {
 bool HashTable::remove(const int key) {
     int index = getHashIndex(key);
     int originalIndex = index;
+    bool removed = false;
 
     do {
         if (hashTable[index].customerID == key) {
             hashTable[index].customerID = -1; // Mark as removed
-            // Optionally, clear other fields in the customer record
             return true;
         } else if (hashTable[index].customerID == 0) {
             // If we hit an empty slot, the item was never in the table
             return false;
         }
 
+        // Linear probing: go to the next index
         index = (index + 1) % hashSize;
     } while (index != originalIndex);
 
@@ -132,8 +123,11 @@ Customer* HashTable::get(const int key) const {
         } else if (hashTable[index].customerID == 0) {
             return nullptr;
         }
+
+        // Linear probing: go to the next index
         index = (index + 1) % hashSize;
     } while (index != originalIndex);
+
     return nullptr;
 }
 
@@ -153,37 +147,32 @@ bool HashTable::addTransaction(
     Customer* temp = get(customerID);
     list<Transaction>::iterator it;
     hash<std::string> hasher;
-    string hashValue; // Used to generate unique ID
-    string borrow;
-    string due;
+    string uid, borrow, due;
     
     // Add transaction if customer exists
     if (temp != nullptr) {
         if (isBorrow) {
-            // If the transaction is a borrow, populate transaction data and 
+            // If transaction is a borrow, populate transaction data and 
             // push to front of list.
-            string borrow = msTimestampToString(getCurrentTimestamp());
-            string due = msTimestampToString(getCurrentTimestamp() + TWO_WEEKS);
+            borrow = msTimestampToString(getCurrentTimestamp());
+            due = msTimestampToString(getCurrentTimestamp() + TWO_WEEKS);
             // Generate UID by hashing string of customer ID and borrowed time.
+            uid = to_string(hasher(to_string(customerID) + borrow));
             temp->transactions.push_front(
-                Transaction{
-                    to_string(hasher(to_string(customerID) + borrow)),
-                    borrow,
-                    due,
-                    "N/A",
-                    details,
-                    }
-                );
+                Transaction{uid, borrow, due, "N/A", details,}
+            );
             return true;
         } else {
-            // If the transaction is a return, search customer transaction log
+            // If transaction is a return, search customer transaction log
             // from latest to earliest and update return date and push to front 
             // of list. 
-            for (it = temp->transactions.end(); it != temp->transactions.begin(); it--) {
+            for (it = temp->transactions.end(); 
+                it != temp->transactions.begin(); it--) {
                 if (it->transactionDetail == details) {
                     cout << "Transaction found: " << details << endl;
-                    // Swap found transaction to front
+                    // Set return date
                     it->returnDate = msTimestampToString(getCurrentTimestamp());
+                    // Swap found transaction to front
                     temp->transactions.splice(temp->transactions.begin(), temp->transactions, it, next(it));
                     return true;
                 }
@@ -232,18 +221,28 @@ void HashTable::displayHistory(const int customerID, const int limit) const {
 
     if (temp != nullptr) {
         tempTransactions = temp->transactions;
-        cout << "Customer ID " << temp->ID
-                << ", Name: " << temp->name << endl;
+        cout << "Customer ID " << temp->ID << ", Name: " << temp->name << endl;
+        if (!tempTransactions.empty() && limit > 0) {
+            cout << "Size: " << tempTransactions.size() << endl;
+            cout
+            << right << setw(20) << "Transaction #\t"
+            << right << setw(20) << "UID\t"
+            << right << setw(20) << "Borrow Date\t" 
+            << right << setw(20) << "Due Date\t" 
+            << right << setw(20) << "Return Date\t" 
+            << left << "Details\t" << endl;
+        }
         for (it = tempTransactions.begin();
                 it != tempTransactions.end() && countOfTransactions < limit;
                 ++it) {
             countOfTransactions++;
-            cout << " - Transaction " << countOfTransactions << " | ";
-            cout << "UID:" << it->transactionID << " "
-                    << "Borrow Date:" << it->borrowDate << " "
-                    << "Due Date:" << it->dueDate << " "
-                    << "Return Date:" << it->returnDate << " "
-                    << "Details: " << it->transactionDetail << endl;
+            cout
+            << right << setw(20) << countOfTransactions << "\t"
+            << right << setw(20) << it->transactionID << "\t"
+            << right << setw(20) << it->borrowDate << "\t"
+            << right << setw(20) << it->dueDate << "\t"
+            << right << setw(20) << it->returnDate << "\t"
+            << left << it->transactionDetail << endl;
         }
     }
 }

@@ -25,7 +25,7 @@ int main() {
     prettyPrint("Creating sample customers");
     Customer customer1{1, "John Doe", "2024-03-01", 0, false, {}};
     Customer customer2{1202, "Jane Smith", "2024-03-02", 0, false, {}};
-    Customer customer3{4503, "Alice Johnson35", "2024-03-03", 0, false, {}};
+    Customer customer3{4503, "Alice Johnson", "2024-03-03", 0, false, {}};
 
     // Instantiate the HashTable
     prettyPrint("Initializing hashtable");
@@ -43,7 +43,7 @@ int main() {
 
     // Add dummy transactions to customer1
     prettyPrint("TEST: Add dummy transactions to customer1");
-    for (int i = 1; i <= 5; i++) {
+    for (int i = 1; i <= 100; i++) {
         hashTable.addTransaction(customer1.ID, "movie", true);
         this_thread::sleep_for(chrono::milliseconds(1));
     }
@@ -64,7 +64,7 @@ int main() {
     prettyPrint("TEST: Adding non-existing return transaction to customer1:");
     hashTable.addTransaction(customer1.ID, "movie34", false);
 
-    prettyPrint("TEST: Get and display customer with nonexisting customerID = 2");
+    prettyPrint("TEST: Get and display customer w/ customerID = 2");
     // Attempt to retrieve customer with ID 2
     Customer* retrievedCustomer2 = hashTable.get(2);
     if (retrievedCustomer2 != nullptr)
@@ -74,7 +74,7 @@ int main() {
 
     // Remove a customer from the hash table
     // Attempt to remove customer with ID 2
-    prettyPrint("TEST: Attempt to remove customer with nonexisting customerID = 2");
+    prettyPrint("TEST: Attempt to remove customer w/ customerID = 2");
     bool removed = hashTable.remove(2); 
     if (removed)
         cout << "RESULT: Customer removed successfully.\n";
@@ -85,7 +85,7 @@ int main() {
     prettyPrint("HashTable contents after attempted removal:");
     hashTable.display(10);
     
-    prettyPrint("TEST: Get and display customer with existing customerID = 1202");
+    prettyPrint("TEST: Get and display customer w/ customerID = 1202");
     // Attempt to retrieve customer with ID 1202
     Customer* retrievedCustomer35 = hashTable.get(1202);
     if (retrievedCustomer35 != nullptr)
@@ -95,7 +95,7 @@ int main() {
 
     // Remove a customer from the hash table
     // Attempt to remove customer with ID 1202
-    prettyPrint("TEST: Attempt to remove customer with existing customerID = 1202");
+    prettyPrint("TEST: Attempt to remove customer w/ customerID = 1202");
     removed = hashTable.remove(1202); 
     if (removed)
         cout << "RESULT: Customer removed successfully.\n";
@@ -108,7 +108,7 @@ int main() {
 
     // Display transaction history of customer 1 up to 1000 entries.
     prettyPrint("TEST: Customer 1 transactions:");
-    hashTable.displayHistory(customer1.ID, 100);
+    hashTable.displayHistory(customer1.ID);
     
     return 0;
 }

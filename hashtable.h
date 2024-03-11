@@ -69,7 +69,9 @@ class HashTable {
         // Destructor
         // Precondition: NONE
         // Postcondition: Clears all dynamically allocated memory.
-        ~HashTable();
+        ~HashTable() {
+            delete[] hashTable;
+        };
 
         // --------------------------------------------------------------------
         // insert()
@@ -77,7 +79,7 @@ class HashTable {
         // Precondition: None
         // Postcondition: Hash Table is updated with key value pair if the 
         // entry does not exist.
-        void insert(const Customer);
+        bool insert(const Customer);
 
         // --------------------------------------------------------------------
         // remove()
@@ -109,22 +111,35 @@ class HashTable {
 
         // --------------------------------------------------------------------
         // display()
-        // Outputs hash table up to specified customers and transactions
+        // Outputs hash table up to specified # of customers and transactions
         // Precondition: None
         // Postcondition: Output of hash table to console
         void display(const int, const int) const;
 
         // --------------------------------------------------------------------
         // display()
-        // Outputs hash table up to specified customers w/o transactions
+        // Outputs hash table up to specified # of customers w/o transactions
         // Precondition: None
         // Postcondition: Output of hash table to console
         void display(const int customerEntries) const {
             display(customerEntries, 0);
         };
 
-        
+        // --------------------------------------------------------------------
+        // displayHistory()
+        // Outputs list of transaction for specified customer
+        // Precondition: None
+        // Postcondition: Output of hash table to console
         void displayHistory(const int, const int) const;
+
+        // --------------------------------------------------------------------
+        // displayHistory()
+        // Attempts to output entire list of transaction for specified customer
+        // Precondition: None
+        // Postcondition: Output of hash table to console
+        void displayHistory(const int customerID) const {
+            displayHistory(customerID, INT_MAX);
+        };
 };
 
 #endif
