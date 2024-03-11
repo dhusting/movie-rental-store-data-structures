@@ -176,7 +176,6 @@ void HashTable::display(const int limit) const {
     list<Transaction> tempTransactions;
     list<Transaction>::iterator it;
     int countOfEntries = 0;
-    int countOfTransactions;
 
     // Traverse list of customers and print details including transactions
     for (int i = 0; countOfEntries < limit && i < hashSize; i++) {
@@ -184,20 +183,10 @@ void HashTable::display(const int limit) const {
             countOfEntries++;
             temp = &hashTable[i].customer;
             tempTransactions = temp->transactions;
-            cout << "Hash Index " << i << ": Customer ID " << hashTable[i].customerID
-                 << ", Name: " << temp->name << endl;
-            countOfTransactions = 0;
-            for (it = tempTransactions.begin();
-                 it != tempTransactions.end() && countOfTransactions < limit;
-                 ++it) {
-                countOfTransactions++;
-                cout << " - Transaction " << countOfTransactions << ":";
-                cout << "ID:" << it->transactionID << " "
-                     << "Borrow Date: " << it->borrowDate << " "
-                     << "Due Date: " << it->dueDate << " "
-                     << "Return Date: " << it->returnDate << " "
-                     << "Details: " << it->transactionDetail << endl;
-            }
+            cout << "Hash Index " << i << ": "
+                 << "Customer ID " << hashTable[i].customerID << ", "
+                 << "Name: " << temp->name << endl;
+            displayHistory(hashTable[i].customerID, limit);
         }
     }
 }
