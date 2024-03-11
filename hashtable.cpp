@@ -7,9 +7,11 @@
 // Assumptions - None
 // ----------------------------------------------------------------------------
 #include <chrono>
+#include <functional>
 #include <iostream>
-#include <sstream>
+#include <iomanip>
 #include <list>
+#include <sstream>
 
 #include "hashtable.h"
 
@@ -31,6 +33,27 @@ uint64_t HashTable::getCurrentTimestamp() {
     chrono::system_clock::now().time_since_epoch());
 
     return ms.count();
+}
+
+string HashTable::msTimestampToString(uint64_t milliseconds) {
+    // Convert milliseconds to system_clock time_point
+    chrono::time_point<chrono::system_clock> tp =
+        chrono::time_point<chrono::system_clock>() + chrono::milliseconds(milliseconds);
+
+    // Convert time_point to time_t for conversion to tm struct
+    auto timeT = chrono::system_clock::to_time_t(tp);
+
+    // Convert to tm struct for formatting
+    tm bt = *localtime(&timeT);
+
+    // Use stringstream for formatting
+    ostringstream oss;
+
+    oss << put_time(&bt, "%Y%m%d_%H%M%S");
+    int milliseconds_part = milliseconds % 1000;
+    oss << "." << setw(2) << setfill('0') << milliseconds_part;
+
+    return oss.str();
 }
 
 // ----------------------------------------------------------------------------
@@ -60,7 +83,7 @@ void HashTable::insert(const Customer customer) {
 
         // Linear probing: go to the next index
         index = (index + 1) % hashSize;
-        cout << "Traversing | current ID+: " << hashTable[index].customerID << endl;
+        // cout << "Traversing | current ID+: " << hashTable[index].customerID << endl;
     } while (index != originalIndex);
 
     if (!inserted) {
@@ -129,16 +152,24 @@ bool HashTable::addTransaction(
     const int customerID, const string details, const bool isBorrow) {
     Customer* temp = get(customerID);
     list<Transaction>::iterator it;
+    hash<std::string> hasher;
+    string hashValue; // Used to generate unique ID
+    string borrow;
+    string due;
+    
     // Add transaction if customer exists
     if (temp != nullptr) {
         if (isBorrow) {
             // If the transaction is a borrow, populate transaction data and 
-            // push to front of list. 
+            // push to front of list.
+            string borrow = msTimestampToString(getCurrentTimestamp());
+            string due = msTimestampToString(getCurrentTimestamp() + TWO_WEEKS);
+            // Generate UID by hashing string of customer ID and borrowed time.
             temp->transactions.push_front(
                 Transaction{
-                    to_string(customerID),
-                    to_string(getCurrentTimestamp()),
-                    to_string(getCurrentTimestamp() + TWO_WEEKS),
+                    to_string(hasher(to_string(customerID) + borrow)),
+                    borrow,
+                    due,
                     "N/A",
                     details,
                     }
@@ -148,11 +179,11 @@ bool HashTable::addTransaction(
             // If the transaction is a return, search customer transaction log
             // from latest to earliest and update return date and push to front 
             // of list. 
-            for (it = temp->transactions.end();it != temp->transactions.begin(); it--) {
+            for (it = temp->transactions.end(); it != temp->transactions.begin(); it--) {
                 if (it->transactionDetail == details) {
                     cout << "Transaction found: " << details << endl;
                     // Swap found transaction to front
-                    it->returnDate = to_string(getCurrentTimestamp());
+                    it->returnDate = msTimestampToString(getCurrentTimestamp());
                     temp->transactions.splice(temp->transactions.begin(), temp->transactions, it, next(it));
                     return true;
                 }
@@ -208,7 +239,7 @@ void HashTable::displayHistory(const int customerID, const int limit) const {
                 ++it) {
             countOfTransactions++;
             cout << " - Transaction " << countOfTransactions << " | ";
-            cout << "ID:" << it->transactionID << " "
+            cout << "UID:" << it->transactionID << " "
                     << "Borrow Date:" << it->borrowDate << " "
                     << "Due Date:" << it->dueDate << " "
                     << "Return Date:" << it->returnDate << " "

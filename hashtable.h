@@ -53,6 +53,8 @@ class HashTable {
 
         uint64_t getCurrentTimestamp();
 
+        string msTimestampToString(uint64_t);
+
     public:
         // --------------------------------------------------------------------
         // Default Constructor
