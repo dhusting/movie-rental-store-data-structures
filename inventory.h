@@ -6,6 +6,9 @@
 // Summary - This file contains the specification for the Inventory class
 // Assumptions - N/A
 // ----------------------------------------------------------------------------
+#ifndef inventory_h
+#define inventory_h
+
 #include <fstream>
 #include <iostream>
 #include <list>
@@ -216,3 +219,5 @@ class Inventory{
         void commandInputFromFile(const string);
 
 };
+
+#endif

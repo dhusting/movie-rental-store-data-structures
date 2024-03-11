@@ -7,9 +7,8 @@
 // Assumptions - Extends the NodeData class
 // -----------------------------------------------------------------------------
 #include <string>
-#include <movie.h>
 #include <vector>
-#include "nodedata.h"
+#include "movie.h"
 
 using namespace std;
 
@@ -27,26 +26,3 @@ Movie::Movie(string ID, string title, int stock, string releaseDate
 }
 // Pseudocode:
 // Assign object properties to parameter values
-
-// -----------------------------------------------------------------------------
-// getType
-// Override function that returns media type
-// Precondition: N/A
-// Postcondition: Return string value of media type
-string Movie::getType() {
-    return "Movie";
-};
-
-// -----------------------------------------------------------------------------
-// getDirector
-// Getter for director property
-// Precondition: Valid movie object
-// Postcondition: Return string director value
-string Movie::getDirector() {return director;}
-
-// -----------------------------------------------------------------------------
-// getMajorActor
-// Getter for majorActor property
-// Precondition: Valid movie object
-// Postcondition: Return string majorActor value
-string Movie::getMajorActor() {return majorActor;}

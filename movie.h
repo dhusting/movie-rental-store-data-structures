@@ -6,6 +6,9 @@
 // Summary - This file contains the specification for the Movie class
 // Assumptions - Extends the NodeData class
 // -----------------------------------------------------------------------------
+#ifndef movie_h
+#define movie_h
+
 #include <string>
 #include "nodedata.h"
 
@@ -23,8 +26,6 @@ class Movie : NodeData {
         string majorActor;
 
     public:
-
-        Movie() {};
 
         // -----------------------------------------------------------------------------
         // Empty constructor ()
@@ -82,3 +83,5 @@ class Movie : NodeData {
         // Postcondition: Assign majorActor field to parameter
         void setMajorActor(string majorActor) {this->majorActor = majorActor;}
 };
+
+#endif

@@ -107,7 +107,7 @@ string Inventory::getAddress() {
 Product* Inventory::getProduct(const string abbrev)
 {
     //iterate through product list
-    for(Product product : productList)
+    for(Product & product : productList)
     {
         //compare abbreviations and return address
         if(product.getAbbreviation() == abbrev)
@@ -156,7 +156,10 @@ bool Inventory::ingestFromBackupFiles()
 
         //close the file
         commandFile.close();
+        return true;
     }
+
+    return false;
 }
 
 // -----------------------------------------------------------------------------
@@ -299,18 +302,24 @@ bool Inventory::executeBorrow(const string command)
                     
                     //create a transaction
                     addTransaction(customerID, command, false);
+
+                    return true;
                 }
 
             } else {
                 cout << "Genre Abbreviation: " << commandFields.at(2) << " does not exist" << endl;
+                return false;
             }
         } else {
             cout << "Product Abbreviation: " << commandFields.at(1) << " does not exist" << endl;
+            return false;
         }
     } else {
         cout << "Customer ID: " << id << " does not exist" << endl;
+        return false;
     }
 
+    return false;
 }
 
 // -----------------------------------------------------------------------------
@@ -389,17 +398,24 @@ bool Inventory::executeReturn(const string command)
                     
                     //create a transaction
                     addTransaction(customerID, command, false);
+
+                    return true;
                 }
 
             } else {
                 cout << "Genre Abbreviation: " << commandFields.at(2) << " does not exist" << endl;
+                return false;
             }
         } else {
             cout << "Product Abbreviation: " << commandFields.at(1) << " does not exist" << endl;
+            return false;
         }
     } else {
         cout << "Customer ID: " << id << " does not exist" << endl;
+        return false;
     }
+
+    return false;
 }
 
 // -----------------------------------------------------------------------------
@@ -432,6 +448,8 @@ bool Inventory::displayInventory() {
         }
         
     }
+
+    return true;
 }
 
 // -----------------------------------------------------------------------------
@@ -494,10 +512,16 @@ bool Inventory::createProduct(const string command)
 
             //add to the back of the list
             productList.push_back(m);
+
+            return true;
         }
     } else {
         cout << "Product Abbreviation: " << commandFields.at(1) << " does not exist" << endl;
+
+        return false;
     }
+
+    return false;
 }
 
 // -----------------------------------------------------------------------------
@@ -521,11 +545,17 @@ bool Inventory::createGenre(const string command) {
 
             //call createGenre        
             mediaPtr->createGenre(genreCommand);
+
+            return true;
         }    
 
     } else {
         cout << "Product Abbreviation: " << command.at(0) << " does not exist" << endl;
+
+        return false;
     }
+
+    return false;
 }
 
 // -----------------------------------------------------------------------------

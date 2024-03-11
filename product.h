@@ -7,6 +7,9 @@
 // stores all product types in a store. 
 // Assumptions - None
 // -----------------------------------------------------------------------------
+#ifndef product_h
+#define product_h
+
 #include <string>
 
 using namespace std;
@@ -41,3 +44,5 @@ class Product {
         string getAbbreviation() { return this->abbreviation; }
 
 };
+
+#endif

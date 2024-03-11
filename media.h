@@ -7,6 +7,8 @@
 // stores all media types in a store and holds Genre BSTs that sorts movies. 
 // Assumptions - None
 // -----------------------------------------------------------------------------
+#ifndef media_h
+#define media_h
 
 #include <list>
 #include <iostream>
@@ -51,3 +53,5 @@ class Media : public Product {
         // Postcondition: prints to the console the Genre BST
         void printGenres();
 };
+
+#endif

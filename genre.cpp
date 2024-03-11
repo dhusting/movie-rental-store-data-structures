@@ -23,6 +23,8 @@ using namespace std;
 // Postcondition: BST contents are printed to terminal output in order
 ostream &operator<<(ostream &out, const Genre &rhs) {
     rhs.print(out);
+
+    return out;
 }
 
 // -----------------------------------------------------------------------------

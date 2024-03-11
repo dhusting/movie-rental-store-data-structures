@@ -6,12 +6,15 @@
 // Summary - This file contains the specification for the HashTable class
 // Assumptions - None
 // ----------------------------------------------------------------------------
+#ifndef hashtable_h
+#define hashtable_h
+
 #include <string>
 #include <list>
 
 using namespace std;
 
-int DEFAULT_HASH_SIZE = 1000;
+const int DEFAULT_HASH_SIZE = 1000;
 
 struct Transaction {
     string transactionID;
@@ -115,3 +118,5 @@ class HashTable {
         //  for (length of hash array)
         //   output value, if not empty to cout
 };
+
+#endif
