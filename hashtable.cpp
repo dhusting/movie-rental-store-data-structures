@@ -34,6 +34,11 @@ void HashTable::insert(const int key, const Customer customer) {
 
     do {
         // If the spot is empty or previously removed (ID = -1), insert the new
+        /* Debug Messages
+        //cout << "Processing key: " << key << " customer: " << customer.ID << endl;
+        //cout << "Traversing | current index: " << index << endl;
+        //cout << "Traversing | current ID: " << hashTable[index].customerID << endl;
+        */
         if (hashTable[index].customerID == 0 || hashTable[index].customerID == -1) {
             hashTable[index].customerID = key;
             hashTable[index].customer = customer;
@@ -43,6 +48,7 @@ void HashTable::insert(const int key, const Customer customer) {
 
         // Linear probing: go to the next index
         index = (index + 1) % hashSize;
+        cout << "Traversing | current ID+: " << hashTable[index].customerID << endl;
     } while (index != originalIndex);
 
     if (!inserted) {
@@ -110,7 +116,6 @@ Customer* HashTable::get(const int key) const {
 bool HashTable::addTransaction(int customerID, string details, bool isBorrow) {
     Customer* temp = get(customerID);
     if (temp != nullptr) {
-        cout << "Customer exists! " << customerID << endl;
         // If customer exists
         if (isBorrow) {// If the transaction is a borrow, populate transaction data and 
             // push to front of list. 
@@ -144,8 +149,12 @@ void HashTable::display(const int limit) const {
     Customer* temp;
     list<Transaction> tempTransactions;
     list<Transaction>::iterator it;
-    for (int i = 0; i < limit && i < hashSize; ++i) {
+    int countOfEntries = 0;
+
+    // Traverse list of customers and print details including transactions
+    for (int i = 0; countOfEntries < limit && i < hashSize; ++i) {
         if (hashTable[i].customerID > 0) { // Assumes ID > 0 for valid entries
+            countOfEntries++;
             temp = &hashTable[i].customer;
             tempTransactions = temp->transactions;
             cout << "Index " << i << ": ID " << hashTable[i].customerID
@@ -155,7 +164,7 @@ void HashTable::display(const int limit) const {
                  it != tempTransactions.end() && count < limit;
                  ++it) {
                 count++;
-                cout << "Transaction " << count << endl;
+                cout << " - Transaction " << count << ":";
                 cout << it->transactionID << " "
                      << it->borrowDate << " "
                      << it->dueDate << " "

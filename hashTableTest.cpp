@@ -14,8 +14,8 @@ using namespace std;
 int main() {
     // Create some sample customers
     Customer customer1{1, "John Doe", "2024-03-01", 0, false, {}};
-    Customer customer2{2, "Jane Smith", "2024-03-02", 0, false, {}};
-    Customer customer3{3, "Alice Johnson", "2024-03-03", 0, false, {}};
+    Customer customer2{28, "Jane Smith", "2024-03-02", 0, false, {}};
+    Customer customer3{35, "Alice Johnson", "2024-03-03", 0, false, {}};
 
     // Instantiate the HashTable
     HashTable hashTable;
