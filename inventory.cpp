@@ -445,7 +445,7 @@ bool Inventory::displayInventory() {
 void Inventory::displayHistory(const string term) const {
     // scans customer ID from terms
     // scans through all customers for customer ID
-    // given customer IDiterates through all the customer transactions 
+    // given customer ID iterates through all the customer transactions 
     // output the transaction to the console.
  
     int customer_ID = stoi(term);

@@ -25,9 +25,9 @@ int main() {
     hashTable.insert(customer2.ID, customer2);
     hashTable.insert(customer3.ID, customer3);
 
-    hashTable.addTransaction(customer1.ID, "teststring", true);
-    hashTable.addTransaction(customer1.ID, "teststring", true);
-    hashTable.addTransaction(customer1.ID, "teststring", true);
+    hashTable.addTransaction(customer1.ID, "teststring1", true);
+    hashTable.addTransaction(customer1.ID, "teststring2", true);
+    hashTable.addTransaction(customer1.ID, "teststring3", true);
 
     // Display hash table contents
     cout << "HashTable contents after insertion:" << endl;
@@ -35,14 +35,14 @@ int main() {
     cout << "-----------------------------------" << endl;
 
     // Get and display a specific customer
-    try {
-        // Attempt to retrieve customer with ID 2
-        Customer* retrievedCustomer = hashTable.get(2);
-        if (retrievedCustomer != nullptr)
-            cout << "Retrieved Customer: " << retrievedCustomer->name << endl;
-    } catch (const runtime_error& e) {
-        cout << e.what() << endl;
-    }
+    // Attempt to retrieve customer with ID 2
+    Customer* retrievedCustomer = hashTable.get(2);
+    if (retrievedCustomer != nullptr)
+        cout << "Retrieved Customer: " << retrievedCustomer->name << endl;
+    else 
+        cout << "Customer could not be retrieved" << endl;
+
+
     cout << "-----------------------------------" << endl;
 
     // Remove a customer from the hash table
@@ -51,12 +51,18 @@ int main() {
     if (removed) {
         cout << "Customer removed successfully." << endl;
     } else {
-        cout << "Customer not found." << endl;
+        cout << "Customer to be removed not found." << endl;
     }
 
     // Display hash table contents after removal
     cout << "HashTable contents after removal:" << endl;
-    hashTable.display(10); // Display up to 10 elements for demonstration
+    hashTable.display(10);
 
+
+    hashTable.addTransaction(customer1.ID, "teststring2", false);
+
+    // Display hash table contents after return
+    cout << "HashTable contents after return:" << endl;
+    hashTable.display(10);
     return 0;
 }

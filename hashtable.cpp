@@ -115,6 +115,8 @@ Customer* HashTable::get(const int key) const {
 // if the customer exists
 bool HashTable::addTransaction(int customerID, string details, bool isBorrow) {
     Customer* temp = get(customerID);
+    list<Transaction>::iterator it;
+
     if (temp != nullptr) {
         // If customer exists
         if (isBorrow) {// If the transaction is a borrow, populate transaction data and 
@@ -129,14 +131,24 @@ bool HashTable::addTransaction(int customerID, string details, bool isBorrow) {
                     }
                 );
             return true;
-        } else { 
+        } else {
+            for (it = temp->transactions.begin();it != temp->transactions.end(); it++) {
+                cout << "Current Transaction: " << it->transactionDetail << endl;
+                if (it->transactionDetail == details) {
+                    cout << "Transaction found: " << details << endl;
+                    // Swap found transaction to front
+                    temp->transactions.splice(temp->transactions.begin(), temp->transactions, it, next(it) );
+                    return true;
+                }
             // If the transaction is a return, search customer transaction log, 
             // update return date and push to front of list. 
             // TODO;
-            return true;
+            }
+            cout << "Transaction not found: " << details << endl;
+            return false;
         }
-    } else
-        return false;
+    }
+    return false;
 }
 
 
@@ -150,6 +162,7 @@ void HashTable::display(const int limit) const {
     list<Transaction> tempTransactions;
     list<Transaction>::iterator it;
     int countOfEntries = 0;
+    int countOfTransactions;
 
     // Traverse list of customers and print details including transactions
     for (int i = 0; countOfEntries < limit && i < hashSize; ++i) {
@@ -159,12 +172,12 @@ void HashTable::display(const int limit) const {
             tempTransactions = temp->transactions;
             cout << "Index " << i << ": ID " << hashTable[i].customerID
                  << ", Name: " << temp->name << endl;
-            int count = 0;
+            countOfTransactions = 0;
             for (it = tempTransactions.begin();
-                 it != tempTransactions.end() && count < limit;
+                 it != tempTransactions.end() && countOfTransactions < limit;
                  ++it) {
-                count++;
-                cout << " - Transaction " << count << ":";
+                countOfTransactions++;
+                cout << " - Transaction " << countOfTransactions << ":";
                 cout << it->transactionID << " "
                      << it->borrowDate << " "
                      << it->dueDate << " "
