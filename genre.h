@@ -125,7 +125,7 @@ class Genre {
         // Method to retrieve inventory data from BST to update or print
         // Precondition: Search key parameter
         // Postcondition: Return nodeData object if found, otherwise null
-        bool find(string, NodeData&);
+        bool find(string, NodeData*&);
         // Pseudocode:
         // Iterate down the tree using parameter as the comparison value.  Return
         // NodeData value if equal comparison, nullptr value if media doesn't exist

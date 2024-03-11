@@ -30,8 +30,11 @@ class Inventory{
         // Stores all possible products. E.g (Media, Hardware, etc)
         list<Product> productList;
 
-        ofstream outputFile;
-
+        // -----------------------------------------------------------------------------
+        // getProduct()
+        // Searches the product list by the abbreviation and returns address it there is one
+        // Precondition: NONE
+        // Postcondition: returns pointer to Product or null
         Product* getProduct(const string);
 
     public:
@@ -92,6 +95,7 @@ class Inventory{
         // Precondition: NONE
         // Postcondition: return address field value
         string getAddress();
+
         // --------------------------------------------------------------------
         // checkForBackupFiles()
         // Returns whether there are automated backup files of previous 
@@ -99,9 +103,6 @@ class Inventory{
         // Precondition: NONE
         // Postcondition: return true if files exist, false otherwise
         bool checkForBackupFiles();
-        // looks at the predetermined paths for any .bak files that contain previous iteration
-        // of inventories. 
-        // Returns true if there are files
 
         // --------------------------------------------------------------------
         // ingestFromBackupFiles()
@@ -109,15 +110,6 @@ class Inventory{
         // Precondition: NONE
         // Postcondition: returns true if successfull, false otherwise
         bool ingestFromBackupFiles();
-        // calls checkForBackupFiles() to verify there are files to ingest
-        // if true
-        // grab one file
-        // create a new Inventory object
-        // set the name and address from the file
-        // iterate until there are no products left to create
-        // iterate until there are no genres left to create
-        // iterate until all movies have been inserted
-        // return true if capable
 
         // --------------------------------------------------------------------
         // command()
@@ -128,9 +120,6 @@ class Inventory{
         // Postcondition: Command is executed if it is a valid command and exectues
         // the correct associated action and errors if the command is not valid
         void command(const string);
-        // get the first character in the command to designate which method to call
-        // switch(character)
-        //      call method to execute that command
 
         // --------------------------------------------------------------------
         // executeBorrow()
@@ -144,15 +133,6 @@ class Inventory{
         // Postcondition: stock is decreased by one and a transaction is created
         // in the transaction log and errors out if command is not valid
         bool executeBorrow(const string);
-        // searches the given string for information on the product
-        // call getProduct() and if not nullptr
-        // gets from the given string the Genre abbreviation
-        // calls getGenre() and if not nullptr
-        // gets from the given string the movie identification details using the
-        // parsing infor from the Genre class gets the details.
-        // calls getMovie() and if not nullptr
-        // reduces the stock by 1
-        // creates new transaction by utilizing borrowTransaction()
 
         // 
         // --------------------------------------------------------------------
@@ -167,16 +147,6 @@ class Inventory{
         // Postcondition: stock is decreased by one and a transaction is created
         // in the transaction log and errors out if command is not valid
         bool executeReturn(const string);
-        // searches the given string for information on the product
-        // call getProduct() and if not nullptr
-        // gets from the given string the Genre abbreviation
-        // calls getGenre() and if not nullptr
-        // gets from the given string the movie identification details using the
-        // parsing infor from the Genre class gets the details.
-        // calls getMovie() and if not nullptr
-        // increases the stock by 1
-        // if nullptr, creates a new movie in that spot
-        // creates new transaction by utilizing returnTransaction()
 
         // --------------------------------------------------------------------
         // displayInventory()
@@ -186,10 +156,6 @@ class Inventory{
         // Postcondition: outputs all inventory to the console in order and blank
         // if there are no values
         bool displayInventory();
-        // iterate through all products if they exist
-        // iterate through all genres if they exist
-        // iterate through all trees
-        // output movie information and their stock
 
         // --------------------------------------------------------------------
         // displayHistory()
@@ -200,10 +166,6 @@ class Inventory{
         // for all customers.  Otherwise, display transactions for given id,
         // blank if no transactions.
         void displayHistory(const string) const;
-        // scans customer ID from terms
-        // scans through all customers for customer ID
-        // given customer IDiterates through all the customer transactions 
-        // output the transaction to the console.
 
         // --------------------------------------------------------------------
         // createProduct()
@@ -212,11 +174,7 @@ class Inventory{
         // Precondition: Inventory is initialized correctly
         // Postcondition: creates a new Product object for that product and
         // returns error if the product already exists
-        bool createProduct(string);
-        // call getProduct() and if returns nullptr
-        // create new Product object
-        // set the name of the product
-        // add the product to the list
+        bool createProduct(const string);
 
         // --------------------------------------------------------------------
         // createGenre()
@@ -224,10 +182,6 @@ class Inventory{
         // Precondition: Inventory and Product are initialized correctly
         // Postcondition: creates a new genre BST if no genre exists with the same name
         bool createGenre(const string);
-        // call getGenre() and if returns nullptr
-        // create new Genre object
-        // set the name of the product
-        // add the Genre to the list
 
         // --------------------------------------------------------------------
         // createMovie()
@@ -237,9 +191,6 @@ class Inventory{
         // Postcondition: creates a new node that designates the stock in inventory
         // if it does not already exist
         bool createMovie(const string);
-        // // call getMovie() and if returns address
-        // if nullptr towards comparison, create new movie
-        // if found movie of same name return error
 
         // --------------------------------------------------------------------
         // createCustomer()
@@ -247,9 +198,6 @@ class Inventory{
         // Precondition: The Inventory and customer table are initialized correctly
         // Postcondition: creates a new customer in the table if it does not exist
         bool createCustomer(const string);
-        // call get getCustomer() if returns nullptr
-        // create new customer
-        // else error to console
 
         // --------------------------------------------------------------------
         // createTransaction()
@@ -259,10 +207,6 @@ class Inventory{
         // Postcondition: a new transaction transaction is created in the table
         // if the customer exists
         bool addTransaction(int, string, bool);
-        // call getMovie() if address returned
-        // call getCustomer() if customer returned
-        // call borrowStock() if isReturn is false, otherwise returnStock()
-        // create a transaction in the list
 
         // --------------------------------------------------------------------
         // commandInputFromFile(string)
@@ -270,7 +214,5 @@ class Inventory{
         // Precondition: NONE
         // Postcondition: all valid commands are executed
         void commandInputFromFile(const string);
-        // iterates through a file until EOF
-        // utilizes createCommand()
 
 };
