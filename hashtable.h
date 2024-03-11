@@ -105,6 +105,19 @@ class HashTable {
         //  Keep moving forward until you find key or reach empty spot
         //  Reutrn copy of value
 
+        // -----------------------------------------------------------------------------
+        // addTransaction()
+        // Transactions are either a borrow or return.
+        // If transaction is a borrow, creates a new transaction in the HashTable. 
+        // ID is created off of date customer ID and all other details.
+        // If transaction is a return, searches for the transaction given the customer
+        // ID and updates the return date.
+        // Transaction is moved to front of list to maintain chronological order. 
+        // Precondition: Customer id, transaction details, and isReturn parameters
+        // Postcondition: a new transaction transaction is created in the table
+        // if the customer exists
+        bool addTransaction(int, string, bool);
+
         // --------------------------------------------------------------------
         // display()
         // Outputs hash table to console for debugging

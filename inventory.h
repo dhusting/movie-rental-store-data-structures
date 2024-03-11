@@ -1,11 +1,11 @@
-// ------------------------------- inventory.h ----------------------------------
+// ------------------------------- inventory.h ---------------------------------
 // Team Blockbuster - CS502 A WTR24
 // Creation 20240223
 // Modified N/A
-// ----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Summary - This file contains the specification for the Inventory class
 // Assumptions - N/A
-// ----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 #include <fstream>
 #include <iostream>
 #include <list>
@@ -30,9 +30,10 @@ class Inventory{
         // Stores all possible products. E.g (Media, Hardware, etc)
         list<Product> productList;
 
-        // -----------------------------------------------------------------------------
+        // ---------------------------------------------------------------------
         // getProduct()
-        // Searches the product list by the abbreviation and returns address it there is one
+        // Searches the product list by the abbreviation and returns address it 
+        // there is one
         // Precondition: NONE
         // Postcondition: returns pointer to Product or null
         Product* getProduct(const string);
@@ -106,7 +107,7 @@ class Inventory{
 
         // --------------------------------------------------------------------
         // ingestFromBackupFiles()
-        // Ingests from automated backup files that have been outputted and stored.
+        // Ingests from automated backup files that have been output and stored.
         // Precondition: NONE
         // Postcondition: returns true if successfull, false otherwise
         bool ingestFromBackupFiles();
@@ -117,8 +118,8 @@ class Inventory{
         // Returns true if command is executed, false if user wants to exit. 
         // Handles bad inputs. 
         // Precondition: Inventoryis intialized correctly
-        // Postcondition: Command is executed if it is a valid command and exectues
-        // the correct associated action and errors if the command is not valid
+        // Postcondition: Command is executed if it is a valid and exectues the 
+        // correct associated action and errors if the command is not valid
         void command(const string);
 
         // --------------------------------------------------------------------
@@ -153,8 +154,8 @@ class Inventory{
         // Executes an Inventory (‘I’) command. Outputs the inventory to the 
         // console 
         // Precondition: Inventory is initialized
-        // Postcondition: outputs all inventory to the console in order and blank
-        // if there are no values
+        // Postcondition: outputs all inventory to the console in order and 
+        // blank if there are no values
         bool displayInventory();
 
         // --------------------------------------------------------------------
@@ -180,7 +181,8 @@ class Inventory{
         // createGenre()
         // Creates a new Genre Binary Search Tree. (Comedy, Classic, Drama, Etc)
         // Precondition: Inventory and Product are initialized correctly
-        // Postcondition: creates a new genre BST if no genre exists with the same name
+        // Postcondition: creates a new genre BST if no genre exists with the 
+        // same name
         bool createGenre(const string);
 
         // --------------------------------------------------------------------
@@ -188,15 +190,16 @@ class Inventory{
         // Creates a new movie. Assumes Product is a movie, based on genre the 
         // string is parsed differently so input is left generic
         // Precondition: Inventory, Product, and Genre are initialized correctly
-        // Postcondition: creates a new node that designates the stock in inventory
-        // if it does not already exist
+        // Postcondition: creates a new node that designates the stock in 
+        // inventory if it does not already exist
         bool createMovie(const string);
 
         // --------------------------------------------------------------------
         // createCustomer()
         // Creates a new customer in the hash table
-        // Precondition: The Inventory and customer table are initialized correctly
-        // Postcondition: creates a new customer in the table if it does not exist
+        // Precondition: The Inventory and customer table are initialized 
+        // correctly
+        // Postcondition: creates a new customer in table if does not exist
         bool createCustomer(const string);
 
         // --------------------------------------------------------------------

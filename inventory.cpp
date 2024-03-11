@@ -575,33 +575,24 @@ bool Inventory::createCustomer(string line) {
 }
 
 // -----------------------------------------------------------------------------
-// createTransaction()
-// Creates a new transaction in the HashTable. ID is created off of date
-// customer ID and all other details.
-// Precondition: Customer id, mediaKey, and isReturn parameters
+// addTransaction()
+// Transactions are either a borrow or return.
+// If transaction is a borrow, creates a new transaction in the HashTable. 
+// ID is created off of date customer ID and all other details.
+// If transaction is a return, searches for the transaction given the customer
+// ID and updates the return date.
+// Transaction is moved to front of list to maintain chronological order. 
+// Precondition: Customer id, transaction details, and isReturn parameters
 // Postcondition: a new transaction transaction is created in the table
 // if the customer exists
-bool Inventory::addTransaction(int customerID, string details, bool isReturn) {
+bool Inventory::addTransaction(int customerID, string details, bool isBorrow) {
     // call getMovie() if address returned
     // call getCustomer() if customer returned
     // call borrowStock() if isReturn is false, otherwise returnStock()
     // create a transaction in the list
     // TODO: Handle isReturn
-    Customer* temp = customers.get(customerID);
-    if (temp != nullptr)  {
-        if (!isReturn) {
-            temp->transactions.push_front(
-                Transaction{
-                    "transactionID",
-                    "borrowDate",
-                    "dueDate",
-                    "returnDate",
-                    details,
-                    }
-                );
-        }
-    }
-    return true; // TODO: return success
+    return customers.addTransaction(customerID, details, isBorrow);
+    // TODO: return success
 }
 
 // commandInputFromFile(string)

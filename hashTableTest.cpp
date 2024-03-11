@@ -25,6 +25,10 @@ int main() {
     hashTable.insert(customer2.ID, customer2);
     hashTable.insert(customer3.ID, customer3);
 
+    hashTable.addTransaction(customer1.ID, "teststring", true);
+    hashTable.addTransaction(customer1.ID, "teststring", true);
+    hashTable.addTransaction(customer1.ID, "teststring", true);
+
     // Display hash table contents
     cout << "HashTable contents after insertion:" << endl;
     hashTable.display(10); // Display up to 10 elements for demonstration
