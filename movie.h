@@ -23,9 +23,6 @@ class Movie : NodeData {
         string majorActor;
 
     public:
-
-        Movie() {};
-
         // -----------------------------------------------------------------------------
         // Empty constructor ()
         // Initializes empty movie object

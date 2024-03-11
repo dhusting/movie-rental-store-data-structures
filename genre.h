@@ -54,6 +54,16 @@ class Genre {
         // Pseudocode:
         // Execute recursive in-order traversal of tree and print contents of each node
 
+        // -----------------------------------------------------------------------------
+        // split
+        // Split string into substrings separated by char delimiter
+        // Precondition: String input & char delimiter
+        // Postcondition: Vector of substrings
+        vector<string> split(string input, char delimiter) const;
+        // Pseudocode:
+        // dump input into stringstream buffer
+        // use getline to read substrings from buffer
+
     public:
         // -----------------------------------------------------------------------------
         // Empty constructor
@@ -144,9 +154,18 @@ class Genre {
         // Assign parameter input to parameter field
         // Precondition: Input & field string parameters
         // Postcondition: Parameter field is assigned to parameter input
-        void buildSortField(Movie*, string, string);
+        string buildSortField(Movie*, string, string);
         // Pseudocode:
         // Match field name to object field, assign input to field and convert to type
+
+        // -----------------------------------------------------------------------------
+        // buildMovie
+        // Match input to fields w/ filter parameter
+        // Precondition: Input & filter parameters
+        // Postcondition: Return movie pointer with input data
+        Movie* buildMovie(vector<string>, vector<string>);
+        // Pseudocode:
+        // Use filters to match input to movie fields
 
         // -----------------------------------------------------------------------------
         // print

@@ -7,8 +7,9 @@
 // Assumptions - The class is abstract and is meant be extended to allow for
 // additional media type extensibility
 // -----------------------------------------------------------------------------
+#ifndef NODEDATA_H
+#define NODEDATA_H
 #include <string>
-
 using namespace std;
 
 // -----------------------------------------------------------------------------
@@ -74,14 +75,14 @@ class NodeData {
         // Check two nodeData instances for equality
         // Precondition: Two nodeData parameters
         // Postcondition: Return true if parameters are equal, false otherwise
-        bool NodeData::operator==(const NodeData& rhs) const;
+        bool operator==(const NodeData& rhs) const;
 
         // -----------------------------------------------------------------------------
         // operator > overload
         // Check if left operand is greater than the right
         // Precondition: Two nodeData parameters
         // Postcondition: Return true if left operand is greater, false otherwise
-        bool NodeData::operator>(const NodeData& rhs) const;
+        bool operator>(const NodeData& rhs) const;
 
         // -----------------------------------------------------------------------------
         // getId
@@ -187,3 +188,5 @@ class NodeData {
         // Postcondition: Assign lateFee field to parameter
         void setLateFee(int lateFee) {this->lateFee = lateFee;}
 };
+
+#endif
