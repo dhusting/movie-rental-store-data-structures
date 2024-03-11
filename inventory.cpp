@@ -242,7 +242,7 @@ bool Inventory::executeBorrow(const string command)
     while (ss >> id);
 
     int customerID = stoi(commandFields.at(0));
-    Customer * customer = customers->get(customerID);
+    Customer * customer = customers.get(customerID);
 
     if(customer != nullptr)
     {
@@ -292,7 +292,7 @@ bool Inventory::executeBorrow(const string command)
 // Precondition: command is valid and inventory is initialized correctly
 // Postcondition: stock is decreased by one and a transaction is created
 // in the transaction log and errors out if command is not valid
-bool Inventory::executeReturn(const string terms) 
+bool Inventory::executeReturn(const string command) 
 {
     vector<string> commandFields;
 
@@ -314,7 +314,7 @@ bool Inventory::executeReturn(const string terms)
     while (ss >> id);
 
     int customerID = stoi(commandFields.at(0));
-    Customer * customer = customers->get(customerID);
+    Customer * customer = customers.get(customerID);
 
     if(customer != nullptr)
     {
@@ -369,7 +369,7 @@ bool Inventory::displayInventory() {
 
         if (Media * mediaPtr = dynamic_cast<Media *>(productPtr))
         {
-            
+            mediaPtr->printGenre();
         }
         
     }
@@ -394,8 +394,8 @@ void Inventory::displayHistory(const string term) const {
     // output the transaction to the console.
  
     int customer_ID = stoi(term);
-    Customer temp = customers.get(customer_ID);
-    list<Transaction> tempTransactions = temp.transactions;
+    Customer * temp = customers.get(customer_ID);
+    list<Transaction> tempTransactions = (*temp).transactions;
     list<Transaction>::iterator it;
     // TODO: Table header and logic for checking if transactions exist
     for (it = tempTransactions.begin(); it != tempTransactions.end(); ++it){
