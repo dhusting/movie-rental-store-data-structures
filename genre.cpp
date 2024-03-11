@@ -207,12 +207,12 @@ bool Genre::insert(string line) {
 // Method to retrieve inventory data from BST to update or print
 // Precondition: Search key parameter
 // Postcondition: Return reference to nodeData object if found, else nullptr
-bool Genre::find(string key, NodeData& result) {
+bool Genre::find(string key, NodeData *& result) {
     //iterative traversal, assign result to reference parameter if found
     Node* cur = root;
     while (cur != nullptr) {
         if (cur->data->getId() == key) {    // check if found
-            result = *cur->data;    // assign to result parameter
+            result = cur->data;    // assign to result parameter
             return true;    // return true, find success
         } else if (cur->data->getId() > key)    // check if key is before cur
             cur = cur->left;    // traverse left

@@ -99,11 +99,17 @@ string Inventory::getAddress() {
     return Address;
 }
 
+// -----------------------------------------------------------------------------
+// getProduct()
+// Searches the product list by the abbreviation and returns address it there is one
+// Precondition: NONE
+// Postcondition: returns pointer to Product or null
 Product* Inventory::getProduct(const string abbrev)
 {
-
+    //iterate through product list
     for(Product product : productList)
     {
+        //compare abbreviations and return address
         if(product.getAbbreviation() == abbrev)
             return &product;
     }
@@ -152,16 +158,6 @@ bool Inventory::ingestFromBackupFiles()
         commandFile.close();
     }
 }
-
-// calls checkForBackupFiles() to verify there are files to ingest
-// if true
-// grab one file
-// create a new Inventory object
-// set the name and address from the file
-// iterate until there are no products left to create
-// iterate until there are no genres left to create
-// iterate until all movies have been inserted
-// return true if capable
 
 // -----------------------------------------------------------------------------
 // command()
@@ -290,7 +286,7 @@ bool Inventory::executeBorrow(const string command)
                 if (genre != nullptr)
                 {
                     //empty NodeData to store address if the Node is found
-                    NodeData& node;
+                    NodeData * node;
                     
                     //search for the node with the movie id
                     genre->find(id, node);
@@ -316,15 +312,6 @@ bool Inventory::executeBorrow(const string command)
     }
 
 }
-// searches the given string for information on the product
-// call getProduct() and if not nullptr
-// gets from the given string the Genre abbreviation
-// calls getGenre() and if not nullptr
-// gets from the given string the movie identification details using the
-// parsing infor from the Genre class gets the details.
-// calls getMovie() and if not nullptr
-// reduces the stock by 1
-// creates new transaction by utilizing borrowTransaction()
 
 // -----------------------------------------------------------------------------
 // executeReturn()
@@ -392,16 +379,13 @@ bool Inventory::executeReturn(const string command)
                 if (genre != nullptr)
                 {
                     //empty NodeData to store address if the Node is found
-                    NodeData& node;
+                    NodeData* node;
                     
                     //search for the node with the movie id
                     genre->find(id, node);
                     
                     //reduce the stock by 1
-                    if(!(node->returnStock()))
-                    {
-                        cout << "Stock is already at 0" << endl;
-                    }
+                    node->returnStock();
                     
                     //create a transaction
                     addTransaction(customerID, command, false);
@@ -418,17 +402,6 @@ bool Inventory::executeReturn(const string command)
     }
 }
 
-// searches the given string for information on the product
-// call getProduct() and if not nullptr
-// gets from the given string the Genre abbreviation
-// calls getGenre() and if not nullptr
-// gets from the given string the movie identification details using the
-// parsing infor from the Genre class gets the details.
-// calls getMovie() and if not nullptr
-// increases the stock by 1
-// if nullptr, creates a new movie in that spot
-// creates new transaction by utilizing returnTransaction()
-
 // -----------------------------------------------------------------------------
 // displayInventory()
 // Executes an Inventory (‘I’) command. Outputs the inventory to the 
@@ -437,30 +410,29 @@ bool Inventory::executeReturn(const string command)
 // Postcondition: outputs all inventory to the console in order and blank
 // if there are no values
 bool Inventory::displayInventory() {
-    //iterate through all products
-
+    //checks to see if there are any products
     if (productList.size() == 0)
     {
+        //output no products available
         cout << "No Products available" << endl;
         return false;
     }
 
+    //iterate through all the in the list
     for (Product product : productList)
     {
-
+        //convert to pointer for type check
         Product * productPtr = &product;
 
+        //try to convert to media
         if (Media * mediaPtr = dynamic_cast<Media *>(productPtr))
         {
+            //call the print method
             mediaPtr->printGenre();
         }
         
     }
 }
-// iterate through all products if they exist
-// iterate through all genres if they exist
-// iterate through all trees
-// output movie information and their stock
 
 // -----------------------------------------------------------------------------
 // displayHistory()
@@ -499,32 +471,34 @@ void Inventory::displayHistory(const string term) const {
 // returns error if the product already exists
 bool Inventory::createProduct(const string command) 
 {
-
     vector<string> commandFields;
-
-    stringstream ss(command);
-
     string parsedField;
 
+    //string stream to parse the command
+    stringstream ss(command);
+
+    //get every word separated by a comma
     while (getline(ss, parsedField, ',')) {
+        //add to the field vector
         commandFields.push_back(parsedField);
     }
 
+    //check to see if the product exists already
     if(getProduct(commandFields.at(0)) == nullptr)
     {
+        //if the genre is of media type
         if (commandFields.at(1) == "M")
         {
+            //create a new media object giving it the name and abbreviation
             Media m(commandFields.at(2), commandFields.at(3));
 
+            //add to the back of the list
             productList.push_back(m);
         }
+    } else {
+        cout << "Product Abbreviation: " << commandFields.at(1) << " does not exist" << endl;
     }
 }
-
-// call getProduct() and if returns nullptr
-// create new Product object
-// set the name of the product
-// add the product to the list
 
 // -----------------------------------------------------------------------------
 // createGenre()
@@ -533,17 +507,24 @@ bool Inventory::createProduct(const string command)
 // Postcondition: creates a new genre BST if no genre exists with the same name
 bool Inventory::createGenre(const string command) {
     
+    //search for the product giving it the abbreviation
     Product * product = getProduct(to_string(command.at(0)));
     
+    //check to see if the product exists
     if(product != nullptr)
     {
-
+        //try to convert to a Media
         if(Media * mediaPtr = dynamic_cast<Media *>(product))
         {
-            string genreCommand = command.substr(3);        
+            //get the rest of the command
+            string genreCommand = command.substr(3);
+
+            //call createGenre        
             mediaPtr->createGenre(genreCommand);
         }    
 
+    } else {
+        cout << "Product Abbreviation: " << command.at(0) << " does not exist" << endl;
     }
 }
 
@@ -557,13 +538,13 @@ bool Inventory::createGenre(const string command) {
 bool Inventory::createMovie(const string line) {
     // parse input line
     stringstream ss(line);
-    string cat;
-    getline(ss, cat, ',');
+    string abbrev;
+    getline(ss, abbrev, ',');
 
     // get matching genre & insert input line
-    Product *product = &Products[0];
+    Product *product = getProduct(abbrev);
     Media *media = (Media *)product;
-    Genre *genre = media->getGenre(cat);
+    Genre *genre = media->getGenre(abbrev);
     if (genre == nullptr)
         return false;
     genre->insert(line);
