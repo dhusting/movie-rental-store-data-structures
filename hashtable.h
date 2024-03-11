@@ -6,8 +6,9 @@
 // Summary - This file contains the specification for the HashTable class
 // Assumptions - None
 // ----------------------------------------------------------------------------
-#include <string>
+#include <chrono>
 #include <list>
+#include <string>
 
 using namespace std;
 
@@ -22,7 +23,7 @@ struct Transaction {
 };
 
 struct Customer {
-    int ID;
+    int ID = 0;
     string name;
     string dateCreated;
     int infractionCount;
@@ -47,6 +48,8 @@ class HashTable {
         int getHashIndex(const int key) const {
             return key % hashSize;
         }
+
+        uint64_t getCurrentTimestamp();
 
     public:
         // --------------------------------------------------------------------

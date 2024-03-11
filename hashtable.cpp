@@ -6,12 +6,17 @@
 // Summary - This file contains the implmentation for the HashTable class
 // Assumptions - None
 // ----------------------------------------------------------------------------
-#include <list>
+#include <chrono>
+#include <format>
 #include <iostream>
+#include <sstream>
+#include <list>
 
 #include "hashtable.h"
 
 using namespace std;
+
+const uint64_t TWO_WEEKS = 1209600000;
 
 // ----------------------------------------------------------------------------
 // Destructor
@@ -19,6 +24,14 @@ using namespace std;
 // Postcondition: Clears all dynamically allocated memory.
 HashTable::~HashTable() {
     delete[] hashTable;
+}
+
+// Return number of seconds since January 1st, 1970
+uint64_t HashTable::getCurrentTimestamp() {
+    chrono::milliseconds ms = chrono::duration_cast< chrono::milliseconds >(
+    chrono::system_clock::now().time_since_epoch());
+
+    return ms.count();
 }
 
 // ----------------------------------------------------------------------------
@@ -123,9 +136,9 @@ bool HashTable::addTransaction(int customerID, string details, bool isBorrow) {
             // push to front of list. 
             temp->transactions.push_front(
                 Transaction{
-                    "transactionID_holder",
-                    "borrowDate_holder",
-                    "dueDate_holder",
+                    to_string(customerID),
+                    to_string(getCurrentTimestamp()),
+                    to_string(getCurrentTimestamp() + TWO_WEEKS),
                     "returnDate_holder",
                     details,
                     }
@@ -137,17 +150,19 @@ bool HashTable::addTransaction(int customerID, string details, bool isBorrow) {
                 if (it->transactionDetail == details) {
                     cout << "Transaction found: " << details << endl;
                     // Swap found transaction to front
-                    temp->transactions.splice(temp->transactions.begin(), temp->transactions, it, next(it) );
+                    it->returnDate = to_string(getCurrentTimestamp());
+                    temp->transactions.splice(temp->transactions.begin(), temp->transactions, it, next(it));
                     return true;
                 }
             // If the transaction is a return, search customer transaction log, 
             // update return date and push to front of list. 
             // TODO;
             }
-            cout << "Transaction not found: " << details << endl;
+            cout << "Error, transaction not found: " << details << endl;
             return false;
         }
     }
+    cout << "Error, customer not found: " << details << endl;
     return false;
 }
 
@@ -165,7 +180,7 @@ void HashTable::display(const int limit) const {
     int countOfTransactions;
 
     // Traverse list of customers and print details including transactions
-    for (int i = 0; countOfEntries < limit && i < hashSize; ++i) {
+    for (int i = 0; countOfEntries < limit && i < hashSize; i++) {
         if (hashTable[i].customerID > 0) { // Assumes ID > 0 for valid entries
             countOfEntries++;
             temp = &hashTable[i].customer;
@@ -178,7 +193,7 @@ void HashTable::display(const int limit) const {
                  ++it) {
                 countOfTransactions++;
                 cout << " - Transaction " << countOfTransactions << ":";
-                cout << it->transactionID << " "
+                cout << "ID:" << it->transactionID << " "
                      << it->borrowDate << " "
                      << it->dueDate << " "
                      << it->returnDate << " "
