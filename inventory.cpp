@@ -8,9 +8,12 @@
 // -----------------------------------------------------------------------------
 #include <fstream>
 #include <iostream>
+#include <filesystem>
 #include <list>
 #include <string>
 #include <sstream>
+#include <chrono>
+#include <ctime>
 #include "inventory.h"
 #include "product.h"
 #include "media.h"
@@ -119,7 +122,13 @@ Product* Inventory::getProduct(const string abbrev)
 // sessions
 // Precondition: NONE
 // Postcondition: return true if files exist, false otherwise
-bool Inventory::checkForBackupFiles() {}
+bool Inventory::checkForBackupFiles() 
+{
+    if (filesystem::exists("backup.bak"))
+        return true;
+
+    return false;
+}
 // looks at the predetermined paths for any .bak files that contain previous iteration
 // of inventories. 
 // Returns true if there are files
@@ -129,7 +138,19 @@ bool Inventory::checkForBackupFiles() {}
 // Ingests from automated backup files that have been outputted and stored.
 // Precondition: NONE
 // Postcondition: returns true if successfull, false otherwise
-bool Inventory::ingestFromBackupFiles() {}
+bool Inventory::ingestFromBackupFiles() 
+{
+    if (checkForBackupFiles())
+    {
+        string line;
+        ifstream commandFile;
+        commandFile.open("backup.bak");
+        while (getline(commandFile, line))
+            command(line);
+        commandFile.close();
+    }
+}
+
 // calls checkForBackupFiles() to verify there are files to ingest
 // if true
 // grab one file
@@ -141,25 +162,6 @@ bool Inventory::ingestFromBackupFiles() {}
 // return true if capable
 
 // -----------------------------------------------------------------------------
-// dumpToBackupFiles()
-// Dumps genre nodes in-order into a <inventoryName_movie_dump.bak> 
-// Dumps transactions into <inventoryName_transactions_dump.bak>
-// Dumps customers into <inventoryName_customers_dump.bak>
-// Allows us to save the state of the inventory
-// between application sessions. (ex: customer or movies are manually 
-// added) Automated Backs up all data structures to files
-// Returns success
-// Precondition: NONE
-// Postcondition: Overwrites file if file named with 
-// inventoryName_*dumpType*_dump.bak exists
-bool Inventory::dumpToBackupFiles() {}
-// creates file 
-// iterates through all products if there are any and outputs all values
-// into the file
-// iterates through all genres if there are any and outputs there values into the file
-// iterates through all genre BSTs and outputs the movie values in-order into the file
-
-// -----------------------------------------------------------------------------
 // command()
 // Executes commands from the console and calls the correct method. 
 // Returns true if command is executed, false if user wants to exit. 
@@ -169,21 +171,45 @@ bool Inventory::dumpToBackupFiles() {}
 // the correct associated action and errors if the command is not valid
 void Inventory::command(const string line) {
     // parse input line
-    stringstream ss(line);
-    vector<string> terms;
-    string term;
-    while (ss >> term)
-        terms.push_back(term);
+    char term = line.at(0);
     
+    int firstComma = line.find(',');
+
+    string command = line.substr(firstComma);
+
+    bool commandSuccessFlag;
+
     // execute command
-    if (terms[0] == "B")
-        executeBorrow(terms);
-    else if (terms[0] == "R")
-        executeReturn(terms);
-    else if (terms[0] == "I")
-        displayInventory();
-    else if (terms[0] == "H")
-        displayHistory(terms);
+    if (term == 'P')
+        commandSuccessFlag = createProduct(command);
+    else if (term == 'G')
+        commandSuccessFlag = createGenre(command);
+    else if (term == 'B')
+        commandSuccessFlag = executeBorrow(command);
+    else if (term == 'R')
+        commandSuccessFlag = executeReturn(command);
+    else if (term == 'I')
+        commandSuccessFlag = displayInventory();
+    else if (term == 'H')
+        commandSuccessFlag = displayHistory(command);
+    else if (isdigit(term))
+        commandSuccessFlag = createCustomer(line);
+    else {
+        commandSuccessFlag = createMovie(line);
+    }
+
+    if(commandSuccessFlag)
+    {
+        ofstream outputFile("backup.bak");
+
+        if (outputFile.is_open())
+        {
+            outputFile << line << endl;
+            outputFile.close();
+        }
+
+    }
+
 }
 
 // -----------------------------------------------------------------------------
@@ -197,7 +223,7 @@ void Inventory::command(const string line) {
 // and the movie is in stock
 // Postcondition: stock is decreased by one and a transaction is created
 // in the transaction log and errors out if command is not valid
-void Inventory::executeBorrow(const vector<string> terms) {}
+bool Inventory::executeBorrow(const string terms) {}
 // searches the given string for information on the product
 // call getProduct() and if not nullptr
 // gets from the given string the Genre abbreviation
@@ -219,7 +245,7 @@ void Inventory::executeBorrow(const vector<string> terms) {}
 // Precondition: command is valid and inventory is initialized correctly
 // Postcondition: stock is decreased by one and a transaction is created
 // in the transaction log and errors out if command is not valid
-void Inventory::executeReturn(const vector<string> terms) {}
+bool Inventory::executeReturn(const string terms) {}
 // searches the given string for information on the product
 // call getProduct() and if not nullptr
 // gets from the given string the Genre abbreviation
@@ -238,7 +264,7 @@ void Inventory::executeReturn(const vector<string> terms) {}
 // Precondition: Inventory is initialized
 // Postcondition: outputs all inventory to the console in order and blank
 // if there are no values
-void Inventory::displayInventory() {}
+bool Inventory::displayInventory() {}
 // iterate through all products if they exist
 // iterate through all genres if they exist
 // iterate through all trees
@@ -252,12 +278,13 @@ void Inventory::displayInventory() {}
 // Postcondition: If param string is empty, display transactions 
 // for all customers.  Otherwise, display transactions for given id,
 // blank if no transactions.
-void Inventory::displayHistory(const vector<string> terms) const {
+void Inventory::displayHistory(const string term) const {
     // scans customer ID from terms
     // scans through all customers for customer ID
     // given customer IDiterates through all the customer transactions 
     // output the transaction to the console.
-    int customer_ID = stoi(terms[1]);
+ 
+    int customer_ID = stoi(term);
     Customer temp = customers.get(customer_ID);
     list<Transaction> tempTransactions = temp.transactions;
     list<Transaction>::iterator it;
@@ -271,7 +298,6 @@ void Inventory::displayHistory(const vector<string> terms) const {
     }
 }
 
-
 // -----------------------------------------------------------------------------
 // createProduct()
 // Creates a new Product using the Product class and specify type of 
@@ -279,7 +305,7 @@ void Inventory::displayHistory(const vector<string> terms) const {
 // Precondition: Inventory is initialized correctly
 // Postcondition: creates a new Product object for that product and
 // returns error if the product already exists
-void Inventory::createProduct(const string command) 
+bool Inventory::createProduct(const string command) 
 {
 
     vector<string> commandFields;
@@ -297,6 +323,8 @@ void Inventory::createProduct(const string command)
         if (commandFields.at(1) == "M")
         {
             Media m(commandFields.at(2), commandFields.at(3));
+
+            productList.push_back(m);
         }
     }
 }
@@ -311,11 +339,22 @@ void Inventory::createProduct(const string command)
 // Creates a new Genre Binary Search Tree. (Comedy, Classic, Drama, Etc)
 // Precondition: Inventory and Product are initialized correctly
 // Postcondition: creates a new genre BST if no genre exists with the same name
-void Inventory::createGenre(const string command) {
+bool Inventory::createGenre(const string command) {
     
+    Product * product = getProduct(to_string(command.at(0)));
+    
+    if(product != nullptr)
+    {
 
+        if(Media * mediaPtr = dynamic_cast<Media *>(product))
+        {
+            string genreCommand = command.substr(3);        
+            mediaPtr->createGenre(genreCommand);
+        }    
+
+    }
     
-    media->createGenre(command);
+    
 }
 
 // -----------------------------------------------------------------------------
@@ -325,7 +364,7 @@ void Inventory::createGenre(const string command) {
 // Precondition: Inventory, Product, and Genre are initialized correctly
 // Postcondition: creates a new node that designates the stock in inventory
 // if it does not already exist
-void Inventory::createMovie(string line) {
+bool Inventory::createMovie(const string line) {
     // parse input line
     stringstream ss(line);
     vector<string> terms;
@@ -353,7 +392,7 @@ void Inventory::createMovie(string line) {
 // Creates a new customer in the hash table
 // Precondition: The Inventory and customer table are initialized correctly
 // Postcondition: creates a new customer in the table if it does not exist
-void Inventory::createCustomer(string line) {
+bool Inventory::createCustomer(string line) {
     // parse line for customer information
     // call get getCustomer() if returns nullptr
     // create new customer
@@ -368,6 +407,7 @@ void Inventory::createCustomer(string line) {
     // TODO: programmatically set creation date
     Customer newCustomer{customerID, name, "2024-03-10", 0, false, {}};
     customers.insert(customerID, newCustomer);
+    return true; // TODO: return success
 }
 
 // -----------------------------------------------------------------------------
@@ -377,7 +417,7 @@ void Inventory::createCustomer(string line) {
 // Precondition: Customer id, mediaKey, and isReturn parameters
 // Postcondition: a new transaction transaction is created in the table
 // if the customer exists
-void Inventory::addTransaction(int customerID, string details, bool isReturn) {
+bool Inventory::addTransaction(int customerID, string details, bool isReturn) {
     // call getMovie() if address returned
     // call getCustomer() if customer returned
     // call borrowStock() if isReturn is false, otherwise returnStock()
@@ -397,46 +437,17 @@ void Inventory::addTransaction(int customerID, string details, bool isReturn) {
                 );
         }
     }
+    return true; // TODO: return success
 }
 
-// -----------------------------------------------------------------------------
-// movieInputFromFile(string)
-// reads file and constructs genre BSTs
-// Precondition: NONE
-// Postcondition: genre BSTs are initialized for data lookup
-void Inventory::movieInputFromFile() {
-    string line;
-    ifstream movieFile;
-    movieFile.open("data4movies.txt");
-    while (getline(movieFile, line))
-        createMovie(line);
-    movieFile.close();
-}
-
-// -----------------------------------------------------------------------------
-// customerInputFromFile(string)
-// reads file and initializes customer hashtable
-// Precondition: NONE
-// Postcondition: hashtable is ready for transaction lookup by 
-// customer id
-void Inventory::customerInputFromFile() {
-    string line;
-    ifstream customerFile;
-    customerFile.open("data4customers.txt");
-    while (getline(customerFile, line))
-        createCustomer(line);
-    customerFile.close();
-}
-
-// -----------------------------------------------------------------------------
 // commandInputFromFile(string)
 // reads and executes commands from command file
 // Precondition: NONE
 // Postcondition: all valid commands are executed
-void Inventory::commandInputFromFile() {
+void Inventory::commandInputFromFile(const string filePath) {
     string line;
     ifstream commandFile;
-    commandFile.open("data4commands.txt");
+    commandFile.open(filePath);
     while (getline(commandFile, line))
         command(line);
     commandFile.close();

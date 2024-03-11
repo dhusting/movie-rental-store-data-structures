@@ -21,7 +21,7 @@ class Media : public Product {
 
     public:
     
-        Media(const string abbreviation, const string name): Product(name, abbreviation);
+        Media(const string abbreviation, const string name): Product(name, abbreviation) {};
 
         // --------------------------------------------------------------------
         // getGenre()
