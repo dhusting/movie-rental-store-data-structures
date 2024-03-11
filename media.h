@@ -23,6 +23,11 @@ class Media : public Product {
 
     public:
     
+        // --------------------------------------------------------------------
+        // Constructor()
+        // creates a media object by calling the constructor of it's parent class
+        // Precondition: None
+        // Postcondition: creates a new Media object
         Media(const string abbreviation, const string name): Product(name, abbreviation) {};
 
         // --------------------------------------------------------------------
@@ -39,5 +44,10 @@ class Media : public Product {
         // Postcondition: returns address of genre if exists, null otherwise
         void createGenre(const string);
 
-        void printGenre();
+        // --------------------------------------------------------------------
+        // printGenre()
+        // prints the entire Genre BST
+        // Precondition: Media created correctly 
+        // Postcondition: prints to the console the Genre BST
+        void printGenres();
 };
