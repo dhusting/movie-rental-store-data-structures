@@ -91,6 +91,7 @@ Customer* HashTable::get(const int key) const {
         }
         index = (index + 1) % hashSize;
     } while (index != originalIndex);
+    return nullptr;
 }
 
 // ----------------------------------------------------------------------------

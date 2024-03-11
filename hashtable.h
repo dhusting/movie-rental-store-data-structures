@@ -11,7 +11,7 @@
 
 using namespace std;
 
-int DEFAULT_HASH_SIZE = 1000;
+const int DEFAULT_HASH_SIZE = 1000;
 
 struct Transaction {
     string transactionID;
