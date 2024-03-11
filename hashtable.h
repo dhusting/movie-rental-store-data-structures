@@ -119,7 +119,7 @@ class HashTable {
         // Precondition: Customer id, transaction details, and isReturn parameters
         // Postcondition: a new transaction transaction is created in the table
         // if the customer exists
-        bool addTransaction(int, string, bool);
+        bool addTransaction(const int, const string, const bool);
 
         // --------------------------------------------------------------------
         // display()
@@ -130,4 +130,7 @@ class HashTable {
         // Pseudocode:
         //  for (length of hash array)
         //   output value, if not empty to cout
+
+        
+        void displayHistory(const int, const int) const;
 };

@@ -125,7 +125,8 @@ Customer* HashTable::get(const int key) const {
 // Precondition: Customer id, transaction details, and isReturn parameters
 // Postcondition: a new transaction transaction is created in the table
 // if the customer exists
-bool HashTable::addTransaction(int customerID, string details, bool isBorrow) {
+bool HashTable::addTransaction(
+    const int customerID, const string details, const bool isBorrow) {
     Customer* temp = get(customerID);
     list<Transaction>::iterator it;
 
@@ -165,7 +166,6 @@ bool HashTable::addTransaction(int customerID, string details, bool isBorrow) {
     return false;
 }
 
-
 // ----------------------------------------------------------------------------
 // display()
 // Outputs hash table to console for debugging
@@ -184,7 +184,7 @@ void HashTable::display(const int limit) const {
             countOfEntries++;
             temp = &hashTable[i].customer;
             tempTransactions = temp->transactions;
-            cout << "Index " << i << ": ID " << hashTable[i].customerID
+            cout << "Hash Index " << i << ": Customer ID " << hashTable[i].customerID
                  << ", Name: " << temp->name << endl;
             countOfTransactions = 0;
             for (it = tempTransactions.begin();
@@ -193,11 +193,41 @@ void HashTable::display(const int limit) const {
                 countOfTransactions++;
                 cout << " - Transaction " << countOfTransactions << ":";
                 cout << "ID:" << it->transactionID << " "
-                     << it->borrowDate << " "
-                     << it->dueDate << " "
-                     << it->returnDate << " "
-                     << it->transactionDetail << endl;
+                     << "Borrow Date: " << it->borrowDate << " "
+                     << "Due Date: " << it->dueDate << " "
+                     << "Return Date: " << it->returnDate << " "
+                     << "Details: " << it->transactionDetail << endl;
             }
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// displayHistory()
+// Outputs hash table to console for debugging
+// Precondition: None
+// Postcondition: Output of hash table to console
+void HashTable::displayHistory(const int customerID, const int limit) const {
+    Customer* temp = get(customerID);
+    list<Transaction> tempTransactions;
+    list<Transaction>::iterator it;
+    int countOfTransactions = 0;
+
+    if (temp != nullptr) {
+        cout << "Displaying History\n";
+        tempTransactions = temp->transactions;
+        cout << "Customer ID " << temp->ID
+                << ", Name: " << temp->name << endl;
+        for (it = tempTransactions.begin();
+                it != tempTransactions.end() && countOfTransactions < limit;
+                ++it) {
+            countOfTransactions++;
+            cout << " - Transaction " << countOfTransactions << ":";
+            cout << "ID:" << it->transactionID << " "
+                    << "Borrow Date: " << it->borrowDate << " "
+                    << "Due Date: " << it->dueDate << " "
+                    << "Return Date: " << it->returnDate << " "
+                    << "Details: " << it->transactionDetail << endl;
         }
     }
 }

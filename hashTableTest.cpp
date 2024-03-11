@@ -64,5 +64,8 @@ int main() {
     // Display hash table contents after return
     cout << "HashTable contents after return:" << endl;
     hashTable.display(10);
+
+    hashTable.displayHistory(customer1.ID, 1000);
+    
     return 0;
 }
