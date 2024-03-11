@@ -39,8 +39,8 @@ uint64_t HashTable::getCurrentTimestamp() {
 // Precondition: None
 // Postcondition: Hash Table is updated with key value pair if the entry does 
 // not exist.
-void HashTable::insert(const int key, const Customer customer) {
-    int index = getHashIndex(key);
+void HashTable::insert(const Customer customer) {
+    int index = getHashIndex(customer.ID);
     int originalIndex = index;
     bool inserted = false;
 
@@ -52,7 +52,7 @@ void HashTable::insert(const int key, const Customer customer) {
         //cout << "Traversing | current ID: " << hashTable[index].customerID << endl;
         */
         if (hashTable[index].customerID == 0 || hashTable[index].customerID == -1) {
-            hashTable[index].customerID = key;
+            hashTable[index].customerID = customer.ID;
             hashTable[index].customer = customer;
             inserted = true;
             break;

@@ -36,7 +36,7 @@ struct Customer {
 class HashTable {
     private:
         struct KeyValuePair {
-            int customerID;
+            int customerID = 0;
             Customer customer;
         };
 
@@ -75,7 +75,7 @@ class HashTable {
         // Precondition: None
         // Postcondition: Hash Table is updated with key value pair if the 
         // entry does not exist.
-        void insert(const int, const Customer);
+        void insert(const Customer);
 
         // --------------------------------------------------------------------
         // remove()
