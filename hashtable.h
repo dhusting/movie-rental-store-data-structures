@@ -62,8 +62,6 @@ class HashTable {
         HashTable() : hashSize(DEFAULT_HASH_SIZE) {
             hashTable = new KeyValuePair[hashSize];
         };
-        // Pseudocode:
-        // Initialize array with hashSize and set to hashTable
 
         // --------------------------------------------------------------------
         // Destructor
@@ -78,11 +76,6 @@ class HashTable {
         // Postcondition: Hash Table is updated with key value pair if the 
         // entry does not exist.
         void insert(const int, const Customer);
-        // Pseudocode:
-        //  getHashIndex from KeyType
-        //  Attempt to insert at hashIndex into hashTable
-        //  If not sucessful, increment index and try again.
-        //  Abort if end of array
 
         // --------------------------------------------------------------------
         // remove()
@@ -91,12 +84,6 @@ class HashTable {
         // Precondition: None
         // Postcondition: Hash Table is updated with key value pair removed
         bool remove(const int);
-        // Pseudocode:
-        //  Calculate hash value
-        //  Check location of array for the key
-        //  Keep moving forward until you find key or reach empty spot
-        //  Replace value with empty customer information.reset
-        //   - Set ID to -1 to indicate removal. 
 
         // --------------------------------------------------------------------
         // get()
@@ -104,11 +91,6 @@ class HashTable {
         // Precondition: Key and value should exist
         // Postcondition: Returns value specified by key
         Customer* get(const int) const;
-        // Pseudocode:
-        //  Calculate hash value
-        //  Check location of array for the key
-        //  Keep moving forward until you find key or reach empty spot
-        //  Reutrn copy of value
 
         // -----------------------------------------------------------------------------
         // addTransaction()
@@ -125,13 +107,19 @@ class HashTable {
 
         // --------------------------------------------------------------------
         // display()
-        // Outputs hash table to console for debugging
+        // Outputs hash table up to specified customers and transactions
         // Precondition: None
         // Postcondition: Output of hash table to console
-        void display(const int) const;
-        // Pseudocode:
-        //  for (length of hash array)
-        //   output value, if not empty to cout
+        void display(const int, const int) const;
+
+        // --------------------------------------------------------------------
+        // display()
+        // Outputs hash table up to specified customers w/o transactions
+        // Precondition: None
+        // Postcondition: Output of hash table to console
+        void display(const int customerEntries) const {
+            display(customerEntries, 0);
+        };
 
         
         void displayHistory(const int, const int) const;

@@ -129,10 +129,10 @@ bool HashTable::addTransaction(
     const int customerID, const string details, const bool isBorrow) {
     Customer* temp = get(customerID);
     list<Transaction>::iterator it;
-
+    // Add transaction if customer exists
     if (temp != nullptr) {
-        // If customer exists
-        if (isBorrow) {// If the transaction is a borrow, populate transaction data and 
+        if (isBorrow) {
+            // If the transaction is a borrow, populate transaction data and 
             // push to front of list. 
             temp->transactions.push_front(
                 Transaction{
@@ -145,8 +145,10 @@ bool HashTable::addTransaction(
                 );
             return true;
         } else {
-            for (it = temp->transactions.begin();it != temp->transactions.end(); it++) {
-                cout << "Current Transaction: " << it->transactionDetail << endl;
+            // If the transaction is a return, search customer transaction log
+            // from latest to earliest and update return date and push to front 
+            // of list. 
+            for (it = temp->transactions.end();it != temp->transactions.begin(); it--) {
                 if (it->transactionDetail == details) {
                     cout << "Transaction found: " << details << endl;
                     // Swap found transaction to front
@@ -154,11 +156,8 @@ bool HashTable::addTransaction(
                     temp->transactions.splice(temp->transactions.begin(), temp->transactions, it, next(it));
                     return true;
                 }
-            // If the transaction is a return, search customer transaction log, 
-            // update return date and push to front of list. 
-            // TODO;
             }
-            cout << "Error, transaction not found: " << details << endl;
+            cout << "Error: transaction not found: " << details << endl;
             return false;
         }
     }
@@ -171,22 +170,20 @@ bool HashTable::addTransaction(
 // Outputs hash table to console for debugging
 // Precondition: None
 // Postcondition: Output of hash table to console
-void HashTable::display(const int limit) const {
+void HashTable::display(const int customerlimit, const int transactionslimit) const {
     Customer* temp;
     list<Transaction> tempTransactions;
     list<Transaction>::iterator it;
     int countOfEntries = 0;
 
     // Traverse list of customers and print details including transactions
-    for (int i = 0; countOfEntries < limit && i < hashSize; i++) {
+    for (int i = 0; countOfEntries < customerlimit && i < hashSize; i++) {
         if (hashTable[i].customerID > 0) { // Assumes ID > 0 for valid entries
             countOfEntries++;
             temp = &hashTable[i].customer;
             tempTransactions = temp->transactions;
-            cout << "Hash Index " << i << ": "
-                 << "Customer ID " << hashTable[i].customerID << ", "
-                 << "Name: " << temp->name << endl;
-            displayHistory(hashTable[i].customerID, limit);
+            cout << "[Hash Index " << i << "]\n";
+            displayHistory(hashTable[i].customerID, transactionslimit);
         }
     }
 }
@@ -203,7 +200,6 @@ void HashTable::displayHistory(const int customerID, const int limit) const {
     int countOfTransactions = 0;
 
     if (temp != nullptr) {
-        cout << "Displaying History\n";
         tempTransactions = temp->transactions;
         cout << "Customer ID " << temp->ID
                 << ", Name: " << temp->name << endl;
