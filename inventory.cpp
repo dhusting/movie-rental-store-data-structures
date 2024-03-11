@@ -120,10 +120,7 @@ Product* Inventory::getProduct(const string abbrev)
 // Postcondition: return true if files exist, false otherwise
 bool Inventory::checkForBackupFiles() 
 {
-    if (filesystem::exists("backup.bak"))
-        return true;
-
-    return false;
+    return filesystem::exists("backup.bak");
 }
 // looks at the predetermined paths for any .bak files that contain previous iteration
 // of inventories. 
@@ -136,13 +133,22 @@ bool Inventory::checkForBackupFiles()
 // Postcondition: returns true if successfull, false otherwise
 bool Inventory::ingestFromBackupFiles() 
 {
+    //check for the backup file
     if (checkForBackupFiles())
     {
+        //create empty variables for storage
         string line;
         ifstream commandFile;
+
+        //open the file
         commandFile.open("backup.bak");
+
+        //get every line from the file
         while (getline(commandFile, line))
+            //call the command function for every line
             command(line);
+
+        //close the file
         commandFile.close();
     }
 }
@@ -169,13 +175,16 @@ void Inventory::command(const string line) {
     // parse input line
     char term = line.at(0);
     
+    //find the first comma location
     int firstComma = line.find(',');
 
+    //truncate the command abbreviation from the line
     string command = line.substr(firstComma);
 
+    //set a command success flag that is false
     bool commandSuccessFlag = false;
 
-    // execute command
+    //if statement to shuttle command to the correct method
     if (term == 'P')
         commandSuccessFlag = createProduct(command);
     else if (term == 'G')
@@ -188,19 +197,27 @@ void Inventory::command(const string line) {
         displayInventory();
     else if (term == 'H')
         displayHistory(command);
+    //if first char is digit, assume creation of customer
     else if (isdigit(term))
         commandSuccessFlag = createCustomer(line);
     else {
+        //default to creating a movie
         commandSuccessFlag = createMovie(line);
     }
 
+    //check to see if a storage command was executed
     if(commandSuccessFlag)
-    {
+    {   
+        //open a new file output stream
         ofstream outputFile("backup.bak");
 
+        //if the file is open
         if (outputFile.is_open())
         {
+            //output line to the file
             outputFile << line << endl;
+
+            //close the file
             outputFile.close();
         }
 
@@ -221,53 +238,82 @@ void Inventory::command(const string line) {
 // in the transaction log and errors out if command is not valid
 bool Inventory::executeBorrow(const string command) 
 {
-
+    //vector to easily grab the values of the command
     vector<string> commandFields;
 
+    //string stream to parse each word in the line
     stringstream ss(command);
+
+    //variables to temp store the words and id
     string word;
     string id;
 
+    //count number of spaces
     int spaceCount = 0;
 
     // Parse the string and grab each word up to the 4th space
     while (ss >> word && spaceCount < 3) {
+        //increase count if word is a space
         if (word == " ") {
             spaceCount++;
         } else {
+            //add the word to the commandfields vector
             commandFields.push_back(word);
         }
     }
 
+    //store the rest of the words in the id
     while (ss >> id);
 
+    //create an int for the customer id
     int customerID = stoi(commandFields.at(0));
+
+    //search for the customer by the id
     Customer * customer = customers.get(customerID);
 
+    //check to see if customer exists
     if(customer != nullptr)
     {
+        //search for the product
         Product * product = getProduct(commandFields.at(1));
 
+        //check to see if the product exists
         if (product != nullptr)
         {
+
+            //test to see if the product is a media
             if (Media * mediaPtr = dynamic_cast<Media *>(product))
             {
+                //search for the genre
                 Genre * genre = mediaPtr->getGenre(commandFields.at(2));
 
+                //check to see if the genre exists
                 if (genre != nullptr)
                 {
-
+                    //empty NodeData to store address if the Node is found
                     NodeData& node;
-
+                    
+                    //search for the node with the movie id
                     genre->find(id, node);
-
-                    node->borrowStock();
-
+                    
+                    //reduce the stock by 1
+                    if(!(node->borrowStock()))
+                    {
+                        cout << "Stock is already at 0" << endl;
+                    }
+                    
+                    //create a transaction
                     addTransaction(customerID, command, false);
                 }
 
+            } else {
+                cout << "Genre Abbreviation: " << commandFields.at(2) << " does not exist" << endl;
             }
+        } else {
+            cout << "Product Abbreviation: " << commandFields.at(1) << " does not exist" << endl;
         }
+    } else {
+        cout << "Customer ID: " << id << " does not exist" << endl;
     }
 
 }
@@ -294,52 +340,82 @@ bool Inventory::executeBorrow(const string command)
 // in the transaction log and errors out if command is not valid
 bool Inventory::executeReturn(const string command) 
 {
+    //vector to easily grab the values of the command
     vector<string> commandFields;
 
+    //string stream to parse each word in the line
     stringstream ss(command);
+
+    //variables to temp store the words and id
     string word;
     string id;
 
+    //count number of spaces
     int spaceCount = 0;
 
     // Parse the string and grab each word up to the 4th space
     while (ss >> word && spaceCount < 3) {
+        //increase count if word is a space
         if (word == " ") {
             spaceCount++;
         } else {
+            //add the word to the commandfields vector
             commandFields.push_back(word);
         }
     }
 
+    //store the rest of the words in the id
     while (ss >> id);
 
+    //create an int for the customer id
     int customerID = stoi(commandFields.at(0));
+
+    //search for the customer by the id
     Customer * customer = customers.get(customerID);
 
+    //check to see if customer exists
     if(customer != nullptr)
     {
+        //search for the product
         Product * product = getProduct(commandFields.at(1));
 
+        //check to see if the product exists
         if (product != nullptr)
         {
+
+            //test to see if the product is a media
             if (Media * mediaPtr = dynamic_cast<Media *>(product))
             {
+                //search for the genre
                 Genre * genre = mediaPtr->getGenre(commandFields.at(2));
 
+                //check to see if the genre exists
                 if (genre != nullptr)
                 {
-
-                    NodeData& node = new Movie();
-
+                    //empty NodeData to store address if the Node is found
+                    NodeData& node;
+                    
+                    //search for the node with the movie id
                     genre->find(id, node);
-
-                    node->returnStock();
-
-                    addTransaction(customerID, command, true);
+                    
+                    //reduce the stock by 1
+                    if(!(node->returnStock()))
+                    {
+                        cout << "Stock is already at 0" << endl;
+                    }
+                    
+                    //create a transaction
+                    addTransaction(customerID, command, false);
                 }
 
+            } else {
+                cout << "Genre Abbreviation: " << commandFields.at(2) << " does not exist" << endl;
             }
+        } else {
+            cout << "Product Abbreviation: " << commandFields.at(1) << " does not exist" << endl;
         }
+    } else {
+        cout << "Customer ID: " << id << " does not exist" << endl;
     }
 }
 
@@ -362,6 +438,14 @@ bool Inventory::executeReturn(const string command)
 // Postcondition: outputs all inventory to the console in order and blank
 // if there are no values
 bool Inventory::displayInventory() {
+    //iterate through all products
+
+    if (productList.size() == 0)
+    {
+        cout << "No Products available" << endl;
+        return false;
+    }
+
     for (Product product : productList)
     {
 
