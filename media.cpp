@@ -44,6 +44,12 @@ void Media::createGenre(const string command)
 
 void Media::printGenre()
 {
+    if (genreList.size() == 0)
+    {
+        cout << "No Genres available" << endl;
+        return;
+    }
+
     for (Genre g : genreList)
     {
         cout << g;
