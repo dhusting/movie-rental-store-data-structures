@@ -7,6 +7,8 @@
 // Assumptions - Filters for each genre will be provided from either config
 // file or user
 // -----------------------------------------------------------------------------
+#ifndef GENRE_H
+#define GENRE_H
 #include "nodedata.h"
 #include "movie.h"
 #include <vector>
@@ -54,6 +56,16 @@ class Genre {
         // Pseudocode:
         // Execute recursive in-order traversal of tree and print contents of each node
 
+        // -----------------------------------------------------------------------------
+        // split
+        // Split string into substrings separated by char delimiter
+        // Precondition: String input & char delimiter
+        // Postcondition: Vector of substrings
+        vector<string> split(string input, char delimiter) const;
+        // Pseudocode:
+        // dump input into stringstream buffer
+        // use getline to read substrings from buffer
+
     public:
         // -----------------------------------------------------------------------------
         // Empty constructor
@@ -88,7 +100,7 @@ class Genre {
         // Getter for name property
         // Precondition: Valid genre object
         // Postcondition: Return string name value
-        string getName() {return name;}
+        string getName();
         // Pseudocode:
         // Return name value
 
@@ -97,7 +109,7 @@ class Genre {
         // Getter for abbreviation property
         // Precondition: Valid genre object
         // Postcondition: Return string abbreviation value
-        string getAbbreviation() {return abbreviation;}
+        string getAbbreviation();
         // Pseudocode:
         // Return abbreviation value
 
@@ -106,7 +118,7 @@ class Genre {
         // Deallocate tree with rescursive, post-order traversal
         // Precondition: Pointer to current Node
         // Postcondition: All tree nodes deleted and memory freed
-        void Genre::clear(Node* node) const;
+        void clear(Node* node) const;
         // Pseudocode:
         // Use recursive, post-order traversal to visit and delete each node
 
@@ -144,9 +156,18 @@ class Genre {
         // Assign parameter input to parameter field
         // Precondition: Input & field string parameters
         // Postcondition: Parameter field is assigned to parameter input
-        void buildSortField(Movie*, string, string);
+        string buildSortField(Movie*, string, string);
         // Pseudocode:
         // Match field name to object field, assign input to field and convert to type
+
+        // -----------------------------------------------------------------------------
+        // buildMovie
+        // Match input to fields w/ filter parameter
+        // Precondition: Input & filter parameters
+        // Postcondition: Return movie pointer with input data
+        Movie* buildMovie(vector<string>, vector<string>);
+        // Pseudocode:
+        // Use filters to match input to movie fields
 
         // -----------------------------------------------------------------------------
         // print
@@ -157,3 +178,5 @@ class Genre {
         // Pseudocode:
         // Execute recursive in-order traversal of tree and print contents of each node
 };
+
+#endif

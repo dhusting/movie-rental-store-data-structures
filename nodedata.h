@@ -7,8 +7,10 @@
 // Assumptions - The class is abstract and is meant be extended to allow for
 // additional media type extensibility
 // -----------------------------------------------------------------------------
+#ifndef NODEDATA_H
+#define NODEDATA_H
 #include <string>
-
+#include <iostream>
 using namespace std;
 
 // -----------------------------------------------------------------------------
@@ -23,7 +25,11 @@ class NodeData {
     // Print contents of NodeData
     // Precondition: Valid NodeData object
     // Postcondition: NodeData contents printed to terminal output
-    friend ostream &operator<<(ostream &out, const NodeData &rhs);
+    friend ostream& operator<<(ostream &out, const NodeData &rhs) {
+        out << rhs.id << ", " << rhs.title << ", " << rhs.stock << ", " 
+            << rhs.releaseDate << ", " << rhs.releaseYear << ", " << rhs.lateFee;
+        return out;
+    }
     // Pseudocode:
     // NodeData contents printed to terminal output
 
@@ -43,11 +49,26 @@ class NodeData {
 
     public:
         // -----------------------------------------------------------------------------
+        // Empty constructor
+        // Returns empty NodeData instance
+        // Precondition: N/A
+        // Postcondition: Empty NodeData object
+        NodeData() {}
+
+        // -----------------------------------------------------------------------------
         // Constructor
         // Allocates NodeData object, pure virtual implementation
         // Precondition: N/A
         // Postcondition: NodeData object allocated with parameter properties
-        NodeData(string, string, int, string, int, double);
+        NodeData(string id, string title, int stock, string releaseDate
+            , int releaseYear, double lateFee) {
+                this->id = id;
+                this->title = title;
+                this->stock = stock;
+                this->releaseDate = releaseDate;
+                this->releaseYear = releaseYear;
+                this->lateFee = lateFee;
+        }
         // Pseudocode:
         // Assign parameters to properties
         
@@ -56,7 +77,7 @@ class NodeData {
         // Deallocates NodeData object, pure virtual implementation
         // Precondition: Valid NodeData object
         // Postcondition: Memory used by NodeData object is freed
-        ~NodeData();
+        ~NodeData() {}
         // Pseudocode:
         // Child object overloads destructor
 
@@ -74,14 +95,14 @@ class NodeData {
         // Check two nodeData instances for equality
         // Precondition: Two nodeData parameters
         // Postcondition: Return true if parameters are equal, false otherwise
-        bool NodeData::operator==(const NodeData& rhs) const;
+        bool operator==(const NodeData& rhs) const {return this->id == rhs.id;}
 
         // -----------------------------------------------------------------------------
         // operator > overload
         // Check if left operand is greater than the right
         // Precondition: Two nodeData parameters
         // Postcondition: Return true if left operand is greater, false otherwise
-        bool NodeData::operator>(const NodeData& rhs) const;
+        bool operator>(const NodeData& rhs) const {return this->id > rhs.id;}
 
         // -----------------------------------------------------------------------------
         // getId
@@ -187,3 +208,5 @@ class NodeData {
         // Postcondition: Assign lateFee field to parameter
         void setLateFee(int lateFee) {this->lateFee = lateFee;}
 };
+
+#endif

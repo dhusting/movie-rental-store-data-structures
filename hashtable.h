@@ -6,6 +6,8 @@
 // Summary - This file contains the specification for the HashTable class
 // Assumptions - None
 // ----------------------------------------------------------------------------
+#ifndef HASHTABLE_H
+#define HASHTABLE_H
 #include <chrono>
 #include <list>
 #include <string>
@@ -134,3 +136,5 @@ class HashTable {
         
         void displayHistory(const int, const int) const;
 };
+
+#endif

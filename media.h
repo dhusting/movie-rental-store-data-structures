@@ -7,7 +7,8 @@
 // stores all media types in a store and holds Genre BSTs that sorts movies. 
 // Assumptions - None
 // -----------------------------------------------------------------------------
-
+#ifndef MEDIA_H
+#define MEDIA_H
 #include <list>
 #include <iostream>
 #include "product.h"
@@ -28,7 +29,15 @@ class Media : public Product {
         // creates a media object by calling the constructor of it's parent class
         // Precondition: None
         // Postcondition: creates a new Media object
-        Media(const string abbreviation, const string name): Product(name, abbreviation) {};
+        Media(const string abbreviation, const string name): 
+            Product(name, abbreviation) {};
+
+        // --------------------------------------------------------------------
+        // ~Media
+        // Destructor - deallocates media instance
+        // Precondition: Media instance
+        // Postcondition: Media memory freed
+        ~Media() {};
 
         // --------------------------------------------------------------------
         // getGenre()
@@ -51,3 +60,5 @@ class Media : public Product {
         // Postcondition: prints to the console the Genre BST
         void printGenres();
 };
+
+#endif

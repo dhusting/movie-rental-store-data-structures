@@ -7,6 +7,8 @@
 // stores all product types in a store. 
 // Assumptions - None
 // -----------------------------------------------------------------------------
+#ifndef PRODUCT_H
+#define PRODUCT_H
 #include <string>
 
 using namespace std;
@@ -19,14 +21,18 @@ class Product {
         string abbreviation;
 
     public:
-
-        virtual ~Product();
-
         // --------------------------------------------------------------------
         // Name Constructor
         // Precondition: NONE
         // Postcondition: Initialized Product with name
-        Product(const string newName, const string abbreviation) {this->name = newName; this->abbreviation = abbreviation;}
+        Product(const string newName, const string abbreviation) 
+            {this->name = newName; this->abbreviation = abbreviation;}
+
+        // --------------------------------------------------------------------
+        // Destructor
+        // Precondition: Product instance
+        // Postcondition: Product memory freed
+        virtual ~Product() {}
 
         // --------------------------------------------------------------------
         // getName()
@@ -41,3 +47,5 @@ class Product {
         string getAbbreviation() { return this->abbreviation; }
 
 };
+
+#endif

@@ -23,6 +23,7 @@ using namespace std;
 // Postcondition: BST contents are printed to terminal output in order
 ostream &operator<<(ostream &out, const Genre &rhs) {
     rhs.print(out);
+    return out;
 }
 
 // -----------------------------------------------------------------------------
@@ -37,6 +38,22 @@ void Genre::print(ostream &out, Node* node) const {
         out << *node->data << endl;
         print(out, node->right);
     }
+}
+
+// -----------------------------------------------------------------------------
+// split
+// Split string into substrings separated by char delimiter
+// Precondition: String input & char delimiter
+// Postcondition: Vector of substrings
+vector<string> Genre::split(string input, char delimiter) const {
+    stringstream ss(input);     //add to buffer
+    vector<string> subs;
+    while (ss.good()) {     //check buffer limit
+        string sub;
+        getline(ss, sub, delimiter);  //read substring split by delimiter
+        subs.push_back(sub);
+    }
+    return subs;
 }
 
 // -----------------------------------------------------------------------------
@@ -109,69 +126,15 @@ void Genre::clear(Node* node) const {
 // Precondition: Pointer to NodeData object to insert into tree
 // Postcondition: Data inserted into ordered leaf of the tree
 bool Genre::insert(string line) {
-    // split parse string
-    stringstream ps(parseString);
-    vector<string> fields;
-    while (ps.good()) {
-        string field;
-        getline(ps, field, ',');
-        fields.push_back(field);
-    }
-
     // split input string
-    stringstream ls(line);
-    vector<string> terms;
-    while (ls.good()) {
-        string term;
-        getline(ls, term, ',');
-        terms.push_back(term);
-    }
-
-    // iterate through terms & set to str
-    vector<string> parameters;
-    Movie *movie = new Movie();
-    for (int i = 0; i < fields.size(); i++) {
-        string field = fields[i];
-        string term = terms[i];
-        if(field.find('_') != std::string::npos){
-            stringstream subs(field);
-            vector<string> subFields;
-            while (subs.good()) {
-                string sub;
-                getline(subs, sub, '_');
-                subFields.push_back(sub);
-            }
-            for (int i = 0; i < subFields.size(); i++) {
-                stringstream ts(term);
-                string subTerm;
-                if (subFields[i] == "Major Actor") {
-                    string first, last;
-                    ts >> first >> last;
-                    subTerm = first + " " + last;
-                } else
-                    ts >> subTerm;
-                setField(movie, subFields[i], subTerm);
-            }
-        } else
-            setField(movie, field, term);
-    }
-
-    // split sort string
-    stringstream ss(sortString);
-    vector<string> sortFields;
-    while (ss.good()) {
-        string field;
-        getline(ss, field, ',');
-        sortFields.push_back(field);
-    }
-    string sortField;
-    for(int i = 0; i < sortFields.size(); i++)
-        buildSortField(movie, sortFields[i], sortField);
-    ((NodeData *)movie)->setId(sortField);
+    vector<string> input = split(line, ',');
+    // split parse string
+    vector<string> filters = split(parseString, ',');
+    Movie *movie = buildMovie(input, filters);
 
     // allocate new node & assign data
     Node *node = new Node();
-        node->data = (NodeData *)&movie;
+        node->data = (NodeData *)movie;
         node->left = nullptr;
         node->right = nullptr;
 
@@ -249,21 +212,67 @@ void Genre::setField(Movie *movie, string field, string input) {
 // Assign parameter input to parameter field
 // Precondition: Input & field string parameters
 // Postcondition: Parameter field is assigned to parameter input
-void buildSortField(Movie *movie, string field, string sortField) {
+string Genre::buildSortField(Movie *movie, string field, string sortField) {
     if (field == "title")
-        sortField + ((NodeData *)movie)->getTitle();
+        return sortField + ((NodeData *)movie)->getTitle();
     else if (field == "stock")
-        sortField + to_string(((NodeData *)movie)->getStock());
+        return sortField + to_string(((NodeData *)movie)->getStock());
     else if (field == "releaseDate")
-        sortField + ((NodeData *)movie)->getReleaseDate();
+        return sortField + ((NodeData *)movie)->getReleaseDate();
     else if (field == "releaseYear")
-        sortField + to_string(((NodeData *)movie)->getReleaseYear());
+        return sortField + to_string(((NodeData *)movie)->getReleaseYear());
     else if (field == "lateFee")
-        sortField + to_string(((NodeData *)movie)->getLateFee());
+        return sortField + to_string(((NodeData *)movie)->getLateFee());
     else if (field == "director")
-        sortField + movie->getDirector();
+        return sortField + movie->getDirector();
     else if (field == "majorActor")
-        sortField + movie->getMajorActor();
+        return sortField + movie->getMajorActor();
+    else
+        return sortField;
+}
+
+// -----------------------------------------------------------------------------
+// buildMovie
+// Match input to fields w/ filter parameter
+// Precondition: Input & filter parameters
+// Postcondition: Return movie pointer with input data
+Movie* Genre::buildMovie(vector<string> input, vector<string> filters) {
+    // iterate through input terms & assign to movie fields
+    Movie *movie = new Movie();
+    for (int i = 0; i < filters.size(); i++) {
+        string field = filters[i];
+        string term = input[i];
+        if(field.find('_') != std::string::npos){
+            stringstream subs(field);
+            vector<string> subFields;
+            while (subs.good()) {
+                string sub;
+                getline(subs, sub, '_');
+                subFields.push_back(sub);
+            }
+            for (int i = 0; i < subFields.size(); i++) {
+                stringstream ts(term);
+                string subTerm;
+                if (subFields[i] == "Major Actor") {
+                    string first, last;
+                    ts >> first >> last;
+                    subTerm = first + " " + last;
+                } else
+                    ts >> subTerm;
+                setField(movie, subFields[i], subTerm);
+            }
+        } else
+            setField(movie, field, term);
+    }
+
+    // split sort string
+    vector<string> sortFields = split(sortString, ',');
+    string sortField;
+    for(int i = 0; i < sortFields.size(); i++)
+        sortField = buildSortField(movie, sortFields[i], sortField);
+    ((NodeData *)movie)->setId(sortField);
+
+    return movie;   // return pointer to movie object
 }
 
 // -----------------------------------------------------------------------------

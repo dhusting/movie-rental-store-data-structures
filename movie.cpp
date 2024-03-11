@@ -7,11 +7,18 @@
 // Assumptions - Extends the NodeData class
 // -----------------------------------------------------------------------------
 #include <string>
-#include <movie.h>
 #include <vector>
+#include "movie.h"
 #include "nodedata.h"
 
 using namespace std;
+
+// -----------------------------------------------------------------------------
+// Empty constructor ()
+// Initializes empty movie object
+// Precondition: N/A
+// Postcondition: Movie object allocated and ready for lookup in BST
+Movie::Movie() : NodeData() {}
 
 // -----------------------------------------------------------------------------
 // All Movie and NodeData field constructor (Id, title, stock, releaseDate
@@ -45,8 +52,22 @@ string Movie::getType() {
 string Movie::getDirector() {return director;}
 
 // -----------------------------------------------------------------------------
+// setDirector
+// Setter for director property
+// Precondition: Valid NodeData object, string parameter
+// Postcondition: Assign director field to parameter
+void Movie::setDirector(string director) {this->director = director;}
+
+// -----------------------------------------------------------------------------
 // getMajorActor
 // Getter for majorActor property
 // Precondition: Valid movie object
 // Postcondition: Return string majorActor value
 string Movie::getMajorActor() {return majorActor;}
+
+// -----------------------------------------------------------------------------
+// setMajorActor
+// Setter for majorActor property
+// Precondition: Valid NodeData object, string parameter
+// Postcondition: Assign majorActor field to parameter
+void Movie::setMajorActor(string majorActor) {this->majorActor = majorActor;}
