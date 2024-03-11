@@ -7,6 +7,8 @@
 // Assumptions - Filters for each genre will be provided from either config
 // file or user
 // -----------------------------------------------------------------------------
+#ifndef GENRE_H
+#define GENRE_H
 #include "nodedata.h"
 #include "movie.h"
 #include <vector>
@@ -98,7 +100,7 @@ class Genre {
         // Getter for name property
         // Precondition: Valid genre object
         // Postcondition: Return string name value
-        string getName() {return name;}
+        string getName();
         // Pseudocode:
         // Return name value
 
@@ -107,7 +109,7 @@ class Genre {
         // Getter for abbreviation property
         // Precondition: Valid genre object
         // Postcondition: Return string abbreviation value
-        string getAbbreviation() {return abbreviation;}
+        string getAbbreviation();
         // Pseudocode:
         // Return abbreviation value
 
@@ -116,7 +118,7 @@ class Genre {
         // Deallocate tree with rescursive, post-order traversal
         // Precondition: Pointer to current Node
         // Postcondition: All tree nodes deleted and memory freed
-        void Genre::clear(Node* node) const;
+        void clear(Node* node) const;
         // Pseudocode:
         // Use recursive, post-order traversal to visit and delete each node
 
@@ -176,3 +178,5 @@ class Genre {
         // Pseudocode:
         // Execute recursive in-order traversal of tree and print contents of each node
 };
+
+#endif

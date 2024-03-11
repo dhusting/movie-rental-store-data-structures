@@ -110,8 +110,10 @@ Product* Inventory::getProduct(const string abbrev)
     for(Product product : productList)
     {
         //compare abbreviations and return address
-        if(product.getAbbreviation() == abbrev)
-            return &product;
+        if(product.getAbbreviation() == abbrev) {
+            Product *result = &product;
+            return result;
+        }
     }
 
     return nullptr;
@@ -370,7 +372,7 @@ bool Inventory::executeReturn(const string command)
         {
 
             //test to see if the product is a media
-            if (Media * mediaPtr = dynamic_cast<Media *>(product))
+            if (Media * mediaPtr = (Media *)product)
             {
                 //search for the genre
                 Genre * genre = mediaPtr->getGenre(commandFields.at(2));
@@ -425,7 +427,7 @@ bool Inventory::displayInventory() {
         Product * productPtr = &product;
 
         //try to convert to media
-        if (Media * mediaPtr = dynamic_cast<Media *>(productPtr))
+        if (Media * mediaPtr = (Media *)productPtr)
         {
             //call the print method
             mediaPtr->printGenres();
@@ -502,7 +504,7 @@ bool Inventory::createGenre(const string command) {
     if(product != nullptr)
     {
         //try to convert to a Media
-        if(Media * mediaPtr = dynamic_cast<Media *>(product))
+        if(Media * mediaPtr = (Media *)product)
         {
             //get the rest of the command
             string genreCommand = command.substr(3);

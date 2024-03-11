@@ -23,6 +23,7 @@ using namespace std;
 // Postcondition: BST contents are printed to terminal output in order
 ostream &operator<<(ostream &out, const Genre &rhs) {
     rhs.print(out);
+    return out;
 }
 
 // -----------------------------------------------------------------------------
@@ -211,7 +212,7 @@ void Genre::setField(Movie *movie, string field, string input) {
 // Assign parameter input to parameter field
 // Precondition: Input & field string parameters
 // Postcondition: Parameter field is assigned to parameter input
-string buildSortField(Movie *movie, string field, string sortField) {
+string Genre::buildSortField(Movie *movie, string field, string sortField) {
     if (field == "title")
         return sortField + ((NodeData *)movie)->getTitle();
     else if (field == "stock")
@@ -226,6 +227,8 @@ string buildSortField(Movie *movie, string field, string sortField) {
         return sortField + movie->getDirector();
     else if (field == "majorActor")
         return sortField + movie->getMajorActor();
+    else
+        return sortField;
 }
 
 // -----------------------------------------------------------------------------
@@ -234,7 +237,7 @@ string buildSortField(Movie *movie, string field, string sortField) {
 // Precondition: Input & filter parameters
 // Postcondition: Return movie pointer with input data
 Movie* Genre::buildMovie(vector<string> input, vector<string> filters) {
-    // iterate through terms & set to str
+    // iterate through input terms & assign to movie fields
     Movie *movie = new Movie();
     for (int i = 0; i < filters.size(); i++) {
         string field = filters[i];
@@ -269,7 +272,7 @@ Movie* Genre::buildMovie(vector<string> input, vector<string> filters) {
         sortField = buildSortField(movie, sortFields[i], sortField);
     ((NodeData *)movie)->setId(sortField);
 
-    return movie;
+    return movie;   // return pointer to movie object
 }
 
 // -----------------------------------------------------------------------------

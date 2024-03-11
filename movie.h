@@ -6,6 +6,8 @@
 // Summary - This file contains the specification for the Movie class
 // Assumptions - Extends the NodeData class
 // -----------------------------------------------------------------------------
+#ifndef MOVIE_H
+#define MOVIE_H
 #include <string>
 #include "nodedata.h"
 
@@ -47,35 +49,35 @@ class Movie : NodeData {
         // Override function that returns media type
         // Precondition: N/A
         // Postcondition: Return string value of media type
-        string getType() {
-            return "Movie";
-        };
+        string getType();
 
         // -----------------------------------------------------------------------------
         // getDirector
         // Getter for director property
         // Precondition: Valid movie object
         // Postcondition: Return string director value
-        string getDirector() {return director;}
+        string getDirector();
 
         // -----------------------------------------------------------------------------
         // setDirector
         // Setter for director property
         // Precondition: Valid NodeData object, string parameter
         // Postcondition: Assign director field to parameter
-        void setDirector(string director) {this->director = director;}
+        void setDirector(string director);
 
         // -----------------------------------------------------------------------------
         // getMajorActor
         // Getter for majorActor property
         // Precondition: Valid movie object
         // Postcondition: Return string majorActor value
-        string getMajorActor() {return majorActor;}
+        string getMajorActor();
 
         // -----------------------------------------------------------------------------
         // setMajorActor
         // Setter for majorActor property
         // Precondition: Valid NodeData object, string parameter
         // Postcondition: Assign majorActor field to parameter
-        void setMajorActor(string majorActor) {this->majorActor = majorActor;}
+        void setMajorActor(string majorActor);
 };
+
+#endif

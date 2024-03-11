@@ -20,8 +20,10 @@ Genre* Media::getGenre(const string abbrev)
     for(Genre genre : genreList)
     {
         //check to see if the genre abbeiations are equal and return a pointer
-        if(genre.getAbbreviation() == abbrev)
-            return &genre;
+        if(genre.getAbbreviation() == abbrev) {
+            Genre *result = &genre;
+            return result;
+        }
     }
 
     return nullptr;
