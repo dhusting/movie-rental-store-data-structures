@@ -10,14 +10,14 @@
 #include "genre.h"
 using namespace std;
 
-int main() {
+/* int main() {
     // instantiate inventory
     Inventory inventory;
-    inventory.commandInputFromFile("test_config.txt");
+    inventory.commandInputFromFile("product&genre_format.txt");
     inventory.commandInputFromFile("data4movies.txt");
     inventory.commandInputFromFile("data4customers.txt");
 
     // run commands
     inventory.commandInputFromFile("data4commands.txt");
     return 0;
-}
+} */
