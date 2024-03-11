@@ -238,7 +238,7 @@ class Inventory{
         // Postcondition: If param string is empty, display transactions 
         // for all customers.  Otherwise, display transactions for given id,
         // blank if no transactions.
-        void displayHistory(const vector<string>);
+        void displayHistory(const int);
         // iterates through all customers
         // iterates through all the customer transactions 
         // output the transaction to the console.
@@ -274,7 +274,7 @@ class Inventory{
         // Precondition: Inventory, Product, and Genre are initialized correctly
         // Postcondition: creates a new node that designates the stock in inventory
         // if it does not already exist
-        void createMovie(string);
+        bool createMovie(string);
         // // call getMovie() and if returns address
         // if nullptr towards comparison, create new movie
         // if found movie of same name return error

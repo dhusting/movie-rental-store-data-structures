@@ -9,8 +9,10 @@
 // -----------------------------------------------------------------------------
 #include "nodedata.h"
 #include "genre.h"
+#include "movie.h"
 #include <vector>
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -106,10 +108,70 @@ void Genre::clear(Node* node) const {
 // Method to insert data into the BST while maintaing sorted order
 // Precondition: Pointer to NodeData object to insert into tree
 // Postcondition: Data inserted into ordered leaf of the tree
-bool Genre::insert(NodeData* data) {
+bool Genre::insert(string line) {
+    // split parse string
+    stringstream ps(parseString);
+    vector<string> fields;
+    while (ps.good()) {
+        string field;
+        getline(ps, field, ',');
+        fields.push_back(field);
+    }
+
+    // split input string
+    stringstream ls(line);
+    vector<string> terms;
+    while (ls.good()) {
+        string term;
+        getline(ls, term, ',');
+        terms.push_back(term);
+    }
+
+    // iterate through terms & set to str
+    vector<string> parameters;
+    Movie *movie = new Movie();
+    for (int i = 0; i < fields.size(); i++) {
+        string field = fields[i];
+        string term = terms[i];
+        if(field.find('_') != std::string::npos){
+            stringstream subs(field);
+            vector<string> subFields;
+            while (subs.good()) {
+                string sub;
+                getline(subs, sub, '_');
+                subFields.push_back(sub);
+            }
+            for (int i = 0; i < subFields.size(); i++) {
+                stringstream ts(term);
+                string subTerm;
+                if (subFields[i] == "Major Actor") {
+                    string first, last;
+                    ts >> first >> last;
+                    subTerm = first + " " + last;
+                } else
+                    ts >> subTerm;
+                setField(movie, subFields[i], subTerm);
+            }
+        } else
+            setField(movie, field, term);
+    }
+
+    // split sort string
+    stringstream ss(sortString);
+    vector<string> sortFields;
+    while (ss.good()) {
+        string field;
+        getline(ss, field, ',');
+        sortFields.push_back(field);
+    }
+    string sortField;
+    for(int i = 0; i < sortFields.size(); i++)
+        buildSortField(movie, sortFields[i], sortField);
+    ((NodeData *)movie)->setId(sortField);
+
     // allocate new node & assign data
     Node *node = new Node();
-        node->data = data;
+        node->data = (NodeData *)&movie;
         node->left = nullptr;
         node->right = nullptr;
 
@@ -120,10 +182,10 @@ bool Genre::insert(NodeData* data) {
         // iterative traversal & insert node as leaf, in order
         Node *cur = root;
         for(;;) {
-            if (*cur->data == *data) {  // check if data already exists in tree
+            if (*cur->data == *(NodeData *)&movie) {  // check if data already exists in tree
                 delete node;    // deallocate new node
                 return false;   // return false, insert failed
-            } else if (*cur->data > *data)  // check if key is before cur
+            } else if (*cur->data > *(NodeData *)&movie)  // check if key is before cur
                 if (cur->left == nullptr) {     // check if empty left child
                     cur->left = node;   // insert node as left child
                     break;
@@ -161,16 +223,48 @@ bool Genre::find(string key, NodeData& result) {
 }
 
 // -----------------------------------------------------------------------------
-// setKey
-// Method to build NodeData key using sortFilter & matching data
-// Precondition: NodeData parameter
-// Postcondition: Set string concatenation of matching NodeData fields in
-// ID field
-void Genre::setKey(NodeData&) {}
-// Pseudocode:
-// Iterate through sortFilters, each filter represents an index of a getter
-// method in the NodeData object.  Execute methods and concatentate results
-// into a string key, then assign to NodeData id field
+// setField
+// Assign parameter input to parameter field
+// Precondition: Input & field string parameters
+// Postcondition: Parameter field is assigned to parameter input
+void Genre::setField(Movie *movie, string field, string input) {
+    if (field == "title")
+        ((NodeData *)movie)->setTitle(input);
+    else if (field == "stock")
+        ((NodeData *)movie)->setStock(stoi(input));
+    else if (field == "releaseDate")
+        ((NodeData *)movie)->setReleaseDate(input);
+    else if (field == "releaseYear")
+        ((NodeData *)movie)->setReleaseYear(stoi(input));
+    else if (field == "lateFee")
+        ((NodeData *)movie)->setLateFee(stod(input));
+    else if (field == "director")
+        movie->setDirector(input);
+    else if (field == "majorActor")
+        movie->setMajorActor(input);
+}
+
+// -----------------------------------------------------------------------------
+// buildSortField
+// Assign parameter input to parameter field
+// Precondition: Input & field string parameters
+// Postcondition: Parameter field is assigned to parameter input
+void buildSortField(Movie *movie, string field, string sortField) {
+    if (field == "title")
+        sortField + ((NodeData *)movie)->getTitle();
+    else if (field == "stock")
+        sortField + to_string(((NodeData *)movie)->getStock());
+    else if (field == "releaseDate")
+        sortField + ((NodeData *)movie)->getReleaseDate();
+    else if (field == "releaseYear")
+        sortField + to_string(((NodeData *)movie)->getReleaseYear());
+    else if (field == "lateFee")
+        sortField + to_string(((NodeData *)movie)->getLateFee());
+    else if (field == "director")
+        sortField + movie->getDirector();
+    else if (field == "majorActor")
+        sortField + movie->getMajorActor();
+}
 
 // -----------------------------------------------------------------------------
 // print

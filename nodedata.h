@@ -43,6 +43,15 @@ class NodeData {
 
     public:
         // -----------------------------------------------------------------------------
+        // Constructor
+        // Allocates NodeData object, pure virtual implementation
+        // Precondition: N/A
+        // Postcondition: NodeData object allocated with parameter properties
+        NodeData(string, string, int, string, int, double);
+        // Pseudocode:
+        // Assign parameters to properties
+        
+        // -----------------------------------------------------------------------------
         // Destructor
         // Deallocates NodeData object, pure virtual implementation
         // Precondition: Valid NodeData object
@@ -82,11 +91,25 @@ class NodeData {
         string getId() {return id;}
 
         // -----------------------------------------------------------------------------
+        // setId
+        // Setter for id property
+        // Precondition: Valid NodeData object, string parameter
+        // Postcondition: Assign id field to parameter
+        void setId(string id) {this->id = id;}
+
+        // -----------------------------------------------------------------------------
         // getTitle
         // Getter for title property
         // Precondition: Valid NodeData object
         // Postcondition: Return string title value
         string getTitle() {return title;}
+
+        // -----------------------------------------------------------------------------
+        // setTitle
+        // Setter for title property
+        // Precondition: Valid NodeData object, string parameter
+        // Postcondition: Assign title field to parameter
+        void setTitle(string title) {this->title = title;}
 
         // -----------------------------------------------------------------------------
         // getStock
@@ -96,11 +119,24 @@ class NodeData {
         int getStock() {return stock;}
 
         // -----------------------------------------------------------------------------
+        // setStock
+        // Setter for stock property
+        // Precondition: Valid NodeData object, int parameter
+        // Postcondition: Assign stock field to parameter
+        void setStock(int stock) {this->stock = stock;}
+
+        // -----------------------------------------------------------------------------
         // borrowStock
         // Decrements stock property
         // Precondition: Valid NodeData object
         // Postcondition: Stock property decremented by one
-        void borrowStock() {stock-=1;}
+        bool borrowStock() {
+            if (stock > 0) {
+                stock-=1;
+                return true;
+            } else
+                return false;
+        }
 
         // -----------------------------------------------------------------------------
         // returnStock
@@ -117,6 +153,13 @@ class NodeData {
         string getReleaseDate() {return releaseDate;}
 
         // -----------------------------------------------------------------------------
+        // setReleaseData
+        // Setter for releaseDate property
+        // Precondition: Valid NodeData object, string parameter
+        // Postcondition: Assign releaseDate field to parameter
+        void setReleaseDate(string releaseDate) {this->releaseDate = releaseDate;}
+
+        // -----------------------------------------------------------------------------
         // getReleaseYear
         // Getter for releaseYear property
         // Precondition: Valid NodeData object
@@ -124,9 +167,23 @@ class NodeData {
         int getReleaseYear() {return releaseYear;}
 
         // -----------------------------------------------------------------------------
+        // setReleaseYear
+        // Setter for releaseYear property
+        // Precondition: Valid NodeData object, int parameter
+        // Postcondition: Assign releaseYear field to parameter
+        void setReleaseYear(int releaseYear) {this->releaseYear = releaseYear;}
+
+        // -----------------------------------------------------------------------------
         // getLateFee
         // Getter for lateFee property
         // Precondition: Valid NodeData object
         // Postcondition: Return double lateFee value
         double getLateFee() {return lateFee;}
+
+        // -----------------------------------------------------------------------------
+        // setLateFee
+        // Setter for lateFee property
+        // Precondition: Valid NodeData object, double parameter
+        // Postcondition: Assign lateFee field to parameter
+        void setLateFee(int lateFee) {this->lateFee = lateFee;}
 };

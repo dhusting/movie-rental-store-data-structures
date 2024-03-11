@@ -170,7 +170,7 @@ void Inventory::command(const string line) {
     else if (terms[0] == "I")
         displayInventory();
     else if (terms[0] == "H")
-        displayHistory(terms);
+        displayHistory(stoi(terms[1]));
 }
 
 // -----------------------------------------------------------------------------
@@ -239,7 +239,7 @@ void Inventory::displayInventory() {}
 // Postcondition: If param string is empty, display transactions 
 // for all customers.  Otherwise, display transactions for given id,
 // blank if no transactions.
-void Inventory::displayHistory(const vector<string> terms) {}
+void Inventory::displayHistory(const int customerID) {}
 // iterates through all customers
 // iterates through all the customer transactions 
 // output the transaction to the console.
@@ -262,32 +262,18 @@ void Inventory::createProduct(string) {}
 // Creates a new Genre Binary Search Tree. (Comedy, Classic, Drama, Etc)
 // Precondition: Inventory and Product are initialized correctly
 // Postcondition: creates a new genre BST if no genre exists with the same name
-void Inventory::createGenre(string abrv) {
-    string name;
-    string parseFilters;
-    string sortFilters;
-    if (abrv == "C") {
-        name = "Classic";
-        parseFilters = "Stock, Director, Title, Major actor_Release date";
-        sortFilters = "C, Classic, (Stock, Director, Title, Year it released)"
-            ", [Year it released, Major actor])";
-    } else if (abrv == "D") {
-        name = "Drama";
-        parseFilters = "Stock, Director, Title, Major actor_Release date";
-        sortFilters = "D, Drama, (Stock, Director, Title, Year it released)"
-            ", [Major actor, Title])";
-    } else if (abrv == "F") {
-        name = "Comedy";
-        parseFilters = "Stock, Director, Title, Major actor_Release date";
-        sortFilters = "F, Comedy, (Stock, Director, Title, Year it released)"
-            ", [Year it released, Title])";
-    } else
-        return;
-
-    Product *product = &Products[0];
+void Inventory::createGenre(string line) {
+    // parse input line
+    stringstream ss(line);
+    vector<string> terms;
+    while (ss.good()) {
+        string term;
+        getline(ss, term, ',');
+        terms.push_back(term);
+    }
+    Product *product = getProduct(terms[2]);
     Media *media = (Media *)product;
-    Genre genre = Genre(name, abrv, parseFilters, sortFilters);
-    media->setGenre(genre);
+    media->createGenre(line);
 }
 
 // -----------------------------------------------------------------------------
@@ -297,27 +283,20 @@ void Inventory::createGenre(string abrv) {
 // Precondition: Inventory, Product, and Genre are initialized correctly
 // Postcondition: creates a new node that designates the stock in inventory
 // if it does not already exist
-void Inventory::createMovie(string line) {
-    // parse input line
+bool Inventory::createMovie(string line) {
+    // parse category
     stringstream ss(line);
-    vector<string> terms;
-    while (ss.good()) {
-        string term;
-        getline(ss, term, ',');
-        terms.push_back(term);
-    }
-    
-    // instantiate movie object and any other necessary classes
+    string cat;
+    getline(ss, cat, ',');
+
+    // get matching genre & insert input line
     Product *product = &Products[0];
     Media *media = (Media *)product;
-    Genre *genre = media->getGenre(terms[0]);
-    if (genre == nullptr) {
-        createGenre(terms[0]);
-        genre = media->getGenre(terms[0]);
-    }
-    Movie *movie = new Movie(terms[0], terms[1], stoi(terms[2]), terms[3], stoi(terms[4])
-        , stod(terms[5]), terms[6], terms[7]);
-    genre->insert((NodeData *)movie);
+    Genre *genre = media->getGenre(cat);
+    if (genre == nullptr)
+        return false;
+    genre->insert(line);
+    return true;
 }
 
 // -----------------------------------------------------------------------------
