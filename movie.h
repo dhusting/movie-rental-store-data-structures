@@ -23,6 +23,9 @@ class Movie : NodeData {
         string majorActor;
 
     public:
+
+        Movie() {};
+
         // -----------------------------------------------------------------------------
         // All Movie and NodeData field constructor (Id, title, stock, releaseDate
         // , releaseYear, lateFee, director, majorActor, parseFilters, sortFilters)

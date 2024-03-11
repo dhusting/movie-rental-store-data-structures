@@ -12,6 +12,7 @@
 #include <string>
 #include "hashtable.h"
 #include "product.h"
+#include "media.h"
 #include "movie.h"
 #include "genre.h"
 
@@ -25,6 +26,7 @@ class Inventory{
         string Address;
         // Maps customers to their ID
         HashTable customers;
+
         // Stores all possible products. E.g (Media, Hardware, etc)
         list<Product> productList;
 

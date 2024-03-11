@@ -15,10 +15,6 @@
 #include <chrono>
 #include <ctime>
 #include "inventory.h"
-#include "product.h"
-#include "media.h"
-#include "movie.h"
-#include "genre.h"
 
 using namespace std;
 
@@ -177,7 +173,7 @@ void Inventory::command(const string line) {
 
     string command = line.substr(firstComma);
 
-    bool commandSuccessFlag;
+    bool commandSuccessFlag = false;
 
     // execute command
     if (term == 'P')
@@ -189,9 +185,9 @@ void Inventory::command(const string line) {
     else if (term == 'R')
         commandSuccessFlag = executeReturn(command);
     else if (term == 'I')
-        commandSuccessFlag = displayInventory();
+        displayInventory();
     else if (term == 'H')
-        commandSuccessFlag = displayHistory(command);
+        displayHistory(command);
     else if (isdigit(term))
         commandSuccessFlag = createCustomer(line);
     else {
@@ -223,7 +219,58 @@ void Inventory::command(const string line) {
 // and the movie is in stock
 // Postcondition: stock is decreased by one and a transaction is created
 // in the transaction log and errors out if command is not valid
-bool Inventory::executeBorrow(const string terms) {}
+bool Inventory::executeBorrow(const string command) 
+{
+
+    vector<string> commandFields;
+
+    stringstream ss(command);
+    string word;
+    string id;
+
+    int spaceCount = 0;
+
+    // Parse the string and grab each word up to the 4th space
+    while (ss >> word && spaceCount < 3) {
+        if (word == " ") {
+            spaceCount++;
+        } else {
+            commandFields.push_back(word);
+        }
+    }
+
+    while (ss >> id);
+
+    int customerID = stoi(commandFields.at(0));
+    Customer * customer = customers->get(customerID);
+
+    if(customer != nullptr)
+    {
+        Product * product = getProduct(commandFields.at(1));
+
+        if (product != nullptr)
+        {
+            if (Media * mediaPtr = dynamic_cast<Media *>(product))
+            {
+                Genre * genre = mediaPtr->getGenre(commandFields.at(2));
+
+                if (genre != nullptr)
+                {
+
+                    NodeData& node;
+
+                    genre->find(id, node);
+
+                    node->borrowStock();
+
+                    addTransaction(customerID, command, false);
+                }
+
+            }
+        }
+    }
+
+}
 // searches the given string for information on the product
 // call getProduct() and if not nullptr
 // gets from the given string the Genre abbreviation
@@ -245,7 +292,57 @@ bool Inventory::executeBorrow(const string terms) {}
 // Precondition: command is valid and inventory is initialized correctly
 // Postcondition: stock is decreased by one and a transaction is created
 // in the transaction log and errors out if command is not valid
-bool Inventory::executeReturn(const string terms) {}
+bool Inventory::executeReturn(const string terms) 
+{
+    vector<string> commandFields;
+
+    stringstream ss(command);
+    string word;
+    string id;
+
+    int spaceCount = 0;
+
+    // Parse the string and grab each word up to the 4th space
+    while (ss >> word && spaceCount < 3) {
+        if (word == " ") {
+            spaceCount++;
+        } else {
+            commandFields.push_back(word);
+        }
+    }
+
+    while (ss >> id);
+
+    int customerID = stoi(commandFields.at(0));
+    Customer * customer = customers->get(customerID);
+
+    if(customer != nullptr)
+    {
+        Product * product = getProduct(commandFields.at(1));
+
+        if (product != nullptr)
+        {
+            if (Media * mediaPtr = dynamic_cast<Media *>(product))
+            {
+                Genre * genre = mediaPtr->getGenre(commandFields.at(2));
+
+                if (genre != nullptr)
+                {
+
+                    NodeData& node = new Movie();
+
+                    genre->find(id, node);
+
+                    node->returnStock();
+
+                    addTransaction(customerID, command, true);
+                }
+
+            }
+        }
+    }
+}
+
 // searches the given string for information on the product
 // call getProduct() and if not nullptr
 // gets from the given string the Genre abbreviation
@@ -264,7 +361,19 @@ bool Inventory::executeReturn(const string terms) {}
 // Precondition: Inventory is initialized
 // Postcondition: outputs all inventory to the console in order and blank
 // if there are no values
-bool Inventory::displayInventory() {}
+bool Inventory::displayInventory() {
+    for (Product product : productList)
+    {
+
+        Product * productPtr = &product;
+
+        if (Media * mediaPtr = dynamic_cast<Media *>(productPtr))
+        {
+            
+        }
+        
+    }
+}
 // iterate through all products if they exist
 // iterate through all genres if they exist
 // iterate through all trees

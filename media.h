@@ -7,9 +7,11 @@
 // stores all media types in a store and holds Genre BSTs that sorts movies. 
 // Assumptions - None
 // -----------------------------------------------------------------------------
+
+#include <list>
+#include <iostream>
 #include "product.h"
 #include "genre.h"
-#include <list>
 
 using namespace std;
 
@@ -37,5 +39,5 @@ class Media : public Product {
         // Postcondition: returns address of genre if exists, null otherwise
         void createGenre(const string);
 
-
+        void printGenre();
 };
