@@ -207,11 +207,11 @@ void HashTable::displayHistory(const int customerID, const int limit) const {
                 it != tempTransactions.end() && countOfTransactions < limit;
                 ++it) {
             countOfTransactions++;
-            cout << " - Transaction " << countOfTransactions << ":";
+            cout << " - Transaction " << countOfTransactions << " | ";
             cout << "ID:" << it->transactionID << " "
-                    << "Borrow Date: " << it->borrowDate << " "
-                    << "Due Date: " << it->dueDate << " "
-                    << "Return Date: " << it->returnDate << " "
+                    << "Borrow Date:" << it->borrowDate << " "
+                    << "Due Date:" << it->dueDate << " "
+                    << "Return Date:" << it->returnDate << " "
                     << "Details: " << it->transactionDetail << endl;
         }
     }

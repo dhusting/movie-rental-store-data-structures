@@ -6,8 +6,11 @@
 // Summary - This file contains the specification for the HashTable class
 // Assumptions - None
 // ----------------------------------------------------------------------------
-#include "hashtable.h"
 #include <iostream>
+#include <chrono>
+#include <thread>
+
+#include "hashtable.h"
 
 using namespace std;
 
@@ -40,8 +43,9 @@ int main() {
 
     // Add dummy transactions to customer1
     prettyPrint("TEST: Add dummy transactions to customer1");
-    for (int i = 1; i <= 100; i++) {
-        hashTable.addTransaction(customer1.ID, "movie" + to_string(i), true);
+    for (int i = 1; i <= 5; i++) {
+        hashTable.addTransaction(customer1.ID, "movie", true);
+        this_thread::sleep_for(chrono::milliseconds(1));
     }
 
     // Display hash table contents
@@ -50,11 +54,15 @@ int main() {
 
     // Add a return transaction
     prettyPrint("TEST: Adding return transaction to customer1:");
-    hashTable.addTransaction(customer1.ID, "movie2", false);
+    hashTable.addTransaction(customer1.ID, "movie", false);
 
     // Display hash table contents after return
     prettyPrint("HashTable contents after return:");
     hashTable.display(10, 10);
+
+    // Add a return transaction
+    prettyPrint("TEST: Adding non-existing return transaction to customer1:");
+    hashTable.addTransaction(customer1.ID, "movie34", false);
 
     prettyPrint("TEST: Get and display customer with nonexisting customerID = 2");
     // Attempt to retrieve customer with ID 2
