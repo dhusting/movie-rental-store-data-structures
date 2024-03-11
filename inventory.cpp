@@ -205,7 +205,6 @@ void Inventory::command(const string line) {
         }
 
     }
-
 }
 
 // -----------------------------------------------------------------------------
@@ -462,8 +461,6 @@ bool Inventory::createGenre(const string command) {
         }    
 
     }
-    
-    
 }
 
 // -----------------------------------------------------------------------------
@@ -476,24 +473,17 @@ bool Inventory::createGenre(const string command) {
 bool Inventory::createMovie(const string line) {
     // parse input line
     stringstream ss(line);
-    vector<string> terms;
-    while (ss.good()) {
-        string term;
-        getline(ss, term, ',');
-        terms.push_back(term);
-    }
-    
-    // instantiate movie object and any other necessary classes
+    string cat;
+    getline(ss, cat, ',');
+
+    // get matching genre & insert input line
     Product *product = &Products[0];
     Media *media = (Media *)product;
-    Genre *genre = media->getGenre(terms[0]);
-    if (genre == nullptr) {
-        createGenre(terms[0]);
-        genre = media->getGenre(terms[0]);
-    }
-    Movie *movie = new Movie(terms[0], terms[1], stoi(terms[2]), terms[3], stoi(terms[4])
-        , stod(terms[5]), terms[6], terms[7]);
-    genre->insert((NodeData *)movie);
+    Genre *genre = media->getGenre(cat);
+    if (genre == nullptr)
+        return false;
+    genre->insert(line);
+    return true;
 }
 
 // -----------------------------------------------------------------------------

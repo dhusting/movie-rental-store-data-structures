@@ -8,6 +8,7 @@
 // file or user
 // -----------------------------------------------------------------------------
 #include "nodedata.h"
+#include "movie.h"
 #include <vector>
 
 using namespace std;
@@ -112,9 +113,9 @@ class Genre {
         // -----------------------------------------------------------------------------
         // insert
         // Method to insert data into the BST while maintaing sorted order
-        // Precondition: Pointer to NodeData object to insert into tree
+        // Precondition: String input to be parsed into movie object
         // Postcondition: Data inserted into ordered leaf of the tree
-        bool insert(NodeData*);
+        bool insert(string);
         // Pseudocode:
         // Iterate down the tree using parameter as the comparison value.  Add new
         // leaf node with param NodeData value once nullptr node is reached
@@ -130,16 +131,22 @@ class Genre {
         // NodeData value if equal comparison, nullptr value if media doesn't exist
 
         // -----------------------------------------------------------------------------
-        // setKey
-        // Method to build NodeData key using sortFilter & matching data
-        // Precondition: NodeData parameter
-        // Postcondition: Set string concatenation of matching NodeData fields in
-        // ID field
-        void setKey(NodeData&);
+        // setField
+        // Assign parameter input to parameter field
+        // Precondition: Input & field string parameters
+        // Postcondition: Parameter field is assigned to parameter input
+        void setField(Movie*, string, string);
         // Pseudocode:
-        // Iterate through sortFilters, each filter represents an index of a getter
-        // method in the NodeData object.  Execute methods and concatentate results
-        // into a string key, then assign to NodeData id field
+        // Match field name to object field, assign input to field and convert to type
+
+        // -----------------------------------------------------------------------------
+        // buildSortField
+        // Assign parameter input to parameter field
+        // Precondition: Input & field string parameters
+        // Postcondition: Parameter field is assigned to parameter input
+        void buildSortField(Movie*, string, string);
+        // Pseudocode:
+        // Match field name to object field, assign input to field and convert to type
 
         // -----------------------------------------------------------------------------
         // print
