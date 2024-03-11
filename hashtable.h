@@ -12,6 +12,8 @@
 #include <list>
 #include <string>
 
+#include <limits.h>
+
 using namespace std;
 
 const int DEFAULT_HASH_SIZE = 1000;
