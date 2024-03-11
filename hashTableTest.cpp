@@ -17,8 +17,8 @@ int main() {
     Customer customer2{2, "Jane Smith", "2024-03-02", 0, false, {}};
     Customer customer3{3, "Alice Johnson", "2024-03-03", 0, false, {}};
 
-    // Instantiate the HashTable with a size of 10
-    HashTable hashTable(10);
+    // Instantiate the HashTable
+    HashTable hashTable;
 
     // Insert customers into the hash table
     hashTable.insert(customer1.ID, customer1);
@@ -33,8 +33,8 @@ int main() {
     // Get and display a specific customer
     try {
         // Attempt to retrieve customer with ID 2
-        Customer retrievedCustomer = hashTable.get(2);
-        cout << "Retrieved Customer: " << retrievedCustomer.name << endl;
+        Customer* retrievedCustomer = hashTable.get(2);
+        cout << "Retrieved Customer: " << retrievedCustomer->name << endl;
     } catch (const runtime_error& e) {
         cout << e.what() << endl;
     }

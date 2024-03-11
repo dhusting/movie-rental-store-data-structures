@@ -16,30 +16,28 @@ class Product {
     private:
         //name of the product
         string name;
+        string abbreviation;
 
     public:
-        // --------------------------------------------------------------------
-        // Default Constructor
-        // Precondition: NONE
-        // Postcondition: Initialized Product with no name
-        Product();
+
+        virtual ~Product();
 
         // --------------------------------------------------------------------
         // Name Constructor
         // Precondition: NONE
         // Postcondition: Initialized Product with name
-        Product(const string newName) {this->name = newName; }
-
-        // --------------------------------------------------------------------
-        // setName()
-        // Precondition: Product must be initialized correctly
-        // Postcondition: Product with new name
-        void setName(const string newName) { this->name = newName; }
+        Product(const string newName, const string abbreviation) {this->name = newName; this->abbreviation = abbreviation;}
 
         // --------------------------------------------------------------------
         // getName()
         // Precondition: Product must be initialized correctly
         // Postcondition: name is returned
         string getName() { return this->name; }
+
+        // --------------------------------------------------------------------
+        // getAbbreviation()
+        // Precondition: Product must be initialized correctly
+        // Postcondition: name is returned
+        string getAbbreviation() { return this->abbreviation; }
 
 };

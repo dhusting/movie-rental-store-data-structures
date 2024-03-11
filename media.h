@@ -7,9 +7,11 @@
 // stores all media types in a store and holds Genre BSTs that sorts movies. 
 // Assumptions - None
 // -----------------------------------------------------------------------------
+
+#include <list>
+#include <iostream>
 #include "product.h"
 #include "genre.h"
-#include <map>
 
 using namespace std;
 
@@ -17,9 +19,12 @@ class Media : public Product {
 
     private:
         // Genre instances
-        map<string, Genre> genres;
+        list<Genre> genreList;
 
     public:
+    
+        Media(const string abbreviation, const string name): Product(name, abbreviation) {};
+
         // --------------------------------------------------------------------
         // getGenre()
         // parses list of genre BSTs to find the correct genre by its abbreviation
@@ -34,5 +39,5 @@ class Media : public Product {
         // Postcondition: returns address of genre if exists, null otherwise
         void createGenre(const string);
 
-
+        void printGenre();
 };
