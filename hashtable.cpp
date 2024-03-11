@@ -7,7 +7,6 @@
 // Assumptions - None
 // ----------------------------------------------------------------------------
 #include <chrono>
-#include <format>
 #include <iostream>
 #include <sstream>
 #include <list>
