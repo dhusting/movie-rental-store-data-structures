@@ -18,6 +18,15 @@ using namespace std;
 // Summary - Extends NodeData class with two movie - specific fields
 class Movie : NodeData {
 
+    friend ostream& operator<<(ostream &out, const Movie &rhs) {
+        out << rhs.getId() << ", " << rhs.getTitle() << ", " 
+            << to_string(rhs.getStock()) << ", " << rhs.getReleaseDate() 
+            << ", " << to_string(rhs.getReleaseYear()) << ", " 
+            << to_string(rhs.getLateFee()) << ", " << rhs.getDirector() << ", "
+            << rhs.getMajorActor();
+        return out;
+    }
+
     private:
         // Name of director
         string director;
@@ -49,14 +58,14 @@ class Movie : NodeData {
         // Override function that returns media type
         // Precondition: N/A
         // Postcondition: Return string value of media type
-        string getType();
+        string getType() const;
 
         // -----------------------------------------------------------------------------
         // getDirector
         // Getter for director property
         // Precondition: Valid movie object
         // Postcondition: Return string director value
-        string getDirector();
+        string getDirector() const;
 
         // -----------------------------------------------------------------------------
         // setDirector
@@ -70,7 +79,7 @@ class Movie : NodeData {
         // Getter for majorActor property
         // Precondition: Valid movie object
         // Postcondition: Return string majorActor value
-        string getMajorActor();
+        string getMajorActor() const;
 
         // -----------------------------------------------------------------------------
         // setMajorActor
@@ -78,6 +87,20 @@ class Movie : NodeData {
         // Precondition: Valid NodeData object, string parameter
         // Postcondition: Assign majorActor field to parameter
         void setMajorActor(string majorActor);
+
+        // -----------------------------------------------------------------------------
+        // operator == overload
+        // Check two nodeData instances for equality
+        // Precondition: Two movie parameters
+        // Postcondition: Return true if parameters are equal, false otherwise
+        bool operator==(const Movie& rhs) const;
+
+        // -----------------------------------------------------------------------------
+        // operator > overload
+        // Check if left operand is greater than the right
+        // Precondition: Two movie parameters
+        // Postcondition: Return true if left operand is greater, false otherwise
+        bool operator>(const Movie& rhs) const;
 };
 
 #endif

@@ -1,4 +1,4 @@
 P, M, D, DVD
-G, D, C, Classic, (Stock, Director, Title, MajorActor_ReleaseDate), [ReleaseDate, MajorActor]
-G, D, D, Drama, (Stock, Director, Title, ReleaseYear), [Director, Title]
-G, D, F, Comedy, (Stock, Director, Title, ReleaseYear), [Title, ReleaseYear]
+G, D, C, Classic, (Genre, Stock, Director, Title, MajorActor_ReleaseDate), [ReleaseDate, MajorActor]
+G, D, D, Drama, (Genre, Stock, Director, Title, ReleaseYear), [Director, Title]
+G, D, F, Comedy, (Genre, Stock, Director, Title, ReleaseYear), [Title, ReleaseYear]

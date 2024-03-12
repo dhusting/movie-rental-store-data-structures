@@ -35,7 +35,7 @@ void Genre::print(ostream &out, Node* node) const {
     //in order traversal & print node
     if (node != nullptr) {
         print(out, node->left);
-        out << *node->data << endl;
+        out << *((Movie *)node->data) << endl;
         print(out, node->right);
     }
 }
@@ -46,11 +46,13 @@ void Genre::print(ostream &out, Node* node) const {
 // Precondition: String input & char delimiter
 // Postcondition: Vector of substrings
 vector<string> Genre::split(string input, char delimiter) const {
-    stringstream ss(input);     //add to buffer
+    stringstream ss(input);     // add to buffer
     vector<string> subs;
-    while (ss.good()) {     //check buffer limit
+    while (ss.good()) {     // check buffer limit
         string sub;
-        getline(ss, sub, delimiter);  //read substring split by delimiter
+        getline(ss, sub, delimiter);  // read substring split by delimiter
+        if (sub.at(0) == ' ')    // remove leading space
+            sub = sub.substr(1);
         subs.push_back(sub);
     }
     return subs;
@@ -61,7 +63,7 @@ vector<string> Genre::split(string input, char delimiter) const {
 // Initializes genre object with empty properties
 // Precondition: N/A
 // Postcondition: Genre object allocated and ready for use as BST
-Genre::Genre() {}
+Genre::Genre() { root = nullptr; }    // set root to null
 
 // -----------------------------------------------------------------------------
 // Name, Abbreviation and Filter Constructor (name, abbreviation
@@ -75,6 +77,7 @@ Genre::Genre(string nam, string abv, string pFlt, string sFlt) {
     abbreviation = abv;
     parseString = pFlt;
     sortString = sFlt;
+    root = nullptr;
 }
 
 // -----------------------------------------------------------------------------
@@ -145,10 +148,11 @@ bool Genre::insert(string line) {
         // iterative traversal & insert node as leaf, in order
         Node *cur = root;
         for(;;) {
-            if (*cur->data == *(NodeData *)&movie) {  // check if data already exists in tree
+            if (*((Movie *)cur->data) == *movie) {  // check if data already exists in tree
+                delete movie;   // deallocate movie
                 delete node;    // deallocate new node
                 return false;   // return false, insert failed
-            } else if (*cur->data > *(NodeData *)&movie)  // check if key is before cur
+            } else if (*((Movie *)cur->data) > *movie)  // check if key is before cur
                 if (cur->left == nullptr) {     // check if empty left child
                     cur->left = node;   // insert node as left child
                     break;
@@ -213,22 +217,27 @@ void Genre::setField(Movie *movie, string field, string input) {
 // Precondition: Input & field string parameters
 // Postcondition: Parameter field is assigned to parameter input
 string Genre::buildSortField(Movie *movie, string field, string sortField) {
+    string data;
     if (field == "Title")
-        return sortField + ((NodeData *)movie)->getTitle();
+        data = ((NodeData *)movie)->getTitle();
     else if (field == "Stock")
-        return sortField + to_string(((NodeData *)movie)->getStock());
+        data = to_string(((NodeData *)movie)->getStock());
     else if (field == "ReleaseDate")
-        return sortField + ((NodeData *)movie)->getReleaseDate();
+        data = ((NodeData *)movie)->getReleaseDate();
     else if (field == "ReleaseYear")
-        return sortField + to_string(((NodeData *)movie)->getReleaseYear());
+        data = to_string(((NodeData *)movie)->getReleaseYear());
     else if (field == "LateFee")
-        return sortField + to_string(((NodeData *)movie)->getLateFee());
+        data = to_string(((NodeData *)movie)->getLateFee());
     else if (field == "Director")
-        return sortField + movie->getDirector();
+        data = movie->getDirector();
     else if (field == "MajorActor")
-        return sortField + movie->getMajorActor();
+        data = movie->getMajorActor();
+    
+    // concat new data w/ sortfield
+    if (sortField != "")
+        return sortField + " " + data;
     else
-        return sortField;
+        return data;
 }
 
 // -----------------------------------------------------------------------------
@@ -250,15 +259,11 @@ Movie* Genre::buildMovie(vector<string> input, vector<string> filters) {
                 getline(subs, sub, '_');
                 subFields.push_back(sub);
             }
+            stringstream ts(term);
             for (int i = 0; i < subFields.size(); i++) {
-                stringstream ts(term);
-                string subTerm;
-                if (subFields[i] == "MajorActor") {
-                    string first, last;
-                    ts >> first >> last;
-                    subTerm = first + " " + last;
-                } else
-                    ts >> subTerm;
+                string first, last; // subterms are combinations of substrings
+                ts >> first >> last;    // need to read twice
+                string subTerm = first + " " + last;
                 setField(movie, subFields[i], subTerm);
             }
         } else
@@ -267,7 +272,7 @@ Movie* Genre::buildMovie(vector<string> input, vector<string> filters) {
 
     // split sort string
     vector<string> sortFields = split(sortString, ',');
-    string sortField;
+    string sortField = "";
     for(int i = 0; i < sortFields.size(); i++)
         sortField = buildSortField(movie, sortFields[i], sortField);
     ((NodeData *)movie)->setId(sortField);
