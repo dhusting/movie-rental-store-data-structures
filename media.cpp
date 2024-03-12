@@ -17,12 +17,12 @@
 Genre* Media::getGenre(const string abbrev)
 {
     //iterate through all genres
-    for(Genre genre : genreList)
+    for(Genre * genre : genreList)
     {
         //check to see if the genre abbeiations are equal and return a pointer
-        if(genre.getAbbreviation() == abbrev) {
-            Genre *result = &genre;
-            return result;
+        if(genre->getAbbreviation() == abbrev) {
+            
+            return genre;
         }
     }
 
@@ -42,7 +42,8 @@ void Media::createGenre(const string command)
     int abbreviationEnd = command.find(',');
 
     //Look for the second comma that deliminates the name
-    int nameEnd = command.find(',', abbreviationEnd+2);
+    int nameStart = abbreviationEnd+2;
+    int nameEnd = command.find(',', nameStart);
 
     //Look for the parentheses that delminates how to parse the command string
     int parenthesesStart = command.find('(', nameEnd+1)+1;
@@ -54,15 +55,15 @@ void Media::createGenre(const string command)
 
     //store all the strings by substring the command
     string abbreviation = command.substr(0,abbreviationEnd);
-    string name = command.substr(abbreviationEnd+1,nameEnd);
-    string parseString = command.substr(parenthesesStart,parenthesesEnd);
-    string sortString = command.substr(bracketStart,bracketEnd);
+    string name = command.substr(nameStart,nameEnd-nameStart);
+    string parseString = command.substr(parenthesesStart,parenthesesEnd-parenthesesStart);
+    string sortString = command.substr(bracketStart,bracketEnd-bracketStart);
 
     //search for the Genre
     if(getGenre(abbreviation) == nullptr)
     {
         //create a new Genre object
-        Genre g(name, abbreviation, parseString, sortString);
+        Genre * g = new Genre(name, abbreviation, parseString, sortString);
 
         //add to the back of the list
         genreList.push_back(g);
@@ -88,7 +89,7 @@ void Media::printGenres()
     }
 
     //iterate through all the genres and print
-    for (Genre g : genreList)
+    for (Genre * g : genreList)
     {
         cout << g;
     }

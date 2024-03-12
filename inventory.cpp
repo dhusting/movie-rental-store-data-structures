@@ -107,13 +107,37 @@ string Inventory::getAddress() {
 Product* Inventory::getProduct(const string abbrev)
 {
     //iterate through product list
-    for(Product product : productList)
+    for(Product * product : productList)
     {
         //compare abbreviations and return address
-        if(product.getAbbreviation() == abbrev) {
-            Product *result = &product;
-            return result;
+        if(product->getAbbreviation() == abbrev) {
+            
+            return product;
+            
         }
+
+    }
+
+    return nullptr;
+
+}
+
+Media * Inventory::getMedia(const string abbrev)
+{
+    //iterate through product list
+    for(Product * product : productList)
+    {
+
+        if (Media * mediaPtr = (Media *)product)
+        {
+            //compare abbreviations and return address
+            if(mediaPtr->getAbbreviation() == abbrev) {
+            
+                return mediaPtr;
+            
+            }
+        }
+
     }
 
     return nullptr;
@@ -421,13 +445,11 @@ bool Inventory::displayInventory() {
     }
 
     //iterate through all the in the list
-    for (Product product : productList)
+    for (Product * product : productList)
     {
-        //convert to pointer for type check
-        Product * productPtr = &product;
 
         //try to convert to media
-        if (Media * mediaPtr = (Media *)productPtr)
+        if (Media * mediaPtr = (Media *)product)
         {
             //call the print method
             mediaPtr->printGenres();
@@ -474,13 +496,17 @@ bool Inventory::createProduct(const string command)
     }
 
     //check to see if the product exists already
-    if(getProduct(commandFields.at(2)) == nullptr)
+    if(getProduct(commandFields.at(0)) == nullptr)
     {
         //if the genre is of media type
-        if (commandFields.at(1) == "M")
+        if (commandFields.at(0) == "M")
         {
+
+            string abbrev = commandFields.at(1).substr(1);
+            string name = commandFields.at(2).substr(1);
+
             //create a new media object giving it the abbreviation and name
-            Media m(commandFields.at(2), commandFields.at(3));
+            Media * m = new Media(abbrev, name);
 
             //add to the back of the list
             productList.push_back(m);
@@ -497,14 +523,17 @@ bool Inventory::createProduct(const string command)
 // Postcondition: creates a new genre BST if no genre exists with the same name
 bool Inventory::createGenre(const string command) {
     
+    char abbrev = command.at(0);
+    string str(1, abbrev);
+
     //search for the product giving it the abbreviation
-    Product * product = getProduct(to_string(command.at(0)));
-    
+    Product * product = getProduct(str);
+
     //check to see if the product exists
     if(product != nullptr)
     {
         //try to convert to a Media
-        if(Media * mediaPtr = (Media *)product)
+        if(Media* mediaPtr = dynamic_cast<Media*>(product))
         {
             //get the rest of the command
             string genreCommand = command.substr(3);
@@ -532,9 +561,9 @@ bool Inventory::createMovie(const string line) {
     getline(ss, abbrev, ',');
 
     // get matching genre & insert input line
-    Product *product = getProduct(abbrev);
-    Media *media = (Media *)product;
-    Genre *genre = media->getGenre(abbrev);
+    Product *product = getProduct("D");    
+    Media* mediaPtr = dynamic_cast<Media*>(product);
+    Genre * genre = mediaPtr->getGenre(abbrev);
     if (genre == nullptr)
         return false;
     genre->insert(line);

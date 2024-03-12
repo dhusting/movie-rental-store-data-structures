@@ -30,7 +30,7 @@ class Inventory{
         HashTable customers;
 
         // Stores all possible products. E.g (Media, Hardware, etc)
-        list<Product> productList;
+        list<Product *> productList;
 
         // ---------------------------------------------------------------------
         // getProduct()
@@ -39,6 +39,14 @@ class Inventory{
         // Precondition: NONE
         // Postcondition: returns pointer to Product or null
         Product* getProduct(const string);
+
+        // ---------------------------------------------------------------------
+        // getMedia()
+        // Searches the product list by the abbreviation and returns address it 
+        // there is one
+        // Precondition: NONE
+        // Postcondition: returns pointer to Product or null
+        Media* getMedia(const string);
 
     public:
         // --------------------------------------------------------------------

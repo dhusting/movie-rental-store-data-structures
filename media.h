@@ -20,7 +20,7 @@ class Media : public Product {
 
     private:
         // Genre instances
-        list<Genre> genreList;
+        list<Genre *> genreList;
 
     public:
     
