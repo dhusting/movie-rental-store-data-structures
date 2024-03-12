@@ -1,4 +1,4 @@
-// -------------------------------hashtable.h ----------------------------------
+// -------------------------------hashtable.cpp --------------------------------
 // Team Blockbuster - CS502A
 // Created 20240224
 // Modified 20240313
@@ -212,7 +212,7 @@ bool HashTable::addTransaction(const int customerID,
 
 // -----------------------------------------------------------------------------
 // display()
-// Outputs hash table up to specified # of customers w/o transactions
+// Outputs hash table up to specified # of customers w/ # of transactions
 // Precondition: None
 // Postcondition: Hash table is output to console
 void HashTable::display(const int customerlimit,
@@ -240,7 +240,7 @@ void HashTable::display(const int customerlimit,
 // -----------------------------------------------------------------------------
 // displayHistory()
 // Outputs list of transaction for specified customer w/ specified 
-// number of transactions to display
+// # of transactions to display
 // Precondition: None
 // Postcondition: Limited version of hash table is output to console
 void HashTable::displayHistory(const int customerID, const int limit) const
