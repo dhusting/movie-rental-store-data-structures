@@ -6,14 +6,15 @@
 // Summary - This file contains the implementation for the Inventory class
 // Assumptions - N/A
 // -----------------------------------------------------------------------------
-#include <fstream>
-#include <iostream>
-#include <filesystem>
-#include <list>
-#include <string>
-#include <sstream>
 #include <chrono>
 #include <ctime>
+#include <filesystem>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <list>
+#include <sstream>
+#include <string>
 #include "inventory.h"
 
 using namespace std;
