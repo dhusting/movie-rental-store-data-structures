@@ -560,7 +560,7 @@ bool Inventory::createCustomer(string line) {
     name = ss.str();
     // TODO: programmatically set creation date
     Customer newCustomer{customerID, name, "2024-03-10", 0, false, {}};
-    customers.insert(customerID, newCustomer);
+    customers.insert(newCustomer);
     return true; // TODO: return success
 }
 

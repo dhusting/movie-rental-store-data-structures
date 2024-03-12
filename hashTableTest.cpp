@@ -22,13 +22,13 @@ void prettyPrint(string message) {
 
 int main() {
     // Create some sample customers
-    prettyPrint("Creating sample customers");
-    Customer customer1{1, "John Doe", "2024-03-01", 0, false, {}};
+    cout << "Creating sample customers\n";
+    Customer customer1{9999, "John Doe", "2024-03-01", 0, false, {}};
     Customer customer2{1202, "Jane Smith", "2024-03-02", 0, false, {}};
     Customer customer3{4503, "Alice Johnson", "2024-03-03", 0, false, {}};
 
     // Instantiate the HashTable
-    prettyPrint("Initializing hashtable");
+    cout << "Initializing hashtable\n";
     HashTable hashTable;
 
     // Insert customers into the hash table
@@ -38,18 +38,19 @@ int main() {
     hashTable.insert(customer3);
 
     // Display hash table contents
-    prettyPrint("HashTable contents w/ new customers, no transactions posted");
+    cout << "HashTable contents w/ new customers, no transactions posted\n";
     hashTable.display(10, 10);
 
     // Add dummy transactions to customer1
     prettyPrint("TEST: Add dummy transactions to customer1");
     for (int i = 1; i <= 100; i++) {
         hashTable.addTransaction(customer1.ID, "movie", true);
+        // Adding ~millisecond delay for unique borrow datetimes
         this_thread::sleep_for(chrono::milliseconds(1));
     }
 
     // Display hash table contents
-    prettyPrint("HashTable contents w/ transactions after insertion:");
+    cout << "HashTable contents w/ transactions after insertion\n";
     hashTable.display(10, 10);
 
     // Add a return transaction
@@ -57,7 +58,7 @@ int main() {
     hashTable.addTransaction(customer1.ID, "movie", false);
 
     // Display hash table contents after return
-    prettyPrint("HashTable contents after return:");
+    cout << "HashTable contents after return:\n";
     hashTable.display(10, 10);
 
     // Add a return transaction
@@ -103,12 +104,28 @@ int main() {
         cout << "RESULT: Customer to be removed not found.\n";;
 
     // Display hash table contents after removal
-    prettyPrint("HashTable contents after customer removal:");
+    cout << "HashTable contents after customer removal:\n";
     hashTable.display(10);
 
     // Display transaction history of customer 1 up to 1000 entries.
-    prettyPrint("TEST: Customer 1 transactions:");
+    prettyPrint("TEST: Customer 1 transactions");
     hashTable.displayHistory(customer1.ID);
-    
+
+    // Add duplicate customerID
+    prettyPrint("TEST: Add duplicate customerID = 9999");
+    if (!hashTable.insert(Customer{9999, "John Smith(9999)", "2024-03-03", 0, false, {}})) {
+        cout << "RESULT: Unsuccessful in added customerID 9999.\n";
+    }
+
+
+    // Add 9996 more customers
+    prettyPrint("TEST: Add 999 more customers");
+    for (int i = 1; i <= 999; i++) {
+        if (!hashTable.insert(Customer{i, "John Smith(" + to_string(i) + ")", "2024-03-03", 0, false, {}})) {
+            cout << "RESULT: Customer list exceeded max customers of 1000.\n";
+            break;
+        }            
+    }
+
     return 0;
 }

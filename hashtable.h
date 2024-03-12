@@ -1,11 +1,11 @@
-// -------------------------------hashtable.h ---------------------------------
+// -------------------------------hashtable.h ----------------------------------
 // Team Blockbuster - CS502A
 // Created 20240224
 // Modified 20240224
-// ----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Summary - This file contains the specification for the HashTable class
 // Assumptions - None
-// ----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 #ifndef HASHTABLE_H
 #define HASHTABLE_H
 #include <chrono>
@@ -53,12 +53,22 @@ class HashTable {
             return key % hashSize;
         }
 
+        // ---------------------------------------------------------------------
+        // getCurrentTimestamp()
+        // Gets milliseconds since epoch
+        // Precondition: NONE
+        // Postcondition: Returns milliseconds since epoch
         uint64_t getCurrentTimestamp();
 
+        // ---------------------------------------------------------------------
+        // msTimestampToString()
+        // Formats milliseconds since epoch to a string in YYYYMMDD_hhmmss.sss
+        // Precondition: NONE
+        // Postcondition: Returns human readable string
         string msTimestampToString(uint64_t);
 
     public:
-        // --------------------------------------------------------------------
+        // ---------------------------------------------------------------------
         // Default Constructor
         // Initializes an empty HashTable with size of hashSize
         // Precondition: NONE
@@ -67,7 +77,7 @@ class HashTable {
             hashTable = new KeyValuePair[hashSize];
         };
 
-        // --------------------------------------------------------------------
+        // ---------------------------------------------------------------------
         // Destructor
         // Precondition: NONE
         // Postcondition: Clears all dynamically allocated memory.
@@ -75,7 +85,7 @@ class HashTable {
             delete[] hashTable;
         };
 
-        // --------------------------------------------------------------------
+        // ---------------------------------------------------------------------
         // insert()
         // Inserts value specified by key
         // Precondition: None
@@ -83,7 +93,7 @@ class HashTable {
         // entry does not exist.
         bool insert(const Customer);
 
-        // --------------------------------------------------------------------
+        // ---------------------------------------------------------------------
         // remove()
         // Removes value specified by key, returns true if found and removed.
         //  False if not found
@@ -91,22 +101,23 @@ class HashTable {
         // Postcondition: Hash Table is updated with key value pair removed
         bool remove(const int);
 
-        // --------------------------------------------------------------------
+        // ---------------------------------------------------------------------
         // get()
         // Gets value specified by key
         // Precondition: Key and value should exist
         // Postcondition: Returns value specified by key
         Customer* get(const int) const;
 
-        // -----------------------------------------------------------------------------
+        // --------------------------------------------------------------------
         // addTransaction()
         // Transactions are either a borrow or return.
-        // If transaction is a borrow, creates a new transaction in the HashTable. 
-        // ID is created off of date customer ID and all other details.
-        // If transaction is a return, searches for the transaction given the customer
-        // ID and updates the return date.
-        // Transaction is moved to front of list to maintain chronological order. 
-        // Precondition: Customer id, transaction details, and isReturn parameters
+        // If transaction is a borrow, creates a new transaction in the 
+        // HashTable. ID is created off of date customer ID and timestamp
+        // If transaction is a return, searches transactions given the customer
+        // ID and updates the return date. Transaction is moved to front of list
+        // to maintain chronological order. 
+        // Precondition: Customer id, transaction details, and isReturn 
+        // parameters
         // Postcondition: a new transaction transaction is created in the table
         // if the customer exists
         bool addTransaction(const int, const string, const bool);
