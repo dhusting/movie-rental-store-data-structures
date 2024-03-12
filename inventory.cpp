@@ -143,21 +143,6 @@ Media * Inventory::getMedia(const string abbrev)
     return nullptr;
 
 }
-
-// -----------------------------------------------------------------------------
-// checkForBackupFiles()
-// Returns whether there are automated backup files of previous 
-// sessions
-// Precondition: NONE
-// Postcondition: return true if files exist, false otherwise
-bool Inventory::checkForBackupFiles() 
-{
-    return filesystem::exists("backup.bak");
-}
-// looks at the predetermined paths for any .bak files that contain previous iteration
-// of inventories. 
-// Returns true if there are files
-
 // -----------------------------------------------------------------------------
 // ingestFromBackupFiles()
 // Ingests from automated backup files that have been outputted and stored.
@@ -165,9 +150,7 @@ bool Inventory::checkForBackupFiles()
 // Postcondition: returns true if successfull, false otherwise
 bool Inventory::ingestFromBackupFiles() 
 {
-    //check for the backup file
-    if (checkForBackupFiles())
-    {
+
         //create empty variables for storage
         string line;
         ifstream commandFile;
@@ -182,7 +165,7 @@ bool Inventory::ingestFromBackupFiles()
 
         //close the file
         commandFile.close();
-    }
+
 }
 
 // -----------------------------------------------------------------------------
@@ -606,7 +589,12 @@ bool Inventory::createCustomer(string line)
     // Get CustomerID from line
     ss >> term;
     customerID = stoi(term);
-    name = ss.str();
+    getline(ss, name);
+
+    // Remove first character if space.
+    if (!name.empty() && name[0] == ' ')
+        name.erase(0, 1);
+
     
     // Format creation date into YYYYMMDD
     sst << put_time(localtime(&time), "%Y%m%d");

@@ -108,14 +108,6 @@ class Inventory{
         string getAddress();
 
         // --------------------------------------------------------------------
-        // checkForBackupFiles()
-        // Returns whether there are automated backup files of previous 
-        // sessions
-        // Precondition: NONE
-        // Postcondition: return true if files exist, false otherwise
-        bool checkForBackupFiles();
-
-        // --------------------------------------------------------------------
         // ingestFromBackupFiles()
         // Ingests from automated backup files that have been output and stored.
         // Precondition: NONE
