@@ -40,7 +40,7 @@ Movie::Movie(string ID, string title, int stock, string releaseDate
 // Override function that returns media type
 // Precondition: N/A
 // Postcondition: Return string value of media type
-string Movie::getType() {
+string Movie::getType() const {
     return "Movie";
 };
 
@@ -49,7 +49,7 @@ string Movie::getType() {
 // Getter for director property
 // Precondition: Valid movie object
 // Postcondition: Return string director value
-string Movie::getDirector() {return director;}
+string Movie::getDirector() const {return director;}
 
 // -----------------------------------------------------------------------------
 // setDirector
@@ -63,7 +63,7 @@ void Movie::setDirector(string director) {this->director = director;}
 // Getter for majorActor property
 // Precondition: Valid movie object
 // Postcondition: Return string majorActor value
-string Movie::getMajorActor() {return majorActor;}
+string Movie::getMajorActor() const {return majorActor;}
 
 // -----------------------------------------------------------------------------
 // setMajorActor
@@ -71,3 +71,19 @@ string Movie::getMajorActor() {return majorActor;}
 // Precondition: Valid NodeData object, string parameter
 // Postcondition: Assign majorActor field to parameter
 void Movie::setMajorActor(string majorActor) {this->majorActor = majorActor;}
+
+// -----------------------------------------------------------------------------
+// operator == overload
+// Check two nodeData instances for equality
+// Precondition: Two nodeData parameters
+// Postcondition: Return true if parameters are equal, false otherwise
+bool Movie::operator==(const Movie& rhs) const {return this->getId() 
+    == rhs.getId();}
+
+// -----------------------------------------------------------------------------
+// operator > overload
+// Check if left operand is greater than the right
+// Precondition: Two nodeData parameters
+// Postcondition: Return true if left operand is greater, false otherwise
+bool Movie::operator>(const Movie& rhs) const {return this->getId() 
+    > rhs.getId();}

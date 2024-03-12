@@ -25,11 +25,7 @@ class NodeData {
     // Print contents of NodeData
     // Precondition: Valid NodeData object
     // Postcondition: NodeData contents printed to terminal output
-    friend ostream& operator<<(ostream &out, const NodeData &rhs) {
-        out << rhs.id << ", " << rhs.title << ", " << rhs.stock << ", " 
-            << rhs.releaseDate << ", " << rhs.releaseYear << ", " << rhs.lateFee;
-        return out;
-    }
+    friend ostream& operator<<(ostream &out, const NodeData &rhs);
     // Pseudocode:
     // NodeData contents printed to terminal output
 
@@ -86,7 +82,7 @@ class NodeData {
         // Pure virtual function that returns media type
         // Precondition: N/A
         // Postcondition: Return string value of media type
-        virtual string getType() = 0;
+        virtual string getType() const = 0;
         // Pseudocode:
         // Pure virtual implementation makes NodeData an abstract class
 
@@ -95,21 +91,21 @@ class NodeData {
         // Check two nodeData instances for equality
         // Precondition: Two nodeData parameters
         // Postcondition: Return true if parameters are equal, false otherwise
-        bool operator==(const NodeData& rhs) const {return this->id == rhs.id;}
+        bool operator==(const NodeData& rhs) const;
 
         // -----------------------------------------------------------------------------
         // operator > overload
         // Check if left operand is greater than the right
         // Precondition: Two nodeData parameters
         // Postcondition: Return true if left operand is greater, false otherwise
-        bool operator>(const NodeData& rhs) const {return this->id > rhs.id;}
+        bool operator>(const NodeData& rhs) const;
 
         // -----------------------------------------------------------------------------
         // getId
         // Getter for id property
         // Precondition: Valid NodeData object
         // Postcondition: Return string id value
-        string getId() {return id;}
+        string getId() const {return id;}
 
         // -----------------------------------------------------------------------------
         // setId
@@ -123,7 +119,7 @@ class NodeData {
         // Getter for title property
         // Precondition: Valid NodeData object
         // Postcondition: Return string title value
-        string getTitle() {return title;}
+        string getTitle() const {return title;}
 
         // -----------------------------------------------------------------------------
         // setTitle
@@ -137,7 +133,7 @@ class NodeData {
         // Getter for stock property
         // Precondition: Valid NodeData object
         // Postcondition: Return integer stock value
-        int getStock() {return stock;}
+        int getStock() const {return stock;}
 
         // -----------------------------------------------------------------------------
         // setStock
@@ -171,7 +167,7 @@ class NodeData {
         // Getter for releaseDate property
         // Precondition: Valid NodeData object
         // Postcondition: Return string releaseDate value
-        string getReleaseDate() {return releaseDate;}
+        string getReleaseDate() const {return releaseDate;}
 
         // -----------------------------------------------------------------------------
         // setReleaseData
@@ -185,7 +181,7 @@ class NodeData {
         // Getter for releaseYear property
         // Precondition: Valid NodeData object
         // Postcondition: Return integer releaseYear value
-        int getReleaseYear() {return releaseYear;}
+        int getReleaseYear() const {return releaseYear;}
 
         // -----------------------------------------------------------------------------
         // setReleaseYear
@@ -199,7 +195,7 @@ class NodeData {
         // Getter for lateFee property
         // Precondition: Valid NodeData object
         // Postcondition: Return double lateFee value
-        double getLateFee() {return lateFee;}
+        double getLateFee() const {return lateFee;}
 
         // -----------------------------------------------------------------------------
         // setLateFee
