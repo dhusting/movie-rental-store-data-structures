@@ -466,7 +466,8 @@ bool Inventory::displayInventory() {
 // Postcondition: If param string is empty, display transactions 
 // for all customers.  Otherwise, display transactions for given id,
 // blank if no transactions.
-void Inventory::displayHistory(const string term) const {
+void Inventory::displayHistory(const string term) const =
+{
     int customerID = stoi(term);
     // Outputs up all transactions of given customer ID
     customers.displayHistory(customerID);
@@ -573,7 +574,8 @@ bool Inventory::createMovie(const string line) {
 // Creates a new customer in the hash table
 // Precondition: The Inventory and customer table are initialized correctly
 // Postcondition: creates a new customer in the table if it does not exist
-bool Inventory::createCustomer(string line) {
+bool Inventory::createCustomer(string line)
+{
     stringstream ss(line);
     string term, name, timestamp;
     int customerID;
@@ -603,7 +605,8 @@ bool Inventory::createCustomer(string line) {
 // Precondition: Customer id, transaction details, and isReturn parameters
 // Postcondition: a new transaction transaction is created in the table
 // if the customer exists
-bool Inventory::addTransaction(int customerID, string details, bool isBorrow) {
+bool Inventory::addTransaction(int customerID, string details, bool isBorrow)
+{
     // call getMovie() if address returned
     // call borrowStock() if isReturn is false, otherwise returnStock()
     // create a transaction in the list
