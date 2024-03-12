@@ -191,19 +191,19 @@ bool Genre::find(string key, NodeData *& result) {
 // Precondition: Input & field string parameters
 // Postcondition: Parameter field is assigned to parameter input
 void Genre::setField(Movie *movie, string field, string input) {
-    if (field == "title")
+    if (field == "Title")
         ((NodeData *)movie)->setTitle(input);
-    else if (field == "stock")
+    else if (field == "Stock")
         ((NodeData *)movie)->setStock(stoi(input));
-    else if (field == "releaseDate")
+    else if (field == "ReleaseDate")
         ((NodeData *)movie)->setReleaseDate(input);
-    else if (field == "releaseYear")
+    else if (field == "ReleaseYear")
         ((NodeData *)movie)->setReleaseYear(stoi(input));
-    else if (field == "lateFee")
+    else if (field == "LateFee")
         ((NodeData *)movie)->setLateFee(stod(input));
-    else if (field == "director")
+    else if (field == "Director")
         movie->setDirector(input);
-    else if (field == "majorActor")
+    else if (field == "MajorActor")
         movie->setMajorActor(input);
 }
 
@@ -213,19 +213,19 @@ void Genre::setField(Movie *movie, string field, string input) {
 // Precondition: Input & field string parameters
 // Postcondition: Parameter field is assigned to parameter input
 string Genre::buildSortField(Movie *movie, string field, string sortField) {
-    if (field == "title")
+    if (field == "Title")
         return sortField + ((NodeData *)movie)->getTitle();
-    else if (field == "stock")
+    else if (field == "Stock")
         return sortField + to_string(((NodeData *)movie)->getStock());
-    else if (field == "releaseDate")
+    else if (field == "ReleaseDate")
         return sortField + ((NodeData *)movie)->getReleaseDate();
-    else if (field == "releaseYear")
+    else if (field == "ReleaseYear")
         return sortField + to_string(((NodeData *)movie)->getReleaseYear());
-    else if (field == "lateFee")
+    else if (field == "LateFee")
         return sortField + to_string(((NodeData *)movie)->getLateFee());
-    else if (field == "director")
+    else if (field == "Director")
         return sortField + movie->getDirector();
-    else if (field == "majorActor")
+    else if (field == "MajorActor")
         return sortField + movie->getMajorActor();
     else
         return sortField;
@@ -253,7 +253,7 @@ Movie* Genre::buildMovie(vector<string> input, vector<string> filters) {
             for (int i = 0; i < subFields.size(); i++) {
                 stringstream ts(term);
                 string subTerm;
-                if (subFields[i] == "Major Actor") {
+                if (subFields[i] == "MajorActor") {
                     string first, last;
                     ts >> first >> last;
                     subTerm = first + " " + last;
