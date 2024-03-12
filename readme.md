@@ -1,4 +1,10 @@
 # [CSS 502] Assignment 4 Rent-a-Reel
+
+## Implementation Contributions
+- David Li - 100% Hashtable implementation, testing, and documentation. Additionally some inventory methods related to Hashtable. Contributed to Readme documentation.
+- Darren Husting - 75% of Inventory 100% of Product, Media, and Genre. Contributed to Readme documentation.
+- AJ Plumlee - Genre (Binary Search Tree), NodeData & Movie class implementations and documentation.  Also debugged Inventory class. Contributed to Readme documentation.
+
 ## Overview
 The core of this project revolves around the Inventory class. The Inventory Class maintains Transactions, Customers, and the inventory of Product - Media (DVDs, VHS, Bluray, etc) of which is categorized by Genres (Comedy, Drama, Classic, etc..) with sub types of Music, Movies, etc..
 The inventory can be initialized three ways:
@@ -45,6 +51,42 @@ The inventory can be initialized three ways:
 ## *HashTable*
 The hashtable is based on the closed hashing concept. 
 It uses an array of keyvaluepair structs with customerID as the key and customer as a value.
+
+### Customer
+```
+struct Customer
+{
+    int ID = 0;
+    string name;
+    string dateCreated;
+    int infractionCount;
+    bool banned;
+    list<Transaction> transactions;
+};
+```
+
+### Transaction
+```
+struct Transaction
+{
+    string transactionID;
+    string borrowDate;
+    string dueDate;
+    string returnDate;
+    string transactionDetail;
+};
+```
+
+### KeyValuePair
+Elements of the hashtable
+```
+struct KeyValuePair
+{
+    int customerID = 0;
+    Customer customer;
+};
+```
+
 Although the prompt specifies customerIDs from 0000 to 9999. The array is limited to 1000 entries to utilize and demonstrate the closed hash table.
 > Note: The intent is that there may be 10000 customers however at any one location (`inventory` object) there may only ever be up to around 1000 customers.
 > The application is designed to be scalable. If the customer base decides to go must larger than 10000, we can scale the array size accordingly.
