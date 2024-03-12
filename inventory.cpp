@@ -212,9 +212,9 @@ void Inventory::command(const string line) {
     else if (term == 'G')
         commandSuccessFlag = createGenre(command);
     else if (term == 'B')
-        commandSuccessFlag = executeBorrow(command);
+        commandSuccessFlag = executeBorrow(line.substr(2));
     else if (term == 'R')
-        commandSuccessFlag = executeReturn(command);
+        commandSuccessFlag = executeReturn(line.substr(2));
     else if (term == 'I')
         displayInventory();
     else if (term == 'H')
@@ -267,24 +267,34 @@ bool Inventory::executeBorrow(const string command)
 
     //variables to temp store the words and id
     string word;
+    string temp;
     string id;
 
     //count number of spaces
-    int spaceCount = 0;
+    int i = 0;
 
     // Parse the string and grab each word up to the 4th space
-    while (ss >> word && spaceCount < 2) {
-        //increase count if word is a space
-        if (word == " ") {
-            spaceCount++;
-        } else {
-            //add the word to the commandfields vector
-            commandFields.push_back(word);
-        }
+    while (i < 3 && ss >> word) {
+        
+        //add the word to the commandfields vector
+        commandFields.push_back(word);
+
+        i++;
     }
 
     //store the rest of the words in the id
-    while (ss >> id);
+    while (ss >> temp)
+    {
+        size_t comma = temp.find(",");
+        
+        if (comma != string::npos) {
+            temp.erase(comma, 1);
+        }
+
+        id = id + temp + " ";
+    }
+
+    id.pop_back();
 
     //create an int for the customer id
     int customerID = stoi(commandFields.at(0));
@@ -324,7 +334,7 @@ bool Inventory::executeBorrow(const string command)
                     }
                     
                     //create a transaction
-                    addTransaction(customerID, command, false);
+                    customers.addTransaction(customerID, id, true);
                 }
 
             } else {
@@ -358,26 +368,36 @@ bool Inventory::executeReturn(const string command)
     //string stream to parse each word in the line
     stringstream ss(command);
 
-    //variables to temp store the words and id
+   //variables to temp store the words and id
     string word;
+    string temp;
     string id;
 
     //count number of spaces
-    int spaceCount = 0;
+    int i = 0;
 
     // Parse the string and grab each word up to the 4th space
-    while (ss >> word && spaceCount < 2) {
-        //increase count if word is a space
-        if (word == " ") {
-            spaceCount++;
-        } else {
-            //add the word to the commandfields vector
-            commandFields.push_back(word);
-        }
+    while (i < 3 && ss >> word) {
+        
+        //add the word to the commandfields vector
+        commandFields.push_back(word);
+
+        i++;
     }
 
     //store the rest of the words in the id
-    while (ss >> id);
+    while (ss >> temp)
+    {
+        size_t comma = temp.find(",");
+        
+        if (comma != string::npos) {
+            temp.erase(comma, 1);
+        }
+
+        id = id + temp + " ";
+    }
+
+    id.pop_back();
 
     //create an int for the customer id
     int customerID = stoi(commandFields.at(0));
@@ -414,7 +434,7 @@ bool Inventory::executeReturn(const string command)
                     node->returnStock();
                     
                     //create a transaction
-                    addTransaction(customerID, command, false);
+                    customers.addTransaction(customerID, id, false);
                 }
 
             } else {
@@ -577,6 +597,7 @@ bool Inventory::createMovie(const string line) {
 bool Inventory::createCustomer(string line)
 {
     stringstream ss(line);
+    stringstream sst;
     string term, name, timestamp;
     int customerID;
     auto now = chrono::system_clock::now();
@@ -588,9 +609,9 @@ bool Inventory::createCustomer(string line)
     name = ss.str();
     
     // Format creation date into YYYYMMDD
-    ss << put_time(localtime(&time), "%Y%m%d");
+    sst << put_time(localtime(&time), "%Y%m%d");
 
-    Customer newCustomer{customerID, name, ss.str(), 0, false, {}};
+    Customer newCustomer{customerID, name, sst.str(), 0, false, {}};
     return customers.insert(newCustomer);
 }
 

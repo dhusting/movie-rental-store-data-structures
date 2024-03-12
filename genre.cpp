@@ -248,9 +248,13 @@ string Genre::buildSortField(Movie *movie, string field, string sortField) {
 Movie* Genre::buildMovie(vector<string> input, vector<string> filters) {
     // iterate through input terms & assign to movie fields
     Movie *movie = new Movie();
+
+    input.erase(input.begin());
+
     for (int i = 0; i < filters.size(); i++) {
         string field = filters[i];
         string term = input[i];
+
         if(field.find('_') != std::string::npos){
             stringstream subs(field);
             vector<string> subFields;
