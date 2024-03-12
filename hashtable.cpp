@@ -1,7 +1,7 @@
 // -------------------------------hashtable.h ----------------------------------
 // Team Blockbuster - CS502A
 // Created 20240224
-// Modified 20240224
+// Modified 20240313
 // -----------------------------------------------------------------------------
 // Summary - This file contains the implmentation for the HashTable class
 // Assumptions - None
@@ -21,15 +21,26 @@ using namespace std::chrono;
  // For calculating due date from borrow date
 const uint64_t TWO_WEEKS = 1209600000; //ms
 
-// Return number of milliseconds since January 1st, 1970
-uint64_t HashTable::getCurrentTimestamp() {
+// -----------------------------------------------------------------------------
+// getCurrentTimestamp()
+// Gets current time in milliseconds since epoch January 1st, 1970
+// Precondition: NONE
+// Postcondition: Returns milliseconds since epoch
+uint64_t HashTable::getCurrentTimestamp()
+{
     milliseconds ms = duration_cast< milliseconds >(
     system_clock::now().time_since_epoch());
 
     return ms.count();
 }
 
-string HashTable::msTimestampToString(uint64_t milliseconds) {
+// -----------------------------------------------------------------------------
+// msTimestampToString()
+// Formats milliseconds since epoch to a string in YYYYMMDD_hhmmss.sss
+// Precondition: NONE
+// Postcondition: Returns human readable string
+string HashTable::msTimestampToString(uint64_t milliseconds)
+{
     ostringstream oss;
 
     // Convert milliseconds to time_t for conversion to tm struct
@@ -48,22 +59,26 @@ string HashTable::msTimestampToString(uint64_t milliseconds) {
 // -----------------------------------------------------------------------------
 // insert()
 // Inserts value specified by key
-// Precondition: None
-// Postcondition: Hash Table is updated with key value pair if the entry does 
-// not exist.
-bool HashTable::insert(const Customer customer) {
+// Precondition: CustomerID in customer should be non-negative
+// Postcondition: Hash Table is updated with key value pair if the 
+// entry does not exist.
+bool HashTable::insert(const Customer customer)
+{
     int index = getHashIndex(customer.ID);
     int originalIndex = index;
 
-    do {
+    do
+    {
         // If the spot is empty or previously removed (ID = 0 or -1)
         // Insert new customer
-        if (hashTable[index].customerID == customer.ID) {
+        if (hashTable[index].customerID == customer.ID)
+        {
             cout << "Error: ID is already taken!\n";
             return false;
         }
-        if (hashTable[index].customerID == 0
-            || hashTable[index].customerID == -1) {
+        if (hashTable[index].customerID == 0 || 
+            hashTable[index].customerID == -1)
+        {
             hashTable[index].customerID = customer.ID;
             hashTable[index].customer = customer;
             return true;
@@ -80,20 +95,23 @@ bool HashTable::insert(const Customer customer) {
 // -----------------------------------------------------------------------------
 // remove()
 // Removes value specified by key, returns true if found and removed.
-//  False if not found
+// False if not found
 // Precondition: None
 // Postcondition: Hash Table is updated with key value pair removed
-bool HashTable::remove(const int key) {
+bool HashTable::remove(const int key)
+{
     int index = getHashIndex(key);
     int originalIndex = index;
     bool removed = false;
 
     do {
-        if (hashTable[index].customerID == key) {
+        if (hashTable[index].customerID == key)
+        {
             hashTable[index].customerID = -1; // Mark as removed
             removed = true;
             break;
-        } else if (hashTable[index].customerID == 0) {
+        } else if (hashTable[index].customerID == 0)
+        {
             // If we hit an empty slot, the item was never in the table
             break;
         }
@@ -107,17 +125,20 @@ bool HashTable::remove(const int key) {
 
 // -----------------------------------------------------------------------------
 // get()
-// Gets value specified by key
+// Gets pointer to customer value specified by key
 // Precondition: Key and value should exist
-// Postcondition: Returns value specified by key
-Customer* HashTable::get(const int key) const {
+// Postcondition: Pointer to value specified by key is returned
+Customer* HashTable::get(const int key) const
+{
     int index = getHashIndex(key);
     int originalIndex = index;
 
     do {
-        if (hashTable[index].customerID == key) {
+        if (hashTable[index].customerID == key)
+        {
             return &hashTable[index].customer;
-        } else if (hashTable[index].customerID == 0) {
+        } else if (hashTable[index].customerID == 0)
+        {
             return nullptr;
         }
 
@@ -131,23 +152,28 @@ Customer* HashTable::get(const int key) const {
 // -----------------------------------------------------------------------------
 // addTransaction()
 // Transactions are either a borrow or return.
-// If transaction is a borrow, creates a new transaction in the HashTable. 
-// ID is created off of date customer ID and all other details.
-// If transaction is a return, searches for the transaction given the customer
-// ID and updates the return date.
-// Transaction is moved to front of list to maintain chronological order. 
-// Precondition: Customer id, transaction details, and isReturn parameters
+// If transaction is borrow, creates a new transaction in the 
+// HashTable. ID is created off of date customer ID and timestamp
+// If transaction is return, searches transactions given the customerID 
+// and updates the return date. Transaction is then moved to front of 
+// list to maintain chronological order. 
+// Precondition: Customer id, transaction details, and isReturn 
+// parameters
 // Postcondition: a new transaction transaction is created in the table
 // if the customer exists
-bool HashTable::addTransaction(
-    const int customerID, const string details, const bool isBorrow) {
+bool HashTable::addTransaction(const int customerID,
+                               const string details,
+                               const bool isBorrow)
+{
     Customer* temp = get(customerID);
     hash<std::string> hasher;
     string uid, borrow, due;
     
     // Add transaction if customer exists
-    if (temp != nullptr) {
-        if (isBorrow) {
+    if (temp != nullptr)
+    {
+        if (isBorrow)
+        {
             // If transaction is a borrow, populate transaction data and 
             // push to front of list.
             borrow = msTimestampToString(getCurrentTimestamp());
@@ -161,14 +187,18 @@ bool HashTable::addTransaction(
         } else {
             // If return transaction, search customer transaction log from 
             // earliest to latest, update return date and push to front of list. 
-            for (list<Transaction>::iterator it = temp->transactions.end(); 
-                it != temp->transactions.begin(); it--) {
-                if (it->transactionDetail == details) {
+            for (list<Transaction>::iterator it = temp->transactions.end();
+                 it != temp->transactions.begin();
+                 it--)
+            {
+                if (it->transactionDetail == details)
+                {
                     cout << "Transaction found: " << details << endl;
                     // Set return date
                     it->returnDate = msTimestampToString(getCurrentTimestamp());
                     // Swap found transaction to front
-                    temp->transactions.splice(temp->transactions.begin(), temp->transactions, it, next(it));
+                    temp->transactions.splice(temp->transactions.begin(),
+                                              temp->transactions, it, next(it));
                     return true;
                 }
             }
@@ -182,21 +212,26 @@ bool HashTable::addTransaction(
 
 // -----------------------------------------------------------------------------
 // display()
-// Outputs hash table to console for debugging
+// Outputs hash table up to specified # of customers w/o transactions
 // Precondition: None
-// Postcondition: Output of hash table to console
-void HashTable::display(const int customerlimit, const int transactionslimit) const {
+// Postcondition: Hash table is output to console
+void HashTable::display(const int customerlimit,
+                        const int transactionslimit) const 
+{
     Customer* temp;
     list<Transaction> tempTransactions;
     int countOfEntries = 0;
 
     // Traverse list of customers and print details including transactions
-    for (int i = 0; countOfEntries < customerlimit && i < hashSize; i++) {
-        if (hashTable[i].customerID > 0) { // Assumes ID > 0 for valid entries
+    for (int i = 0; countOfEntries < customerlimit && i < hashSize; i++)
+    {
+        if (hashTable[i].customerID > 0)
+        { // Assumes ID > 0 for valid entries
             countOfEntries++;
             temp = &hashTable[i].customer;
             tempTransactions = temp->transactions;
-            cout << "[Hash Index "<< left << setw(4) << setfill(' ') << i << "] ";
+            cout << "[Hash Index "<< left << setw(4) << setfill(' ') << i 
+                 << "] ";
             displayHistory(hashTable[i].customerID, transactionslimit);
         }
     }
@@ -204,19 +239,25 @@ void HashTable::display(const int customerlimit, const int transactionslimit) co
 
 // -----------------------------------------------------------------------------
 // displayHistory()
-// Outputs hash table to console for debugging
+// Outputs list of transaction for specified customer w/ specified 
+// number of transactions to display
 // Precondition: None
-// Postcondition: Output of hash table to console
-void HashTable::displayHistory(const int customerID, const int limit) const {
+// Postcondition: Limited version of hash table is output to console
+void HashTable::displayHistory(const int customerID, const int limit) const
+{
     Customer* temp = get(customerID);
     list<Transaction> tempTransactions;
     int countOfTransactions = 0;
 
-    if (temp != nullptr) {
+    if (temp != nullptr)
+    {
         tempTransactions = temp->transactions;
-        cout << "Customer ID " << right << setw(4) << setfill('0') << temp->ID << ", Name: " << temp->name << endl;
-        if (!tempTransactions.empty() && limit > 0) {
-            cout << min(limit, int(tempTransactions.size())) << " of " << tempTransactions.size() << endl;
+        cout << "Customer ID " << right << setw(4) << setfill('0') << temp->ID 
+             << ", Name: " << temp->name << endl;
+        if (!tempTransactions.empty() && limit > 0)
+        {
+            cout << min(limit, int(tempTransactions.size())) << " of " 
+                 << tempTransactions.size() << endl;
             cout << setfill(' ')
             << right << setw(20) << "Transaction #\t"
             << right << setw(20) << "UID\t"
@@ -226,8 +267,9 @@ void HashTable::displayHistory(const int customerID, const int limit) const {
             << left << "Details\t" << endl;
         }
         for (list<Transaction>::iterator it = tempTransactions.begin();
-                it != tempTransactions.end() && countOfTransactions < limit;
-                it++) {
+             it != tempTransactions.end() && countOfTransactions < limit;
+             it++)
+        {
             countOfTransactions++;
             cout
             << right << setw(20) << countOfTransactions << "\t"

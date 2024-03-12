@@ -1,26 +1,28 @@
-// -------------------------- hashTableTest.cpp -------------------------------
+// -------------------------- hashTableTest.cpp --------------------------------
 // Team Blockbuster - CS502A
 // Created 20240224
-// Modified 20240224
-// ----------------------------------------------------------------------------
-// Summary - This file contains the specification for the HashTable class
+// Modified 20240313
+// -----------------------------------------------------------------------------
+// Summary - This file contains the test driver code for the hashtable class
 // Assumptions - None
-// ----------------------------------------------------------------------------
-#include <iostream>
+// -----------------------------------------------------------------------------
 #include <chrono>
+#include <iostream>
 #include <thread>
 
 #include "hashtable.h"
 
 using namespace std;
 
-void prettyPrint(string message) {
+void prettyPrint(string message)
+{
     cout << "-----------------------------------\n"
          << message << endl
          << "-----------------------------------\n";
 }
 
-int main() {
+int main()
+{
     // Create some sample customers
     cout << "Creating sample customers\n";
     Customer customer1{9999, "John Doe", "2024-03-01", 0, false, {}};
@@ -43,7 +45,8 @@ int main() {
 
     // Add dummy transactions to customer1
     prettyPrint("TEST: Add dummy transactions to customer1");
-    for (int i = 1; i <= 100; i++) {
+    for (int i = 1; i <= 100; i++)
+    {
         hashTable.addTransaction(customer1.ID, "movie", true);
         // Adding ~millisecond delay for unique borrow datetimes
         this_thread::sleep_for(chrono::milliseconds(1));
@@ -69,7 +72,8 @@ int main() {
     // Attempt to retrieve customer with ID 2
     Customer* retrievedCustomer2 = hashTable.get(2);
     if (retrievedCustomer2 != nullptr)
-        cout << "RESULT: Retrieved Customer: " << retrievedCustomer2->name << endl;
+        cout << "RESULT: Retrieved Customer: " << retrievedCustomer2->name
+             << endl;
     else 
         cout << "RESULT: Customer could not be retrieved\n";
 
@@ -90,10 +94,11 @@ int main() {
     // Attempt to retrieve customer with ID 1202
     Customer* retrievedCustomer35 = hashTable.get(1202);
     if (retrievedCustomer35 != nullptr)
-        cout << "RESULT: Retrieved Customer: " << retrievedCustomer35->name << endl;
-    else 
+    {
+        cout << "RESULT: Retrieved Customer: " << retrievedCustomer35->name
+             << endl;
+    } else
         cout << "RESULT: Customer could not be retrieved\n";
-
     // Remove a customer from the hash table
     // Attempt to remove customer with ID 1202
     prettyPrint("TEST: Attempt to remove customer w/ customerID = 1202");
@@ -113,15 +118,18 @@ int main() {
 
     // Add duplicate customerID
     prettyPrint("TEST: Add duplicate customerID = 9999");
-    if (!hashTable.insert(Customer{9999, "John Smith(9999)", "2024-03-03", 0, false, {}})) {
-        cout << "RESULT: Unsuccessful in added customerID 9999.\n";
-    }
+    Customer duplicateCustomer{9999, "John Smith(9999)", "2024-03-03", 0, false, {}};
+    if (!hashTable.insert(duplicateCustomer))
+        cout << "RESULT: Unsuccessful in adding customerID 9999.\n";
 
 
     // Add 9996 more customers
     prettyPrint("TEST: Add 999 more customers");
-    for (int i = 1; i <= 999; i++) {
-        if (!hashTable.insert(Customer{i, "John Smith(" + to_string(i) + ")", "2024-03-03", 0, false, {}})) {
+    for (int i = 1; i <= 999; i++)
+    {
+        Customer tempCustomer{i, "John Smith(" + to_string(i) + ")", "2024-03-03", 0, false, {}};
+        if (!hashTable.insert(tempCustomer))
+        {
             cout << "RESULT: Customer list exceeded max customers of 1000.\n";
             break;
         }            

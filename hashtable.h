@@ -1,7 +1,7 @@
 // -------------------------------hashtable.h ----------------------------------
 // Team Blockbuster - CS502A
 // Created 20240224
-// Modified 20240224
+// Modified 20240313
 // -----------------------------------------------------------------------------
 // Summary - This file contains the specification for the HashTable class
 // Assumptions - None
@@ -18,7 +18,8 @@ using namespace std;
 
 const int DEFAULT_HASH_SIZE = 1000;
 
-struct Transaction {
+struct Transaction
+{
     string transactionID;
     string borrowDate;
     string dueDate;
@@ -26,7 +27,8 @@ struct Transaction {
     string transactionDetail;
 };
 
-struct Customer {
+struct Customer
+{
     int ID = 0;
     string name;
     string dateCreated;
@@ -35,9 +37,11 @@ struct Customer {
     list<Transaction> transactions;
 };
 
-class HashTable {
+class HashTable
+{
     private:
-        struct KeyValuePair {
+        struct KeyValuePair
+        {
             int customerID = 0;
             Customer customer;
         };
@@ -46,16 +50,17 @@ class HashTable {
         KeyValuePair* hashTable;
 
         // getHashIndex()
-        // Returns index in hash table based on value of key
+        // Returns index in hash table based on value of key customerID
         // Precondition: NONE
-        // Postcondtion: Index returned.
-        int getHashIndex(const int key) const {
+        // Postcondtion: Index returned
+        int getHashIndex(const int key) const
+        {
             return key % hashSize;
         }
 
         // ---------------------------------------------------------------------
         // getCurrentTimestamp()
-        // Gets milliseconds since epoch
+        // Gets current time in milliseconds since epoch January 1st, 1970
         // Precondition: NONE
         // Postcondition: Returns milliseconds since epoch
         uint64_t getCurrentTimestamp();
@@ -70,25 +75,27 @@ class HashTable {
     public:
         // ---------------------------------------------------------------------
         // Default Constructor
-        // Initializes an empty HashTable with size of hashSize
+        // Initializes an empty HashTable with hasSize of DEFAULT_HASH_SIZE
         // Precondition: NONE
-        // Postcondition: Initialize an empty HashTable
-        HashTable() : hashSize(DEFAULT_HASH_SIZE) {
+        // Postcondition: Empty HashTable of fixed sized is initialized 
+        HashTable() : hashSize(DEFAULT_HASH_SIZE)
+        {
             hashTable = new KeyValuePair[hashSize];
         };
 
         // ---------------------------------------------------------------------
         // Destructor
         // Precondition: NONE
-        // Postcondition: Clears all dynamically allocated memory.
-        ~HashTable() {
+        // Postcondition: Clears hashtable array
+        ~HashTable()
+        {
             delete[] hashTable;
         };
 
         // ---------------------------------------------------------------------
         // insert()
         // Inserts value specified by key
-        // Precondition: None
+        // Precondition: CustomerID in customer should be non-negative
         // Postcondition: Hash Table is updated with key value pair if the 
         // entry does not exist.
         bool insert(const Customer);
@@ -96,61 +103,65 @@ class HashTable {
         // ---------------------------------------------------------------------
         // remove()
         // Removes value specified by key, returns true if found and removed.
-        //  False if not found
+        // False if not found
         // Precondition: None
         // Postcondition: Hash Table is updated with key value pair removed
         bool remove(const int);
 
         // ---------------------------------------------------------------------
         // get()
-        // Gets value specified by key
+        // Gets pointer to customer value specified by key
         // Precondition: Key and value should exist
-        // Postcondition: Returns value specified by key
+        // Postcondition: Pointer to value specified by key is returned
         Customer* get(const int) const;
 
-        // --------------------------------------------------------------------
+        // ---------------------------------------------------------------------
         // addTransaction()
         // Transactions are either a borrow or return.
-        // If transaction is a borrow, creates a new transaction in the 
+        // If transaction is borrow, creates a new transaction in the 
         // HashTable. ID is created off of date customer ID and timestamp
-        // If transaction is a return, searches transactions given the customer
-        // ID and updates the return date. Transaction is moved to front of list
-        // to maintain chronological order. 
+        // If transaction is return, searches transactions given the customerID 
+        // and updates the return date. Transaction is then moved to front of 
+        // list to maintain chronological order. 
         // Precondition: Customer id, transaction details, and isReturn 
         // parameters
         // Postcondition: a new transaction transaction is created in the table
         // if the customer exists
         bool addTransaction(const int, const string, const bool);
 
-        // --------------------------------------------------------------------
+        // ---------------------------------------------------------------------
         // display()
         // Outputs hash table up to specified # of customers and transactions
         // Precondition: None
         // Postcondition: Output of hash table to console
         void display(const int, const int) const;
 
-        // --------------------------------------------------------------------
+        // ---------------------------------------------------------------------
         // display()
         // Outputs hash table up to specified # of customers w/o transactions
         // Precondition: None
-        // Postcondition: Output of hash table to console
-        void display(const int customerEntries) const {
+        // Postcondition: Hash table is output to console
+        void display(const int customerEntries) const
+        {
             display(customerEntries, 0);
         };
 
-        // --------------------------------------------------------------------
+        // ---------------------------------------------------------------------
         // displayHistory()
-        // Outputs list of transaction for specified customer
+        // Outputs list of transaction for specified customer w/ specified 
+        // number of transactions to display
         // Precondition: None
-        // Postcondition: Output of hash table to console
+        // Postcondition: Limited version of hash table is output to console
         void displayHistory(const int, const int) const;
 
-        // --------------------------------------------------------------------
+        // ---------------------------------------------------------------------
         // displayHistory()
-        // Attempts to output entire list of transaction for specified customer
+        // Outputs list of transaction for specified customer w/ max 
+        // number of transactions allowable (INT_MAX)
         // Precondition: None
-        // Postcondition: Output of hash table to console
-        void displayHistory(const int customerID) const {
+        // Postcondition: Entire hash table of customer is output to console
+        void displayHistory(const int customerID) const
+        {
             displayHistory(customerID, INT_MAX);
         };
 };
