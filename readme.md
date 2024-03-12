@@ -31,6 +31,7 @@ The inventory can be initialized three ways:
 - Expanding market potential
     - Different Products (Hardware, video games, etc)
     - Renting or Buying (Food, hardware, etc)
+
 ## Application Flow
 1. Create an Inventory object
 2. Create a product (abstract)
@@ -44,6 +45,9 @@ The inventory can be initialized three ways:
 ## *HashTable*
 The hashtable is based on the closed hashing concept. 
 It uses an array of keyvaluepair structs with customerID as the key and customer as a value.
+Although the prompt specifies customerIDs from 0000 to 9999. The array is limited to 1000 entries to utilize and demonstrate the closed hash table.
+> Note: The intent is that there may be 10000 customers however at any one location (`inventory` object) there may only ever be up to around 1000 customers.
+> The application is designed to be scalable. If the customer base decides to go must larger than 10000, we can scale the array size accordingly.
 
 ### How to use
 #### Initialize HashTable
@@ -93,20 +97,27 @@ else
 
 #### To Display HashTable (Customers and/or Transactions in tabular form)
 ```
-// Display hash table contents
-cout << "HashTable contents:" << endl;
-hashTable.display(10, 20); // Display up to 10 customers and 20 transactions
-cout << "-----------------------------------" << endl;
-cout << "HashTable contents:" << endl;
-hashTable.display(10); // Display up to 10 customers and INT_MAX transactions
-cout << "-----------------------------------" << endl;
+// Display up to 10 customers and 20 transactions per customer
+hashTable.display(10, 20);
+
+// Display up to 10 customers w/o transactions
+hashTable.display(10);
+```
+
+#### To Display Details and Transaction history of Customer
+```
+// Display transaction history of customer1 up to 1000 entries. (limit of hash table)
+hashTable.displayHistory(customer1.ID);
 ```
 
 ### To test the hashtable class functionality.
-`hashtabletest.cpp` contains driver code to test the hashtable functionality.
-Run the following:
+`hashTableTest.cpp` contains driver code to test the hashtable functionality.
+#### To Build
 ```c++
-g++ hashtable.cpp, hashtabletest.cpp -o hashtable.o
+g++ hashtable.cpp, hashTableTest.cpp -o hashtable.o
 ```
-
+#### To run
+```
+./hashtable.o
+```
 
