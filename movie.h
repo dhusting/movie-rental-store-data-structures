@@ -19,7 +19,7 @@ using namespace std;
 class Movie : NodeData {
 
     friend ostream& operator<<(ostream &out, const Movie &rhs) {
-        out << rhs.getId() << ", " << rhs.getTitle() << ", " 
+        out << rhs.getTitle() << ", " 
             << to_string(rhs.getStock()) << ", " << rhs.getReleaseDate() 
             << ", " << to_string(rhs.getReleaseYear()) << ", " 
             << to_string(rhs.getLateFee()) << ", " << rhs.getDirector() << ", "

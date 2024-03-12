@@ -91,6 +91,6 @@ void Media::printGenres()
     //iterate through all the genres and print
     for (Genre * g : genreList)
     {
-        cout << g;
+        cout << *g;
     }
 }
