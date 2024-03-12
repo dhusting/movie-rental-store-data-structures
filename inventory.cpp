@@ -445,11 +445,9 @@ bool Inventory::displayInventory() {
 // for all customers.  Otherwise, display transactions for given id,
 // blank if no transactions.
 void Inventory::displayHistory(const string term) const {
-    // given customer ID
-    // output the transaction to the console.
     int customerID = stoi(term);
-    // Output up to 1000 transactions of given customer ID
-    customers.displayHistory(customerID, 1000);
+    // Outputs up all transactions of given customer ID
+    customers.displayHistory(customerID);
 }
 
 // -----------------------------------------------------------------------------
@@ -547,21 +545,22 @@ bool Inventory::createMovie(const string line) {
 // Precondition: The Inventory and customer table are initialized correctly
 // Postcondition: creates a new customer in the table if it does not exist
 bool Inventory::createCustomer(string line) {
-    // parse line for customer information
-    // call get getCustomer() if returns nullptr
-    // create new customer
-    // else error to console
     stringstream ss(line);
-    string term;
-    string name;
+    string term, name, timestamp;
+    int customerID;
+    auto now = chrono::system_clock::now();
+    auto time = chrono::system_clock::to_time_t(now);
 
+    // Get CustomerID from line
     ss >> term;
-    int customerID = stoi(term);
+    customerID = stoi(term);
     name = ss.str();
-    // TODO: programmatically set creation date
-    Customer newCustomer{customerID, name, "2024-03-10", 0, false, {}};
-    customers.insert(newCustomer);
-    return true; // TODO: return success
+    
+    // Format creation date into YYYYMMDD
+    ss << put_time(localtime(&time), "%Y%m%d");
+
+    Customer newCustomer{customerID, name, ss.str(), 0, false, {}};
+    return customers.insert(newCustomer);
 }
 
 // -----------------------------------------------------------------------------
@@ -577,7 +576,6 @@ bool Inventory::createCustomer(string line) {
 // if the customer exists
 bool Inventory::addTransaction(int customerID, string details, bool isBorrow) {
     // call getMovie() if address returned
-    // call getCustomer() if customer returned
     // call borrowStock() if isReturn is false, otherwise returnStock()
     // create a transaction in the list
     return customers.addTransaction(customerID, details, isBorrow);
