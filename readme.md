@@ -166,6 +166,7 @@ g++ hashtable.cpp, hashTableTest.cpp -o hashtable.o
 The Genre class uses a BST implementation to sort media collections for a particular genre
 
 ### Testing
+'''
 Genre *classics = new Genre("C", "Classic", "Genre, Stock, Director"
         ", Title, MajorActor_ReleaseDate", "ReleaseDate, MajorActor");
 Genre *dramas = new Genre("D", "Drama", "Genre, Stock, Director"
@@ -204,7 +205,7 @@ cout << "comedies: " << comedies << endl;
 delete classics;
 delete dramas;
 delete comedies;
-
+'''
 ## NodeData
 The NodeData interface maps the media to tree nodes
 
