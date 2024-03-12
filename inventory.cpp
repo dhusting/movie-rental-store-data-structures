@@ -466,7 +466,7 @@ bool Inventory::displayInventory() {
 // Postcondition: If param string is empty, display transactions 
 // for all customers.  Otherwise, display transactions for given id,
 // blank if no transactions.
-void Inventory::displayHistory(const string term) const =
+void Inventory::displayHistory(const string term) const
 {
     int customerID = stoi(term);
     // Outputs up all transactions of given customer ID
