@@ -186,22 +186,26 @@ bool HashTable::addTransaction(const int customerID,
             return true;
         } else {
             // If return transaction, search customer transaction log from 
-            // earliest to latest, update return date and push to front of list. 
-            for (list<Transaction>::iterator it = temp->transactions.end();
-                 it != temp->transactions.begin();
-                 it--)
+            // earliest to latest, update return date and push to front of list.
+            temp->transactions.reverse(); 
+            for (list<Transaction>::iterator it = temp->transactions.begin();
+                 it != temp->transactions.end();
+                 it++)
             {
-                if (it->transactionDetail == details)
+                if (it->transactionDetail == details && it->returnDate == "N/A")
                 {
                     cout << "Transaction found: " << details << endl;
                     // Set return date
                     it->returnDate = msTimestampToString(getCurrentTimestamp());
                     // Swap found transaction to front
-                    temp->transactions.splice(temp->transactions.begin(),
+                    temp->transactions.splice(temp->transactions.end(),
                                               temp->transactions, it, next(it));
+                                              
+                    temp->transactions.reverse();
                     return true;
                 }
             }
+            temp->transactions.reverse();
             cout << "Error: transaction not found: " << details << endl;
             return false;
         }
