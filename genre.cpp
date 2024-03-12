@@ -149,6 +149,8 @@ bool Genre::insert(string line) {
         Node *cur = root;
         for(;;) {
             if (*((Movie *)cur->data) == *movie) {  // check if data already exists in tree
+                cur->data->setStock(cur->data->getStock() 
+                    + ((NodeData *)movie)->getStock()); // combine stock
                 delete movie;   // deallocate movie
                 delete node;    // deallocate new node
                 return false;   // return false, insert failed
